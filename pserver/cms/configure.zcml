@@ -1,0 +1,15 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:plone="http://namespaces.plone.org/plone">
+
+  <include package="plone.server" file="meta.zcml" />
+
+  <plone:addon
+  		name="cms"
+  		title="Plone CMS"
+  		handler="pserver.cms.install.CMSAddon" />
+
+  <plone:api file="api.json" />
+
+  <include file="content.zcml" />
+
+</configure>

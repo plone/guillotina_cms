@@ -1,0 +1,14 @@
+{
+	"contenttypes": {
+		"plone.dexterity.interfaces.IDexterityContent": {
+            "endpoints": {
+                "@components": {
+                    "GET": {
+                        "factory": "pserver.cms.services.components.ComponentsGET",
+                        "permission": "plone.ViewContent"
+                    }
+                }
+            }
+        }
+	}
+}
