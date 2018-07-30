@@ -10,17 +10,10 @@ Bundle of cms functionality for guillotina
 Prepare guillotina dev
 ----------------------
 
-Git submodule::
-
-    git submodule init
-    git submodule update
-
 Create virtualenv::
 
     virtualenv .
     source bin/activate
-    pip install -r guillotina/requirements.txt
-    cd guillotina; python setup.py develop; cd ..
     pip install -r requirements.txt
     python setup.py develop
 
@@ -43,8 +36,15 @@ Start it::
     docker-compose up cockroachdb cockroachdb2 elasticsearch redis
     docker exec -it guillotina_cms_cockroachdb_1 /cockroach/cockroach sql --insecure --execute="CREATE DATABASE guillotina;"
 
-Run dev
--------
+Build dev image (a.k.a. ./bin/buildout)
+---------------------------------------
+
+To rebuild docker image with dependencies update::
+
+    docker-compose build buillotina
+
+Run dev (a.k.a. ./bin/instance fg)
+----------------------------------
 
 Run docker dev container::
 
@@ -58,6 +58,14 @@ Add CMS containers::
 
     curl -X POST --user root:root http://localhost:8081/db -d '{"@type": "Container", "id": "web", "title": "Plone Site"}'
     curl -X POST --user root:root http://localhost:8081/db/web/@addons -d '{"id": "cms"}'
+
+
+Using Executioner (optional)
+----------------------------
+
+If you want to access and browse the guillotina tree you can use the Angular Front::
+
+    http://localhost:8081/+admin
 
 
 Running Plone-React

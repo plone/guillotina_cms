@@ -47,7 +47,6 @@ services:
     - "50101:50101"
     volumes:
     - .:/usr/src/app
-    - ./guillotina:/usr/src/guillotina
     - logvolume01:/var/log
     links:
     # - postgres

@@ -31,6 +31,8 @@ redis:
 jwt:
   secret: secret
   algorithm: HS256
+jsapps:
+  +admin: guillotina:static/executioner
 cors:
   allow_origin:
   - "*"

@@ -22,12 +22,10 @@ class PubSubUtility:
 
     async def initialize(self, app=None):
         settings = app_settings['redis']
-        print('KKK')
         self.conn = await aioredis.create_redis(
             (settings['host'], settings['port']),
             timeout=10,
             loop=self._loop)
-        print('AA')
         self.publisher = await aioredis.create_redis(
             (settings['host'], settings['port']),
             timeout=10,
