@@ -1,0 +1,98 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  # elasticsearch2:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+  #   container_name: elasticsearch2
+  #   environment:
+  #     - cluster.name=docker-cluster
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - "discovery.zen.ping.unicast.hosts=elasticsearch"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - esdata2:/usr/share/elasticsearch/data
+  #   networks:
+  #     - esnet
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - redis
+  guillotina:
+    build: .
+    ports:
+    - "8081:8081"
+    - "50101:50101"
+    volumes:
+    - .:/usr/src/app
+    - ./guillotina:/usr/src/guillotina
+    - logvolume01:/var/log
+    links:
+    # - postgres
+    - cockroachdb
+    networks:
+    - roachnet
+    - esnet
+    - redis
+  # postgres:
+  #   image: postgres
+  #   environment:
+  #       POSTGRES_PASSWORD: secret
+  #       POSTGRES_INITDB_ARGS: --data-checksums
+  #   volumes:
+  #   - postgres_data_cms:/var/lib/postgresql/data
+
+  cockroachdb: 
+    image: cockroachdb/cockroach
+    command: start --insecure
+    expose:
+    - "8080"
+    - "26257"
+    ports:
+    - "26257:26257"
+    - "8080:8080"
+    networks:
+    - roachnet
+  cockroachdb2: 
+    image: cockroachdb/cockroach
+    command: start --insecure --join=cockroachdb
+    networks:
+      - roachnet
+    volumes: 
+    - cockroach_data_cms:/cockroach/cockroach-data
+
+volumes:
+  logvolume01: {}
+  # postgres_data_cms: {}
+  cockroach_data_cms: {}
+  esdata1:
+    driver: local
+  # esdata2:
+  #   driver: local
+
+networks:
+  esnet:
+  roachnet:
+  redis:

@@ -1,0 +1,34 @@
+# we want to make sure it is run on trusty where sudo is provided for postgres
+language: python
+python: 3.7
+dist: xenial
+sudo: true
+
+services:
+  - postgresql
+  - docker
+# make sure we're on the latest version of postgresql
+addons:
+  postgresql: "9.6"
+before_script:
+  - psql -c 'create database guillotina;' -U postgres
+
+cache:
+  directories:
+    - eggs
+install:
+  - pip install flake8
+  - pip install coverage==4.0.3
+  - pip install -r requirements.txt
+  - pip install -r requirements-test.txt
+  - python setup.py develop
+script:
+  - pytest -s --cov=guillotina_cms -v --cov-report term-missing guillotina_cms
+after_success:
+  - pip install coveralls
+  - coveralls
+  - docker build -t plone/guillotina_cms .
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push plone/guillotina_cms;
+    fi
