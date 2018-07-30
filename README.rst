@@ -41,7 +41,7 @@ Build dev image (a.k.a. ./bin/buildout)
 
 To rebuild docker image with dependencies update::
 
-    docker-compose build buillotina
+    docker-compose build guillotina
 
 Run dev (a.k.a. ./bin/instance fg)
 ----------------------------------
