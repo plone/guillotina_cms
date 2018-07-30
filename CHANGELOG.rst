@@ -1,4 +1,4 @@
-1.0a1 (unreleased)
+1.0a1 (2018-07-30)
 ------------------
 
 - Initial release with search, tiles, websocket pubsub and basic content
