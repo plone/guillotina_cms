@@ -55,6 +55,14 @@ services:
     - roachnet
     - esnet
     - redis
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+    - .:/usr/src/app
+    - /var/run/docker.sock:/var/run/docker.sock
+    - logvolume01:/var/log
   # postgres:
   #   image: postgres
   #   environment:

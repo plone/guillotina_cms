@@ -25,6 +25,9 @@ class DefaultJSONSummarySerializer(object):
         summary = json_compatible({
             '@id': IAbsoluteURL(self.context)(),
             '@type': self.context.type_name,
+            '@name': self.context.__name__,
+            '@uid': self.context.uuid,
+            'UID': self.context.uuid,
             'title': self.context.title
         })
         return summary

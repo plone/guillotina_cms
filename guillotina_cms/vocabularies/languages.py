@@ -199,6 +199,9 @@ class LanguagesVocabulary:
     def __init__(self, context):
         self.context = context
 
+    def keys(self):
+        return _languagelist.keys()
+
     def __iter__(self):
         return iter([self.getTerm(x) for x in _languagelist.keys()])
 

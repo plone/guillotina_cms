@@ -17,8 +17,11 @@ class WorkflowVocabulary:
         else:
             self.states = IWorkflow(context).states
 
+    def keys(self):
+        return self.states
+
     def __iter__(self):
-        return iter([x for x in self.states])
+        return iter([x for x in self.states.keys()])
 
     def __contains__(self, value):
         return value in self.states

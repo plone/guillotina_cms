@@ -80,7 +80,7 @@ Install JS package dependencies with Yarn::
     cd plone-react
     yarn install
 
-Then edit "src/config.js" to point to http://localhost:8081/db/web.
+Then edit "src/config/index.js" to point to http://localhost:8081/db/web.
 
 Start frontend dev server::
 

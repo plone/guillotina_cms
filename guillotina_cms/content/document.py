@@ -10,7 +10,8 @@ from guillotina_cms.interfaces import IDocument
     schema=IDocument,
     behaviors=[
         'guillotina.behaviors.dublincore.IDublinCore',
-        'guillotina_cms.interfaces.base.ICMSBehavior'],
+        'guillotina_cms.interfaces.base.ICMSBehavior',
+        'guillotina_cms.interfaces.tiles.ITiles'],
     allowed_types=[]  # dynamically calculated
 )
 class Document(Folder):

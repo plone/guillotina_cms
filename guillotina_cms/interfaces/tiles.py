@@ -23,10 +23,12 @@ DATA_SCHEMA = json.dumps({
 class ITiles(Interface):
     tiles_layout = JSONField(
         title='Layout of the block',
+        required=False,
         schema=LAYOUT_SCHEMA)
 
     tiles = JSONField(
         title='Data of the block',
+        required=False,
         schema=DATA_SCHEMA)
 
 

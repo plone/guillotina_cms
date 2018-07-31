@@ -19,6 +19,26 @@ from guillotina.interfaces import IContainer
 
 
 @configure.service(
+    context=IContainer, method='GET',
+    permission='guillotina.AccessContent', name='@types',
+    summary='Read information on available types',
+    responses={
+        "200": {
+            "description": "Result results on types",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "@id": {"type": "string"},
+                        "title": {"type": "string"},
+                        "addable": {"type": "boolean"}
+                    }
+                }
+            }
+        }
+    })
+@configure.service(
     context=IResource, method='GET',
     permission='guillotina.AccessContent', name='@types',
     summary='Read information on available types',
