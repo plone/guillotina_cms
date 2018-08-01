@@ -1,4 +1,4 @@
-1.0a2 (unreleased)
+1.0a2 (2018-08-01)
 ------------------
 
 - Fix dependencies for pip install
