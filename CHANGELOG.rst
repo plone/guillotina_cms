@@ -1,7 +1,8 @@
 1.0a2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix dependencies for pip install
+  [bloodbare]
 
 
 1.0a1 (2018-07-30)
