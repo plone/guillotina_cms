@@ -59,7 +59,7 @@ elasticsearch:
   index_name_prefix: plone-
   connection_settings:
     hosts:
-    - localhost:9200
+    - 127.0.0.1:9200
     sniffer_timeout: 0.5
   index: {}
   mapping_overrides:

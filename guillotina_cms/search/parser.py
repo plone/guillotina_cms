@@ -172,7 +172,7 @@ def bbb_parser(get_params):
             get_params['_sort_des'] = 'position_in_parent'
             del get_params['sort_on']
 
-        get_params['depth'] = get_params['path.depth']
+        get_params['depth'] = str(int(get_params['path.depth']) + 1)
         del get_params['path.depth']
         get_params['_size'] = get_params['b_size']
         del get_params['b_size']

@@ -12,7 +12,8 @@ from guillotina_cms.interfaces import IDocument
         'guillotina.behaviors.dublincore.IDublinCore',
         'guillotina_cms.interfaces.base.ICMSBehavior',
         'guillotina_cms.interfaces.tiles.ITiles'],
-    allowed_types=[]  # dynamically calculated
+    allowed_types=[
+        'Image', 'File']  # dynamically calculated
 )
 class Document(Folder):
     pass

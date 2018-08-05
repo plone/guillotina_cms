@@ -1,6 +1,9 @@
 1.0a3 (unreleased)
 ------------------
 
+- File Content type
+  [bloodbare]
+
 - Cookie authentication
   [bloodbare]
 

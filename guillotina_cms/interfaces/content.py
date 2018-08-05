@@ -16,4 +16,11 @@ class IImage(IItem):
     image = CloudFileField(
         title='Image',
         required=False,
-        widget='image')
+        widget='file')
+
+class IFile(IItem):
+
+    file = CloudFileField(
+        title='File',
+        required=False,
+        widget='file')
