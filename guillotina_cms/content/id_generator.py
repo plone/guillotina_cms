@@ -20,5 +20,10 @@ class IDGenerator(object):
         if 'title' in data:
             new_title = data['title'].lower().replace(' ', '-')
             return new_title
+        if '@type' in data and data['@type'] == 'Image':
+            try:
+                return data['image']['filename']
+            except KeyError:
+                return None
         else:
             return None

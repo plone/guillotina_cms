@@ -6,3 +6,4 @@ from . import search  # noqa
 from . import ws_edit  # noqa
 from . import indices  # noqa
 from . import tiles  # noqa
+from . import images  # noqa

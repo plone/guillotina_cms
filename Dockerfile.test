@@ -1,0 +1,20 @@
+FROM python:3
+
+RUN apt-get install
+
+RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-18.06.0-ce.tgz -O /tmp/docker.tar.gz && \
+    tar xzvf /tmp/docker.tar.gz && \
+    cp docker/docker /usr/local/bin/
+
+WORKDIR /usr/src/app
+
+COPY requirements.txt ./
+COPY requirements-test.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements-test.txt
+
+COPY . .
+
+RUN python setup.py develop
+
+CMD [ "pytest iskra_cio" ]

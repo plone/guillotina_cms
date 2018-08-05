@@ -1,7 +1,14 @@
 1.0a3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Cookie authentication
+  [bloodbare]
+
+- Id on images based on filename
+  [bloodbare]
+
+- Image content type
+  [bloodbare]
 
 
 1.0a2 (2018-08-01)

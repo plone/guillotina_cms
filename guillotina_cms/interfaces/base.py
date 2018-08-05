@@ -21,6 +21,11 @@ class ICMSBehavior(Interface):
         required=False,
         source='languages')
 
+    index('position_in_parent', type='int')
+    position = schema.Int(
+        title='Position in parent',
+        required=False)
+
     index('review_state', type='keyword')
     review_state = schema.Choice(
         title='Workflow review state',

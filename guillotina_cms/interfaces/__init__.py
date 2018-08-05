@@ -12,3 +12,4 @@ from .base import ICMSBehavior  # noqa
 from .blocks import IBlocksMarker  # noqa
 from .blocks import IBlocks  # noqa
 from .content import IDocument  # noqa
+from .content import IImage  # noqa

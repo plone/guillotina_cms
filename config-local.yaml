@@ -5,7 +5,7 @@ databases:
 - db:
     storage: cockroach
     transaction_strategy: dbresolve_readcommitted
-    dsn: postgresql://root@cockroachdb:26257/guillotina?sslmode=disable
+    dsn: postgresql://root@localhost:26257/guillotina?sslmode=disable
     read_only: false
     pool_size: 100
 applications:
@@ -24,11 +24,14 @@ root_user:
   password: root
 auth_extractors:
 - guillotina_cms.extractors.CookiePolicy
+- guillotina.auth.extractors.BearerAuthPolicy
+- guillotina.auth.extractors.BasicAuthPolicy
+- guillotina.auth.extractors.WSTokenAuthPolicy
 auth_token_validators:
 - guillotina.auth.validators.SaltedHashPasswordValidator
 - guillotina_cms.validator.CMSJWTValidator
 redis:
-  host: "redis"
+  host: "localhost"
   port: 6379
 jwt:
   secret: secret
@@ -56,7 +59,7 @@ elasticsearch:
   index_name_prefix: plone-
   connection_settings:
     hosts:
-    - elasticsearch:9200
+    - localhost:9200
     sniffer_timeout: 0.5
   index: {}
   mapping_overrides:

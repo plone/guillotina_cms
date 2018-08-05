@@ -156,6 +156,28 @@ def process_field(field, value, query):
                 (_type, modifier, field, value))
 
 
+def bbb_parser(get_params):
+
+    if 'path.depth' in get_params and 'sort_on' in get_params and 'b_size' in get_params:
+        if 'SearchableText' in get_params:
+            get_params['title_in'] = get_params['SearchableText']
+            get_params['text_in'] = get_params['SearchableText']
+            del get_params['SearchableText']
+
+        if 'b_start' in get_params:
+            get_params['_from'] = get_params['b_start']
+            del get_params['b_start']
+
+        if get_params['sort_on'] == 'getObjPositionInParent':
+            get_params['_sort_des'] = 'position_in_parent'
+            del get_params['sort_on']
+
+        get_params['depth'] = get_params['path.depth']
+        del get_params['path.depth']
+        get_params['_size'] = get_params['b_size']
+        del get_params['b_size']
+
+
 class Parser:
 
     def __init__(self, request, context):
@@ -185,6 +207,8 @@ class Parser:
             },
             'sort': []
         }
+
+        bbb_parser(get_params)
 
         if '_aggregations' in get_params:
             query['aggregations'] = {}
@@ -223,7 +247,7 @@ class Parser:
                 query['sort'].append({field: 'desc'})
             del get_params['_sort_des']
 
-        query['sort'].append({'_uid': 'desc'})
+        query['sort'].append({'_id': 'desc'})
 
         # Path specific use case
         if 'path__starts' in get_params:
