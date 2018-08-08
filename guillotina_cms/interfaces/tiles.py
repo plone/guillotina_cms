@@ -1,22 +1,17 @@
 from guillotina import schema
 from guillotina.schema import JSONField
 from zope.interface import Interface
-
 import json
 
 
 LAYOUT_SCHEMA = json.dumps({
-    'type': 'object',
-    'properties': {
-        'cols': {'type': 'array'}
-    },
+    'type': 'array'
 })
 
 DATA_SCHEMA = json.dumps({
     'type': 'object',
     'properties': {
-        'blocks': {'type': 'array'}
-    },
+    }
 })
 
 

@@ -7,6 +7,7 @@ from guillotina.directives import merged_tagged_value_list
 from guillotina.component import get_utilities_for
 from guillotina.interfaces import IBehavior
 from guillotina._cache import FACTORY_CACHE
+from guillotina.utils import get_content_depth
 from dateutil.parser import parse
 import logging
 
@@ -172,7 +173,7 @@ def bbb_parser(get_params):
             get_params['_sort_des'] = 'position_in_parent'
             del get_params['sort_on']
 
-        get_params['depth'] = str(int(get_params['path.depth']) + 1)
+        get_params['depth'] = get_params['path.depth']
         del get_params['path.depth']
         get_params['_size'] = get_params['b_size']
         del get_params['b_size']
@@ -209,6 +210,9 @@ class Parser:
         }
 
         bbb_parser(get_params)
+
+        if 'depth' in get_params:
+            get_params['depth'] = str(int(get_params['depth']) + get_content_depth(self.context))
 
         if '_aggregations' in get_params:
             query['aggregations'] = {}

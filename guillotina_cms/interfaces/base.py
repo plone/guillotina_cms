@@ -1,6 +1,20 @@
 from zope.interface import Interface
 from guillotina import schema
 from guillotina.directives import index
+from guillotina.fields import BucketListField
+import json
+
+HISTORY_SCHEMA = json.dumps({
+    'type': 'object',
+    'properties': {
+        'action': 'string',
+        'actor': {'type': 'string'},
+        'comments': {'type': 'string'},
+        'review_state': {'type': 'string'},
+        'time': {'type': 'date'},
+        'title': {'type': 'string'}
+    }
+})
 
 
 class ICMSLayer(Interface):
@@ -31,3 +45,10 @@ class ICMSBehavior(Interface):
         title='Workflow review state',
         required=False,
         source='worklow_states')
+
+    history = BucketListField(
+        title='History list',
+        required=False,
+        value_type=schema.JSONField(
+            title='History element',
+            schema=HISTORY_SCHEMA))

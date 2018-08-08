@@ -14,3 +14,4 @@ from .blocks import IBlocks  # noqa
 from .content import IDocument  # noqa
 from .content import IImage  # noqa
 from .content import IFile  # noqa
+from .events import IWorkflowChangedEvent  # noqa

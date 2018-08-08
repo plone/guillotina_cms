@@ -75,6 +75,10 @@ utilities:
   factory: guillotina_cms.utilities.pubsub.PubSubUtility
   settings: {}
 search_parser: guillotina_cms.search.parser.Parser
+default_tiles:
+  Document:
+  - type: title
+  - type: text
 workflows:
   basic:
     initial_state: private
@@ -82,14 +86,15 @@ workflows:
       private:
         actions:
             publish:
+                title: Publish
                 to: public
                 check_permission: guillotina.AccessContent
+                set_permission:
+                    roleperm:
+                        setting: Allow
+                        role: guillotina.Member
+                        perm: guillotina.ViewContent
       public:
-        triggers:
-            set_permission:
-                roleperm:
-                    role: guillotina.Member
-                    perm: guillotina.ViewContent
         actions:
             retire:
                 to: private

@@ -79,6 +79,7 @@ workflows:
       private:
         actions:
             publish:
+                title: Publish
                 to: public
                 check_permission: guillotina.AccessContent
       public:

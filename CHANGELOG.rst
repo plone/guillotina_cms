@@ -1,6 +1,9 @@
 1.0a3 (unreleased)
 ------------------
 
+- Initial Workflow implementation
+  [bloodbare]
+
 - File Content type
   [bloodbare]
 

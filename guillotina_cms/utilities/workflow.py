@@ -1,10 +1,18 @@
 import logging
+import datetime
 from guillotina import app_settings
 from guillotina_cms.interfaces import IWorkflowUtility
 from guillotina_cms.interfaces import IWorkflow
 from guillotina import configure
 from guillotina.component import provide_adapter
 from guillotina.utils import import_class
+from guillotina_cms.interfaces.base import ICMSBehavior
+from guillotina.interfaces import IInteraction
+from guillotina.response import HTTPUnauthorized
+from guillotina.utils import get_authenticated_user_id
+from guillotina.api.content import SharingPOST
+from guillotina_cms.events import WorkflowChangedEvent
+from guillotina.event import notify
 
 
 logger = logging.getLogger('guillotina_cms')
@@ -27,11 +35,66 @@ def create_workflow_factory(proto_name, proto_definition):
             return self._states
 
         @property
+        def actions(self):
+            state = ICMSBehavior(self.context).review_state
+            return self._states[state]['actions']
+
+        async def available_actions(self, request):
+            security = IInteraction(request)
+            for action_name, action in self.actions.items():
+                add = False
+                if 'check_permission' in action and security.check_permission(
+                        action['check_permission'], self.context):
+                    add = True
+                elif 'check_permission' not in action:
+                    add = True
+
+                if add:
+                    yield action_name, action
+
+        @property
         def initial_state(self):
             return self._initial_state
 
-        async def switch_state(self, action):
-            pass
+        async def do_action(self, request, action, comments):
+            available_actions = self.actions
+            if action not in available_actions:
+                raise KeyError('Unavailable action')
+
+            action_def = available_actions[action]
+            security = IInteraction(request)
+            if 'check_permission' in action_def and not security.check_permission(
+                    action_def['check_permission'], self.context):
+                raise HTTPUnauthorized()
+
+            # Change permission
+            new_state = action_def['to']
+            cms_behavior = ICMSBehavior(self.context)
+            cms_behavior.review_state = new_state
+
+            if 'set_permission' in action_def:
+                cloned_request = request.clone()
+                cloned_request.data = action_def['set_permission']
+                sharing_view = SharingPOST(self.context, cloned_request)
+                await sharing_view
+
+            # Write history
+            user = get_authenticated_user_id(request)
+            history = {
+                "action": action,
+                "actor": user,
+                "comments": comments,
+                "review_state": new_state,
+                "time": datetime.datetime.now(),
+                "title": action_def['title']
+            }
+
+            await cms_behavior.history.append(history)
+            cms_behavior._p_register()
+
+            await notify(WorkflowChangedEvent(self.context, self, action, comments))
+            return history
+
     return Workflow
 
 
