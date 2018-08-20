@@ -10,7 +10,7 @@ from guillotina_cms.interfaces.base import ICMSBehavior
 from guillotina.interfaces import IInteraction
 from guillotina.response import HTTPUnauthorized
 from guillotina.utils import get_authenticated_user_id
-from guillotina.api.content import SharingPOST
+from guillotina.security.utils import apply_sharing
 from guillotina_cms.events import WorkflowChangedEvent
 from guillotina.event import notify
 
@@ -70,12 +70,11 @@ def create_workflow_factory(proto_name, proto_definition):
             # Change permission
             new_state = action_def['to']
             cms_behavior = ICMSBehavior(self.context)
+            await cms_behavior.load()
             cms_behavior.review_state = new_state
 
-            if 'set_permission' in action_def:
-                cloned_request = request.clone()
-                cloned_request.data = action_def['set_permission']
-                sharing_view = SharingPOST(self.context, cloned_request)
+            if 'set_permission' in self.states[new_state]:
+                sharing_view = await apply_sharing(self.context, self.states[new_state]['set_permission'])
                 await sharing_view
 
             # Write history
@@ -89,7 +88,7 @@ def create_workflow_factory(proto_name, proto_definition):
                 "title": action_def['title']
             }
 
-            await cms_behavior.history.append(history)
+            cms_behavior.history.append(history)
             cms_behavior._p_register()
 
             await notify(WorkflowChangedEvent(self.context, self, action, comments))

@@ -4,6 +4,8 @@ from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
 from guillotina.api.service import Service
 from guillotina_cms.interfaces import IWorkflow
+from guillotina_cms.interfaces import ICMSBehavior
+
 
 # Workflows are defined on the configuration on a JSONField structure
 # {
@@ -61,6 +63,10 @@ class WorkflowGET(Service):
             workflow['transitions'].append({
                 '@id': obj_url + '/@workflow/' + action_name,
                 'title': action['title']})
+
+        cms_obj = ICMSBehavior(self.context)
+        await cms_obj.load()
+        workflow['history'] = cms_obj.history
 
         return workflow
 

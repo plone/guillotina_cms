@@ -5,7 +5,12 @@ import json
 
 
 LAYOUT_SCHEMA = json.dumps({
-    'type': 'array'
+    'type': 'object',
+    'properties': {
+        'items': {
+            'type': 'array'
+        }
+    }
 })
 
 DATA_SCHEMA = json.dumps({

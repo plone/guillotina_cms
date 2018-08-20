@@ -15,7 +15,18 @@ app_settings = {
         'basic': {
             'initial_state': 'private',
             'states': {
-                'private': {}
+                'private': {
+                    'set_permission': {
+                        'roleperm': [
+                            {
+                                'setting': 'Allow',
+                                'role': 'guillotina.Member',
+                                'permission': 'guillotina.ViewContent'
+                            }
+                        ]
+                    },
+                    'actions': {}
+                }
             }
         }
     },
@@ -38,4 +49,5 @@ def includeme(root):
     configure.scan('guillotina_cms.permissions')
     configure.scan('guillotina_cms.install')
     configure.scan('guillotina_cms.validator')
+    configure.scan('guillotina_cms.subscribers')
     configure.scan('guillotina_cms.tiles')

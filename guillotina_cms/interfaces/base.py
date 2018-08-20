@@ -1,7 +1,6 @@
 from zope.interface import Interface
 from guillotina import schema
 from guillotina.directives import index
-from guillotina.fields import BucketListField
 import json
 
 HISTORY_SCHEMA = json.dumps({
@@ -46,7 +45,7 @@ class ICMSBehavior(Interface):
         required=False,
         source='worklow_states')
 
-    history = BucketListField(
+    history = schema.List(
         title='History list',
         required=False,
         value_type=schema.JSONField(

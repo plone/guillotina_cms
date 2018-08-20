@@ -89,11 +89,11 @@ workflows:
                 title: Publish
                 to: public
                 check_permission: guillotina.AccessContent
-                set_permission:
-                    roleperm:
-                        setting: Allow
-                        role: guillotina.Member
-                        perm: guillotina.ViewContent
+        set_permission:
+            roleperm:
+            - setting: Allow
+              role: guillotina.Member
+              permission: guillotina.ViewContent
       public:
         actions:
             retire:
