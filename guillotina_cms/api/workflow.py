@@ -3,12 +3,16 @@ from guillotina import configure
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
 from guillotina.api.service import Service
+from guillotina_cms.interfaces import IWorkflow
+from guillotina_cms.interfaces import ICMSBehavior
+
 
 # Workflows are defined on the configuration on a JSONField structure
 # {
 #   private:
 #       actions:
 #           publish:
+#               title: Publish
 #               to: public
 #               permission: guillotina.AccessContent
 #   public:
@@ -46,15 +50,44 @@ class Workflow(object):
 class WorkflowGET(Service):
 
     async def __call__(self):
-        if not hasattr(self, 'value'):
-            workflow = {
-                'history': [],
-                'transitions': []
-            }
-        else:
-            obj_url = IAbsoluteURL(self.context, self.request)()
-            workflow = {
-                '@id': obj_url + '/@workflow/' + self.workflow_id,
-                'items': await self.value()
-            }
+        obj_url = IAbsoluteURL(self.context, self.request)()
+
+        workflow = {
+            '@id': obj_url + '/@workflow',
+            'history': [],
+            'transitions': []
+        }
+
+        workflow_obj = IWorkflow(self.context)
+        async for action_name, action in workflow_obj.available_actions(self.request):
+            workflow['transitions'].append({
+                '@id': obj_url + '/@workflow/' + action_name,
+                'title': action['title']})
+
+        cms_obj = ICMSBehavior(self.context)
+        await cms_obj.load()
+        workflow['history'] = cms_obj.history
+
         return workflow
+
+
+@configure.service(
+    context=IResource, method='POST',
+    permission='guillotina.AccessContent', name='@workflow/{action_id}',
+    summary='Components for a resource',
+    responses={
+        "200": {
+            "description": "Change action of a workflow",
+            "schema": {
+                "properties": {}
+            }
+        }
+    })
+class DoAction(Service):
+
+    async def __call__(self):
+        action_id = self.request.matchdict['action_id']
+        comment = ''
+        workflow = IWorkflow(self.context)
+        result = await workflow.do_action(self.request, action_id, comment)
+        return result

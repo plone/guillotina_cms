@@ -21,10 +21,10 @@ class CMS(AnnotationBehavior):
             return None
 
     def set_language(self, value):
-        self.context.__review_state__ = value
+        self.context.__language = value
 
     def del_language(self):
-        del self.context.__review_state
+        del self.context.__language
 
     language = property(
         get_language, set_language, del_language)
@@ -36,7 +36,7 @@ class CMS(AnnotationBehavior):
             return IWorkflow(self.context).initial_state
 
     def set_review_state(self, value):
-        self.context.__review_state__ = value
+        self.context.__review_state = value
         self.context._p_register()
 
     def del_review_state(self):

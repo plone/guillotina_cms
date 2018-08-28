@@ -1,7 +1,20 @@
 1.0a3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Initial Workflow implementation
+  [bloodbare]
+
+- File Content type
+  [bloodbare]
+
+- Cookie authentication
+  [bloodbare]
+
+- Id on images based on filename
+  [bloodbare]
+
+- Image content type
+  [bloodbare]
 
 
 1.0a2 (2018-08-01)

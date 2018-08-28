@@ -80,7 +80,7 @@ async def get_all_types(context, request):
             if permission is not None and \
                     not IInteraction(request).check_permission(
                         permission.id, context):
-                raise NoPermissionToAdd(str(context), id)
+                add = False
         if add:
             result.append({
                 '@id': base_url + '/@types/' + id,

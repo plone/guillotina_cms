@@ -22,7 +22,5 @@ def load_tiletype(_context, tile):
 register_configuration_handler('tile', load_tiletype) # noqa
 
 
-
 class tile(_base_decorator):  # noqa: N801
     configuration_type = 'tile'
-    
