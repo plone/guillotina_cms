@@ -25,12 +25,15 @@ async def cms_object_added(obj, event):
         setattr(cms, 'history', [])
         cms.history.append(
             {
-                "action": None,
-                "actor": user_id,
-                "comments": '',
-                "review_state": initial_state,
-                "time": datetime.datetime.now(),
-                "title": initial_state
+                'actor': user_id,
+                'comments': '',
+                'time': datetime.datetime.now(),
+                'title': 'Created',
+                'type': 'workflow',
+                'data': {
+                    'action': None,
+                    'review_state': initial_state,
+                }
             }
         )
         cms._p_register()

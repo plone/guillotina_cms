@@ -1,14 +1,14 @@
 from guillotina import configure
 from guillotina.event import notify
 from guillotina.events import ObjectModifiedEvent
-from guillotina_cms.interfaces import IMarkerFollowing
+from guillotina_cms.interfaces import IFollowingMarker
 from guillotina_cms.interfaces import IFollowing
 from guillotina.utils import get_authenticated_user_id
 from guillotina_cms.interfaces import ICMSLayer
 
 
 @configure.service(
-    context=IMarkerFollowing, layer=ICMSLayer, name='@favorite',
+    context=IFollowingMarker, layer=ICMSLayer, name='@favorite',
     method='POST', permission='guillotina.AccessContent')
 async def addfavorite(context, request):
     user = get_authenticated_user_id(request)
@@ -27,7 +27,7 @@ async def addfavorite(context, request):
 
 
 @configure.service(
-    context=IMarkerFollowing, name='@favorite', method='DELETE',
+    context=IFollowingMarker, name='@favorite', method='DELETE',
     permission='guillotina.AccessContent')
 async def deletefavorite(context, request):
     user = get_authenticated_user_id(request)

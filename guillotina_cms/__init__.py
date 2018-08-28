@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from guillotina.i18n import MessageFactory
 from guillotina import configure
+import glob
+import yaml
 
 _ = MessageFactory('guillotina_cms')
 
@@ -12,19 +14,11 @@ app_settings = {
         'upgrade': 'guillotina_cms.commands.upgrade.UpgradeCommand'
     },
     'workflows': {
-        'basic': {
+        'private': {
             'initial_state': 'private',
             'states': {
                 'private': {
-                    'set_permission': {
-                        'roleperm': [
-                            {
-                                'setting': 'Allow',
-                                'role': 'guillotina.Member',
-                                'permission': 'guillotina.ViewContent'
-                            }
-                        ]
-                    },
+                    'set_permission': {},
                     'actions': {}
                 }
             }
@@ -36,6 +30,13 @@ app_settings = {
     'search_parser': 'guillotina_cms.search.parser.Parser'
 }
 
+path = '/'.join(__file__.split('/')[:-1])
+
+for workflow_file in glob.glob(path + '/workflows/*.yaml'):
+    with open(workflow_file, 'r') as f:
+        workflow_content = yaml.load(f)
+    ident = workflow_file.split('/')[-1].rstrip('.yaml')
+    app_settings['workflows'][ident] = workflow_content
 
 def includeme(root):
     configure.scan('guillotina_cms.interfaces')

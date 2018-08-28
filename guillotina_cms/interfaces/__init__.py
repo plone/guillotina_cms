@@ -9,9 +9,10 @@ from .base import ICMSLayer  # noqa
 from .tiles import ITiles  # noqa
 from .tiles import ITileType  # noqa
 from .base import ICMSBehavior  # noqa
-from .blocks import IBlocksMarker  # noqa
-from .blocks import IBlocks  # noqa
 from .content import IDocument  # noqa
 from .content import IImage  # noqa
 from .content import IFile  # noqa
 from .events import IWorkflowChangedEvent  # noqa
+from .versioning import IVersioning  # noqa
+from .versioning import IVersioningMarker  # noqa
+from .versioning import IDiffCalculator  # noqa

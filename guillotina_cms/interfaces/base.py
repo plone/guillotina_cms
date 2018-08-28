@@ -6,14 +6,24 @@ import json
 HISTORY_SCHEMA = json.dumps({
     'type': 'object',
     'properties': {
-        'action': 'string',
         'actor': {'type': 'string'},
         'comments': {'type': 'string'},
-        'review_state': {'type': 'string'},
         'time': {'type': 'date'},
-        'title': {'type': 'string'}
+        'type': {'type': 'string'},
+        'title': {'type': 'string'},
+        'data': {'type': 'object'}
     }
 })
+
+# If its a workflow:
+#     type: workflow
+#     data:
+#         action: string (action)
+#         review_state: string (review state moved to)
+
+# If its a versioning:
+#     type: versioning
+#         version: int (action)
 
 
 class ICMSLayer(Interface):
@@ -41,12 +51,14 @@ class ICMSBehavior(Interface):
 
     index('review_state', type='keyword')
     review_state = schema.Choice(
+        readonly=True,
         title='Workflow review state',
         required=False,
         source='worklow_states')
 
     history = schema.List(
         title='History list',
+        readonly=True,
         required=False,
         value_type=schema.JSONField(
             title='History element',

@@ -73,7 +73,7 @@ class WorkflowGET(Service):
 
 @configure.service(
     context=IResource, method='POST',
-    permission='guillotina.WorkflowManager', name='@workflow/{action_id}',
+    permission='guillotina.AccessContent', name='@workflow/{action_id}',
     summary='Components for a resource',
     responses={
         "200": {
@@ -87,6 +87,7 @@ class DoAction(Service):
 
     async def __call__(self):
         action_id = self.request.matchdict['action_id']
+        comment = ''
         workflow = IWorkflow(self.context)
-        result = await workflow.do_action(action_id)
+        result = await workflow.do_action(self.request, action_id, comment)
         return result

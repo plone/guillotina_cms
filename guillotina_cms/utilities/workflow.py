@@ -69,24 +69,27 @@ def create_workflow_factory(proto_name, proto_definition):
 
             # Change permission
             new_state = action_def['to']
-            cms_behavior = ICMSBehavior(self.context)
-            await cms_behavior.load()
-            cms_behavior.review_state = new_state
 
             if 'set_permission' in self.states[new_state]:
-                sharing_view = await apply_sharing(self.context, self.states[new_state]['set_permission'])
-                await sharing_view
+                await apply_sharing(self.context, self.states[new_state]['set_permission'])
 
             # Write history
             user = get_authenticated_user_id(request)
             history = {
-                "action": action,
-                "actor": user,
-                "comments": comments,
-                "review_state": new_state,
-                "time": datetime.datetime.now(),
-                "title": action_def['title']
+                'actor': user,
+                'comments': comments,
+                'time': datetime.datetime.now(),
+                'title': action_def['title'],
+                'type': 'workflow',
+                'data': {
+                    'action': action,
+                    'review_state': new_state,
+                }
             }
+
+            cms_behavior = ICMSBehavior(self.context)
+            await cms_behavior.load()
+            cms_behavior.review_state = new_state
 
             cms_behavior.history.append(history)
             cms_behavior._p_register()
