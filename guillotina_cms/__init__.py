@@ -25,7 +25,7 @@ app_settings = {
         }
     },
     'workflows_content': {
-        'guillotina.interfaces.IResource': 'basic'
+        'guillotina.interfaces.IResource': 'private'
     },
     'search_parser': 'guillotina_cms.search.parser.Parser'
 }

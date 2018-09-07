@@ -19,7 +19,7 @@ async def test_history_creation(cms_requester):
         )
 
         assert resp['guillotina_cms.interfaces.base.ICMSBehavior']['history'] is not None
-        assert resp['guillotina_cms.interfaces.base.ICMSBehavior']['history'][0]['title'] == 'private'
+        assert resp['guillotina_cms.interfaces.base.ICMSBehavior']['history'][0]['title'] == 'Created'
 
         resp, status = await requester(
             'GET',
@@ -27,4 +27,4 @@ async def test_history_creation(cms_requester):
         )
 
         assert resp['history'] is not None
-        assert resp['history'][0]['title'] == 'private'
+        assert resp['history'][0]['title'] == 'Created'
