@@ -38,7 +38,6 @@ async def search_get(context, request):
 
     parser = resolve_dotted_name(app_settings['search_parser'])
     call_params, full_objects = parser(request, context)()
-
     result = await search.get_by_path(**call_params)
 
     real_result = {

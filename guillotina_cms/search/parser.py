@@ -58,6 +58,10 @@ def process_field(field, value, query):
 
     indices = get_indexes()
     modifier = None
+    if field == 'portal_type':
+        # XXX: Compatibility with plone?
+        field = 'type_name'
+
     if field not in indices:
         if field.endswith('__not'):
             modifier = 'not'
@@ -78,6 +82,10 @@ def process_field(field, value, query):
             modifier = 'wildcard'
             field = field.rstrip('__wildcard')
 
+    if field == 'portal_type':
+        # XXX: Compatibility with plone?
+        field = 'type_name'
+
     if field in indices:
         if len(value) > 1:
             term_keyword = 'terms'
@@ -86,9 +94,6 @@ def process_field(field, value, query):
             value = value[0]
 
         _type = indices[field]['type']
-        if field == 'portal_type':
-            # XXX: Compatibility with plone?
-            field = 'type_name'
         if _type == 'int':
             try:
                 value = int(value)
