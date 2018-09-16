@@ -24,3 +24,11 @@ class IFile(IItem):
         title='File',
         required=False,
         widget='file')
+
+
+class INews(IItem):
+
+    text = RichTextField(
+        title='Text',
+        required=False,
+        widget='richtext')

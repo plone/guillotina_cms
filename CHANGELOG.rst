@@ -1,6 +1,12 @@
 1.0a3 (unreleased)
 ------------------
 
+- Adding constraints endpoint
+  [bloodbare]
+
+- Adding News content type
+  [bloodbare]
+
 - Initial Workflow implementation
   [bloodbare]
 
