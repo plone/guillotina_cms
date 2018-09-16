@@ -1,4 +1,4 @@
-1.0a3 (unreleased)
+1.0a3 (2018-09-16)
 ------------------
 
 - Adding constraints endpoint
