@@ -5,7 +5,7 @@ from guillotina.interfaces import IFactorySerializeToJson
 from guillotina.component.interfaces import IFactory
 from guillotina_cms.interfaces import ICMSLayer
 from guillotina_cms.directives import fieldset
-from guillotina.directives import merged_tagged_value_dict
+from guillotina_cms.directives import merged_tagged_value_dict_merged
 
 
 @configure.adapter(
@@ -18,14 +18,14 @@ class SerializeCMSFactoryToJson(SerializeFactoryToJson):
 
         # Adding fieldsets to schema
         fieldsets_dict = {}
-        for key, value in merged_tagged_value_dict(self.factory.schema, fieldset.key).items():
+        for key, value in merged_tagged_value_dict_merged(self.factory.schema, fieldset.key).items():
             if key not in fieldsets_dict:
                 fieldsets_dict[key] = value.copy()
             else:
                 fieldsets_dict[key].extend(value)
 
         for schema in self.factory.behaviors or ():
-            for key, value in merged_tagged_value_dict(schema, fieldset.key).items():
+            for key, value in merged_tagged_value_dict_merged(schema, fieldset.key).items():
                 behavior_fields = [schema.__identifier__ + '.' + field for field in value]
                 if key not in fieldsets_dict:
                     fieldsets_dict[key] = behavior_fields.copy()
