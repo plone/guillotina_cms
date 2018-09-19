@@ -20,7 +20,7 @@ class SerializeCMSFactoryToJson(SerializeFactoryToJson):
         fieldsets_dict = {}
         for key, value in merged_tagged_value_dict(self.factory.schema, fieldset.key).items():
             if key not in fieldsets_dict:
-                fieldsets_dict[key] = value
+                fieldsets_dict[key] = value.copy()
             else:
                 fieldsets_dict[key].extend(value)
 
@@ -28,7 +28,7 @@ class SerializeCMSFactoryToJson(SerializeFactoryToJson):
             for key, value in merged_tagged_value_dict(schema, fieldset.key).items():
                 behavior_fields = [schema.__identifier__ + '.' + field for field in value]
                 if key not in fieldsets_dict:
-                    fieldsets_dict[key] = behavior_fields
+                    fieldsets_dict[key] = behavior_fields.copy()
                 else:
                     fieldsets_dict[key].extend(behavior_fields)
 
