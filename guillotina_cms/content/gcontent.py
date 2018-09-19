@@ -10,4 +10,4 @@ directives.fieldset_field.apply(IDublinCore, 'creators', 'ownership')  # pylint:
 directives.fieldset_field.apply(IDublinCore, 'tags', 'categorization')  # pylint: disable=E1101
 directives.fieldset_field.apply(IDublinCore, 'publisher', 'ownership')  # pylint: disable=E1101
 directives.fieldset_field.apply(IDublinCore, 'contributors', 'ownership')  # pylint: disable=E1101
-directives.fieldset_field.apply(IResource, 'id', 'settings')  # pylint: disable=E1101
+directives.fieldset_field.apply(IResource, '__name__', 'settings')  # pylint: disable=E1101
