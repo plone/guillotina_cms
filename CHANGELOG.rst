@@ -1,7 +1,8 @@
 1.0a4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adding fieldset directive
+  [bloodbare]
 
 
 1.0a3 (2018-09-16)

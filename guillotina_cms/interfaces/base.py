@@ -1,6 +1,7 @@
 from zope.interface import Interface
 from guillotina import schema
 from guillotina.directives import index
+from guillotina_cms.directives import fieldset
 import json
 
 HISTORY_SCHEMA = json.dumps({
@@ -33,12 +34,14 @@ class ICMSLayer(Interface):
 class ICMSBehavior(Interface):
 
     index('hidden_navigation', type='boolean')
+    fieldset('hidden_navigation', 'settings')
     hidden_navigation = schema.Bool(
         title='Should be hidden on navigation',
         required=False,
         default=False)
 
     index('language', type='keyword')
+    fieldset('language', 'categorization')
     language = schema.Choice(
         title='Language',
         required=False,

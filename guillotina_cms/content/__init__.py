@@ -6,3 +6,4 @@ from .file import File  # noqa
 
 from .id_generator import IDGenerator  # noqa
 from . import contraintypes  # noqa
+from . import gcontent  # noqa
