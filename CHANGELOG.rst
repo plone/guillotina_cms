@@ -1,4 +1,4 @@
-1.0a4 (unreleased)
+1.0a4 (2018-09-19)
 ------------------
 
 - Adding fieldset directive
