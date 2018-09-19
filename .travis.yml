@@ -28,7 +28,7 @@ after_success:
   - pip install coveralls
   - coveralls
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t plone/guillotina_cms:master;
+    docker build -t plone/guillotina_cms:master .;
     echo "$DOCKER_PASSWORD" | docker login -u="$DOCKER_USERNAME"  --password-stdin;
     docker push plone/guillotina_cms:master;
     fi
