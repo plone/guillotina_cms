@@ -1,8 +1,10 @@
-from zope.interface import Interface
+import json
+
 from guillotina import schema
 from guillotina.directives import index
 from guillotina_cms.directives import fieldset
-import json
+from zope.interface import Interface
+
 
 HISTORY_SCHEMA = json.dumps({
     'type': 'object',
