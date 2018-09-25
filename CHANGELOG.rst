@@ -1,4 +1,4 @@
-1.0a5 (unreleased)
+1.0a5 (2018-09-25)
 ------------------
 
 - Remove login endpoint
