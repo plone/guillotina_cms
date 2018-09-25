@@ -1,4 +1,4 @@
-guillotina>=4.1.11
+guillotina>=4.2.1
 guillotina-dbusers
 guillotina-elasticsearch==3.0.26
 guillotina-rediscache==2.0.3
