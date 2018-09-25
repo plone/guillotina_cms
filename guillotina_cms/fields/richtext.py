@@ -1,13 +1,13 @@
 from guillotina import configure
+from guillotina.component import get_adapter
+from guillotina.exceptions import ValueDeserializationError
+from guillotina.interfaces import IJSONToValue
 from guillotina.schema import Object
 from guillotina.schema._field import _validate_fields
-from zope.interface import implementer
-from guillotina_cms.interfaces import IRichTextField
-from guillotina_cms.interfaces import IRichTextFieldSchema
-from guillotina.exceptions import ValueDeserializationError
-from guillotina.component import get_adapter
-from guillotina.interfaces import IJSONToValue
 from guillotina.schema.exceptions import WrongContainedType
+from guillotina_cms.fields.interfaces import IRichTextField
+from guillotina_cms.fields.interfaces import IRichTextFieldSchema
+from zope.interface import implementer
 
 
 # This class is hacky because the rest api

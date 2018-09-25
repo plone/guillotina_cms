@@ -4,3 +4,5 @@ guillotina-elasticsearch==3.0.26
 guillotina-rediscache==2.0.3
 guillotina-swagger
 diff-match-patch==20121119
+Pillow
+plone.scale>=3.0.1
