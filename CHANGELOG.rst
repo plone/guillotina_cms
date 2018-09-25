@@ -1,7 +1,8 @@
 1.0a5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Remove login endpoint
+  [bloodbare]
 
 
 1.0a4 (2018-09-19)
