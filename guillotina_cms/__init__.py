@@ -22,12 +22,71 @@ app_settings = {
                     'actions': {}
                 }
             }
+        },
+        'basic': {
+            'initial_state': 'private',
+            'states': {
+                'private': {
+                    'actions': {
+                        'publish': {
+                            'title': 'Publish',
+                            'to': 'public',
+                            'check_permission': 'guillotina.ReviewContent'
+                        }
+                    },
+                    'set_permission': {
+                        'roleperm': [
+                            {
+                                'setting': 'Deny',
+                                'role': 'guillotina.Anonymous',
+                                'permission': 'guillotina.ViewContent'
+                            },
+                            {
+                                'setting': 'Deny',
+                                'role': 'guillotina.Anonymous',
+                                'permission': 'guillotina.AccessContent'
+                            }
+                        ]
+                    }
+                },
+                'public': {
+                    'actions': {
+                        'retire': {
+                            'title': 'Retire',
+                            'to': 'private',
+                            'check_permission': 'guillotina.ReviewContent'
+                        }
+                    },
+                    'set_permission': {
+                        'roleperm': [
+                            {
+                                'setting': 'AllowSingle',
+                                'role': 'guillotina.Anonymous',
+                                'permission': 'guillotina.ViewContent'
+                            },
+                            {
+                                'setting': 'AllowSingle',
+                                'role': 'guillotina.Anonymous',
+                                'permission': 'guillotina.AccessContent'
+                            }
+                        ]
+                    }
+                }
+            }
         }
     },
     'workflows_content': {
-        'guillotina.interfaces.IResource': 'private'
+        'guillotina.interfaces.IResource': 'private',
+        'guillotina.interfaces.IContainer': 'basic',
+        'guillotina_cms.content.document.IDocument': 'basic'
     },
-    'search_parser': 'guillotina_cms.search.parser.Parser'
+    'search_parser': 'guillotina_cms.search.parser.Parser',
+    'default_tiles': {
+        'Document': [
+            {'type': 'title'},
+            {'type': 'text'}
+        ]
+    }
 }
 
 path = '/'.join(__file__.split('/')[:-1])
