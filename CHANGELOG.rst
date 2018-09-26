@@ -1,7 +1,8 @@
 1.0a6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixing constraints api
+  [bloodbare]
 
 
 1.0a5 (2018-09-25)
