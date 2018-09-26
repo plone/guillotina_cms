@@ -108,6 +108,5 @@ def includeme(root):
     configure.scan('guillotina_cms.vocabularies')
     configure.scan('guillotina_cms.permissions')
     configure.scan('guillotina_cms.install')
-    configure.scan('guillotina_cms.validator')
     configure.scan('guillotina_cms.subscribers')
     configure.scan('guillotina_cms.tiles')
