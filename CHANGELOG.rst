@@ -1,4 +1,4 @@
-1.0a6 (unreleased)
+1.0a6 (2018-09-26)
 ------------------
 
 - Fixing constraints api
