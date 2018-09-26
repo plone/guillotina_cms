@@ -7,3 +7,5 @@ bin
 lib
 include
 pip-selfcheck.json
+g.db
+g.db.blobs

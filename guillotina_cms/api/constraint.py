@@ -14,7 +14,7 @@ async def get_constraints(context, request):
     if at is None:
         tn = getattr(context, 'type_name', None)
         factory = get_cached_factory(tn)
-        at = factory.allowed_types
+        at = factory.allowed_types if factory.allowed_types is not None else []
     return at
 
 @configure.service(
@@ -38,7 +38,7 @@ async def set_constraint(context, request):
     factory = get_cached_factory(tn)
     allowed_types = factory.allowed_types
     for element in data:
-        if element not in allowed_types:
+        if allowed_types is not None and element not in allowed_types:
             raise ErrorResponse(
                 'WrongType', str('wrong type'),
                 status=412, reason=error_reasons.DESERIALIZATION_FAILED)
@@ -77,14 +77,16 @@ async def append_constraint(context, request):
         factory = get_cached_factory(tn)
         allowed_types = factory.allowed_types
         for element in patch_data:
-            if element not in allowed_types:
+            if allowed_types is not None and element not in allowed_types:
                 raise ErrorResponse(
                     'WrongType', str('wrong type'),
                     status=412, reason=error_reasons.DESERIALIZATION_FAILED)
 
         at = getattr(context, '__allowed_types__', None)
-        if at is None:
+        if at is None and allowed_types is not None:
             at = allowed_types.copy()
+        elif at is None:
+            at = []
         for element in patch_data:
             if element not in at:
                 at.append(element)
@@ -93,7 +95,10 @@ async def append_constraint(context, request):
         at = getattr(context, '__allowed_types__', None)
         if at is None:
             factory = get_cached_factory(tn)
-            at = factory.allowed_types.copy()
+            if factory.allowed_types is None:
+                at = []
+            else:
+                at = factory.allowed_types.copy()
         for element in patch_data:
             if element in at:
                 at.remove(element)
