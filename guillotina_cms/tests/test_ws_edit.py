@@ -31,7 +31,7 @@ async def test_ws_edit(guillotina, cms_requester, pubsub):
             })
         )
         url = guillotina.server.make_url('db/guillotina/item/@ws-edit')
-        asyncio.create_task(await_for_value(url))
+        asyncio.ensure_future(await_for_value(url))
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(
                     url,

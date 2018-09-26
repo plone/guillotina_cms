@@ -1,3 +1,4 @@
+import guillotina_linkintegrity as li
 from guillotina import configure
 from guillotina.component import get_adapter
 from guillotina.exceptions import ValueDeserializationError
@@ -5,6 +6,7 @@ from guillotina.interfaces import IJSONToValue
 from guillotina.schema import Object
 from guillotina.schema._field import _validate_fields
 from guillotina.schema.exceptions import WrongContainedType
+from guillotina.utils import execute
 from guillotina_cms.fields.interfaces import IRichTextField
 from guillotina_cms.fields.interfaces import IRichTextFieldSchema
 from zope.interface import implementer
@@ -56,13 +58,18 @@ def field_deserializer(field, value, context):
                     get_adapter(f, IJSONToValue, args=[val, context]))
             else:
                 setattr(new_obj, key, None)
+    if new_obj.data is not None:
+        execute.after_request(
+            li.update_links_from_html(context, new_obj.data))
+
     return new_obj
 
 
 @configure.value_serializer(RichTextFieldValue)
-def field_serializer(field):
+async def field_serializer(field):
     return {
         'content-type': field.content_type,
-        'data': field.data,
+        'raw': field.data,
+        'data': await li.translate_links(field.data),
         'encoding': field.encoding
     }
