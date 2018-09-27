@@ -9,11 +9,7 @@ databases:
     read_only: false
     pool_size: 100
 applications:
-- guillotina_swagger
 - guillotina_cms
-- guillotina_elasticsearch
-- guillotina_rediscache
-- guillotina_linkintegrity
 address: 8081
 static:
 - favicon.png: static/favicon.png

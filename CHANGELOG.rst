@@ -1,7 +1,8 @@
 1.0a8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use application setting dependencies
+  [vangheem]
 
 
 1.0a7 (2018-09-27)
