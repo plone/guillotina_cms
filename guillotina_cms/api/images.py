@@ -7,7 +7,7 @@ from guillotina.api.service import TraversableFieldService
 from guillotina.component import get_multi_adapter
 from guillotina.interfaces import IFileManager
 from guillotina.response import HTTPNotFound
-from guillotina_cms.behaviors.image import IHasImage
+from guillotina_cms.interfaces import IHasImage
 from guillotina_cms.interfaces import IImagingSettings
 from plone.scale.scale import scaleImage
 
