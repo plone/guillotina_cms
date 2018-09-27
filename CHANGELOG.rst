@@ -1,5 +1,7 @@
 1.0a7 (unreleased)
 ------------------
+- Provide scale for Images and ImageField
+  [bloodbare]
 
 - Add guillotina_linkintegrity
   [vangheem]
@@ -7,7 +9,7 @@
 - Syndication settings behavior(ssr needs to provide feeds)
   [vangheem]
 
-  - Provide image scale support
+- Provide image scale support
   [vangheem]
 
 
