@@ -1,4 +1,4 @@
-1.0a7 (unreleased)
+1.0a7 (2018-09-27)
 ------------------
 - Provide scale for Images and ImageField
   [bloodbare]
