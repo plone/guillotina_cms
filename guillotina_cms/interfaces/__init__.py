@@ -1,5 +1,6 @@
 from .base import ICMSBehavior  # noqa
 from .base import ICMSLayer  # noqa
+from .image import IHasImage  # noqa
 from .content import IDocument  # noqa
 from .content import IFile  # noqa
 from .content import IImage  # noqa

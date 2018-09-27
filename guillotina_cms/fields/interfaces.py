@@ -1,6 +1,8 @@
 from zope.interface import Interface
 from guillotina.schema.interfaces import IObject
 from guillotina import schema
+from guillotina.interfaces import IFile
+from guillotina.interfaces import ICloudFileField
 
 
 class IRichTextField(IObject):
@@ -18,3 +20,10 @@ class IRichTextFieldSchema(Interface):
     encoding = schema.ASCII(
         title='Get the real encoding'
     )
+
+
+class IImageFile(IFile):
+    """Image file"""
+
+class ICloudImageFileField(ICloudFileField):
+    """Image on the cloud file"""
