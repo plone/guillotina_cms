@@ -61,7 +61,7 @@ elasticsearch:
   connection_settings:
     hosts:
     - elasticsearch:9200
-    sniffer_timeout: 0.5
+    sniffer_timeout: 0
   index: {}
   mapping_overrides:
     "*": {}

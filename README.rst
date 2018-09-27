@@ -73,7 +73,7 @@ Running Plone-React
 
 Checkout Plone-React::
 
-    git clone https://github.com/plone/plone-react.githttps://github.com/plone/plone-react.git
+    git clone https://github.com/plone/plone-react.git
  
 Install JS package dependencies with Yarn::
 
