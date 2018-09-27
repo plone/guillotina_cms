@@ -7,16 +7,6 @@ WIP: This package is a work in progress to provide CMS on guillotina
 
 Bundle of cms functionality for guillotina
 
-Prepare guillotina dev
-----------------------
-
-Create virtualenv::
-
-    virtualenv .
-    source bin/activate
-    pip install -r requirements.txt
-    python setup.py develop
-
 
 Prepare Docker env
 ------------------
@@ -30,25 +20,49 @@ MacOS::
 Start Docker Background
 -----------------------
 
-Start it::
+Start it (with cockroach) ::
 
     docker-compose create
     docker-compose up cockroachdb cockroachdb2 elasticsearch redis
     docker exec -it guillotina_cms_cockroachdb_1 /cockroach/cockroach sql --insecure --execute="CREATE DATABASE guillotina;"
 
+
+Start it (with postgres) ::
+
+    docker-compose create
+    docker-compose -f docker-compose-pg.yaml up postgres elasticsearch redis
+
 Build dev image (a.k.a. ./bin/buildout)
 ---------------------------------------
 
-To rebuild docker image with dependencies update::
+To install with docker::
 
     docker-compose build guillotina
+
+To install with virtualenv (python 3.7) ::
+
+    virtualenv .
+    source bin/activate
+    pip install -r requirements.txt
+    python setup.py develop
+    # If you want to run tests
+    pip install -r requirements-test.txt
+
 
 Run dev (a.k.a. ./bin/instance fg)
 ----------------------------------
 
-Run docker dev container::
+Run docker dev container (with cockroach) ::
 
     docker-compose run --service-ports guillotina
+
+Run docker dev container (with postgres) ::
+
+    docker-compose -f docker-compose-pg.yaml run --service-ports guillotina
+
+Run on virtualenv (with postgres) ::
+
+    g -c config-pg.yaml
 
 
 Add CMS container
@@ -89,3 +103,15 @@ Start frontend dev server::
 Then go to http://localhost:4300 to see the Plone-React frontend running on Guillotina!
 
 You can log into Plone-React with username "root" and password "root".
+
+
+Cleanup DB
+----------
+
+Cleanup postgres env::
+
+    docker-compose -f docker-compose-pg.yaml rm -s -v elasticsearch redis postgres
+
+Cleanup cockroachdb env::
+
+    docker-compose -f docker-compose-pg.yaml rm -s -v elasticsearch redis cockroachdb cockroachdb2

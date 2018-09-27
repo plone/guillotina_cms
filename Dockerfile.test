@@ -17,4 +17,4 @@ COPY . .
 
 RUN python setup.py develop
 
-CMD [ "pytest iskra_cio" ]
+CMD [ "pytest guillotina_cms" ]
