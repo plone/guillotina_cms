@@ -1,10 +1,10 @@
+from guillotina.fields import CloudFileField
 from guillotina.interfaces import IFolder
 from guillotina.interfaces import IItem
-from guillotina_cms.fields.richtext import RichTextField
-from guillotina.fields import CloudFileField
-from guillotina_cms.fields.image import CloudImageFileField
 from guillotina_cms.directives import fieldset_field
-from guillotina_cms.interfaces import IHasImage
+from guillotina_cms.fields.image import CloudImageFileField
+from guillotina_cms.fields.richtext import RichTextField
+from guillotina_cms.interfaces.image import IHasImage
 
 
 class IDocument(IFolder):

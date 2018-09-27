@@ -2,11 +2,8 @@ from guillotina import configure
 from guillotina import schema
 from guillotina.fields import CloudFileField
 from guillotina.interfaces import IResource
+from guillotina_cms.interfaces import IHasImage
 from zope.interface import Interface
-
-
-class IHasImage(Interface):
-    pass
 
 
 @configure.behavior(
