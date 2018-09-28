@@ -4,6 +4,7 @@ from guillotina.addons import Addon
 from guillotina.interfaces import ILayers
 from guillotina_cms.behaviors.image import IImageAttachment
 from guillotina_cms.behaviors.syndication import ISyndicationSettings
+from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.interfaces import IImagingSettings
 
 
@@ -19,6 +20,7 @@ class CMSAddon(Addon):
     async def install(cls, container, request):
         container.add_behavior(ISyndicationSettings)
         container.add_behavior(IImageAttachment)
+        container.add_behavior(ICMSBehavior)
 
         registry = request.container_settings
         registry.for_interface(ILayers)['active_layers'] |= {

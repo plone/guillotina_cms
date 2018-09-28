@@ -1,8 +1,20 @@
 from guillotina import configure
 from guillotina.behaviors.instance import AnnotationBehavior
+from guillotina.behaviors.properties import ContextProperty
 from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.interfaces import IWorkflow
 from guillotina.utils import iter_parents
+
+
+def default_review_state(context=None, name=None):
+    return IWorkflow(context).initial_state
+
+
+def default_language(context=None, name=None):
+    for parent in iter_parents(context):
+        if hasattr(parent, name):
+            return parent.name
+    return None
 
 
 @configure.behavior(
@@ -11,37 +23,7 @@ from guillotina.utils import iter_parents
     for_="guillotina.interfaces.IResource")
 class CMS(AnnotationBehavior):
 
-    def get_language(self):
-        if hasattr(self.context, '__language'):
-            return self.context.__language
-        else:
-            for parent in iter_parents(self.context):
-                if hasattr(self.context, '__language'):
-                    return self.context.__language
-            return None
+    review_state = ContextProperty('review_state', default_review_state)
+    language = ContextProperty('language', default_language)
 
-    def set_language(self, value):
-        self.context.__language = value
-
-    def del_language(self):
-        del self.context.__language
-
-    language = property(
-        get_language, set_language, del_language)
-
-    def get_review_state(self):
-        if hasattr(self.context, '__review_state'):
-            return self.context.__review_state
-        else:
-            return IWorkflow(self.context).initial_state
-
-    def set_review_state(self, value):
-        self.context.__review_state = value
-        self.context._p_register()
-
-    def del_review_state(self):
-        del self.context.__review_state
-        self.context._p_register()
-
-    review_state = property(
-        get_review_state, set_review_state, del_review_state)
+    __local__properties__ = ('review_state', 'language')

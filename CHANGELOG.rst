@@ -1,7 +1,14 @@
 1.0a9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixing navigation to use @search endpoint and get parameter to get navigation based on depth
+  [bloodbare]
+
+- Full object search result
+  [bloodbare]
+
+- Setting default title for an object the id of itself
+  [bloodbare]
 
 
 1.0a8 (2018-09-27)

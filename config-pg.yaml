@@ -74,37 +74,4 @@ utilities:
 - provides: guillotina_cms.interfaces.IPubSubUtility
   factory: guillotina_cms.utilities.pubsub.PubSubUtility
   settings: {}
-search_parser: guillotina_cms.search.parser.Parser
-default_tiles:
-  Document:
-  - type: title
-  - type: text
-workflows:
-  basic:
-    initial_state: private
-    states:
-      private:
-        actions:
-            publish:
-                title: Publish
-                to: public
-                check_permission: guillotina.ReviewContent
-        set_permission:
-            roleperm:
-            - setting: Allow
-              role: guillotina.Anonymous
-              permission: guillotina.ViewContent
-      public:
-        actions:
-            retire:
-                title: Retire
-                to: private
-                check_permission: guillotina.ReviewContent
-        set_permission:
-            roleperm:
-            - setting: Deny
-              role: guillotina.Anonymous
-              permission: guillotina.ViewContent
-workflows_content:
-  guillotina.interfaces.IResource: basic
-  guillotina_cms.content.document.IDocument: guillotina_simple_publication
+
