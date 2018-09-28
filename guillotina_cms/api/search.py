@@ -48,7 +48,7 @@ async def search_get(context, request):
 
     for member in result['member']:
         if full_objects:
-            obj = get_object_by_oid(member['uuid'])
+            obj = await get_object_by_oid(member['uuid'])
 
             view = DefaultGET(obj, request)
             serialization = await view()

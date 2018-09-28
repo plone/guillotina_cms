@@ -37,3 +37,6 @@ async def cms_object_added(obj, event):
             }
         )
         cms._p_register()
+
+    if hasattr(obj, 'title') and obj.title is None:
+        obj.title = obj.id

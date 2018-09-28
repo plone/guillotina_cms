@@ -25,5 +25,10 @@ class IDGenerator(object):
                 return data['image']['filename']
             except KeyError:
                 return None
+        elif '@type' in data and data['@type'] == 'File':
+            try:
+                return data['file']['filename']
+            except KeyError:
+                return None
         else:
             return None
