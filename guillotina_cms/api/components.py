@@ -91,8 +91,9 @@ class Navigation(Service):
 
     async def __call__(self):
         search = query_utility(ICatalogUtility)
-        path = get_content_path(self.context)
-        depth = get_content_depth(self.context) + 1
+        context = self.request.container
+        path = get_content_path(context)
+        depth = get_content_depth(context) + 1
         max_depth = None
         if 'expand.navigation.depth' in self.request.rel_url.query:
             max_depth = str(int(self.request.rel_url.query['expand.navigation.depth']) + depth)
@@ -128,7 +129,7 @@ class Navigation(Service):
             }
             pending_dict.setdefault(brain['parent_uuid'], []).append(brain_serialization)
 
-        parent_uuid = self.context.uuid
+        parent_uuid = context.uuid
         if parent_uuid not in pending_dict:
             final_list = []
         else:
