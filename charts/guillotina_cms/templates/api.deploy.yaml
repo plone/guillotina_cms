@@ -1,0 +1,58 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ .Values.app }}-api
+  labels:
+    app: {{ .Values.app }}
+    role: api
+    heritage: {{ .Release.Service }}
+spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  replicas: {{ .Values.api.replicaCount }}
+  template:
+    metadata:
+      name: {{ .Values.app }}-api
+      labels:
+        app: {{ .Values.app }}
+        role: api
+        heritage: {{ .Release.Service }}
+    spec:
+      dnsPolicy: ClusterFirst
+      affinity:
+{{ toYaml .Values.api.affinity | indent 8 }}
+      tolerations:
+{{ toYaml .Values.api.tolerations | indent 8 }}
+      containers:
+      - name: {{ .Values.app }}-api
+        image: "{{ .Values.image_guillotina }}"
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.api.service.internalPort }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 90
+          periodSeconds: 60
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.api.service.internalPort }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 90
+          periodSeconds: 60
+        command: ["/app/docker-entrypoint.sh"]
+        args: ["guillotina", "-c" ,"/app/config.yaml"]
+        volumeMounts:
+        - mountPath: /app/config.yml
+          name: config
+          subPath: config.yml
+        ports:
+        - name: api
+          containerPort: {{ .Values.api.service.internalPort }}
+          protocol: {{ .Values.api.service.protocol }}
+        resources:
+{{ toYaml .Values.api.resources | indent 10 }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Values.app }}-config

@@ -1,0 +1,19 @@
+dependencies:
+- name: postgresql
+  version: "0.18.0"
+  repository: "@stable"
+  alias: db
+  tags:
+    - guillotina-db
+- name: redis
+  version: "3.10.0"
+  repository: "@stable"
+  alias: cache
+  tags:
+    - guillotina-cache
+- name: elasticsearch
+  version: "1.6.6"
+  repository: "@iskra"
+  alias: index
+  tags:
+    - guillotina-index

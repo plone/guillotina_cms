@@ -1,7 +1,11 @@
 1.0a10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Adding a base chart helm configuration
+  [bloodbare]
+
+- Updating guillotina
+  [bloodbare]
 
 
 1.0a9 (2018-09-28)
