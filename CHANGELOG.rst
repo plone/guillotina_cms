@@ -1,7 +1,8 @@
 1.0a10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix image deserialization error
+  [vangheem]
 
 
 1.0a9 (2018-09-28)
