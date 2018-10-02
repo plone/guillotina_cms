@@ -1,6 +1,9 @@
 1.0a10 (unreleased)
 -------------------
 
+- Split search function to call it from other code
+  [bloodbare]
+
 - Adding a base chart helm configuration
   [bloodbare]
 
