@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.app }}-api
+spec:
+  type: {{ .Values.service.api.type }}
+  ports:
+  - name: api
+    port: {{ .Values.service.api.externalPort }}
+    targetPort: {{ .Values.service.api.internalPort }}
+    protocol: {{ .Values.service.api.protocol }}
+  selector:
+    app: {{ .Values.app }}
+    role: api
+    heritage: {{ .Release.Service }}

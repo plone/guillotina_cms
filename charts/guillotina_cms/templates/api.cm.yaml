@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.app }}-config
+  labels:
+    app: {{ .Values.app }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  config.yml: |-
+    aiohttp_settings:
+      client_max_size: 20971520
+    databases:
+    - db:
+        storage: postgresql
+        transaction_strategy: dbresolve_readcommitted
+        dsn: postgresql://{{ .Values.db.postgresUser }}:{{ .Values.db.postgresPassword }}@{{ .Values.app }}-db:5432/{{ .Values.db.postgresDatabase }}
+        read_only: false
+        pool_size: 100
+    applications:
+    - guillotina_swagger
+    - guillotina_cms
+    - guillotina_dbuser
+    - guillotina_elasticsearch
+    - guillotina_rediscache
+    address: {{ .Values.service.api.internalPort }}
+    static:
+    - favicon.png: static/favicon.png
+    - swagger_static: guillotina_swagger:static
+    # - pastanaga: pastanaga-angular/dist
+    # - ng: plone-angular-demo/dist
+    # - plone: plone-react
+    root_user:
+      password: {{ .Values.api.root_passwd }}
+    auth_extractors:
+    - guillotina.auth.extractors.CookiePolicy
+    - guillotina.auth.extractors.BearerAuthPolicy
+    - guillotina.auth.extractors.BasicAuthPolicy
+    - guillotina.auth.extractors.WSTokenAuthPolicy
+    auth_token_validators:
+    - guillotina.auth.validators.SaltedHashPasswordValidator
+    - guillotina.auth.validators.JWTValidator
+    redis:
+      host: "{{ .Values.app }}-cache-master"
+      port: 6379
+    jwt:
+      secret: {{ .Values.api.jwtsecret }}
+      algorithm: HS256
+    jsapps:
+      +admin: guillotina:static/executioner
+    cors:
+      allow_origin:
+      - "{{ .Values.api.externalUrl }}"
+      allow_methods:
+      - GET
+      - POST
+      - DELETE
+      - HEAD
+      - PATCH
+      - OPTIONS
+      allow_headers:
+      - "*"
+      expose_headers:
+      - "*"
+      allow_credentials: true
+      max_age: 3660
+    elasticsearch:
+      bulk_size: 20
+      index_name_prefix: ges-
+      connection_settings:
+        hosts:
+        - {{ .Values.app }}-index-client:9200
+        sniffer_timeout: 0.5
+      index: {}
+      mapping_overrides:
+        "*": {}
+    utilities:
+    - provides: guillotina.async_util.IQueueUtility
+      factory: guillotina.async_util.QueueUtility
+      settings: {}
+    - provides: guillotina_cms.interfaces.IWorkflowUtility
+      factory: guillotina_cms.utilities.workflow.WorkflowUtility
+      settings: {}
+    - provides: guillotina_cms.interfaces.IPubSubUtility
+      factory: guillotina_cms.utilities.pubsub.PubSubUtility
+      settings: {}
+

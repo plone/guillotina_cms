@@ -1,0 +1,54 @@
+app: gcms
+revisionHistoryLimit: 2
+
+api:
+  image: plone/guillotina_cms:master
+  service:
+    type: LoadBalancer
+    externalPort: 80
+    internalPort: 8080
+    protocol: TCP
+    externalUrl: https://
+  resources:
+    limits:
+      memory: "600Mi"
+      cpu: "300m"
+  root_passwd: root
+  jwtsecret: secret
+  replicaCount: 1
+
+front:
+  image: plone/plone-react:master.latest
+  resources:
+    limits:
+      memory: "600Mi"
+      cpu: "400m"
+  service:
+    type: LoadBalancer
+    externalPort: 80
+    internalPort: 4300
+    protocol: TCP
+    externalUrl: https://
+
+
+index:
+  single: true
+  data:
+    replicas: 1
+    exposeHttp: true
+  cluster:
+    env:
+      MINIMUM_MASTER_NODES: "1"
+      EXPECTED_MASTER_NODES: "1"
+      RECOVER_AFTER_MASTER_NODES: "1"
+
+cache:
+  cluster:
+    enabled: false
+  usePassword: false
+
+db:
+  postgresUser: postgres
+  postgresPassword: secret
+  postgresDatabase: guillotina
+

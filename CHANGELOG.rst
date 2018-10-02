@@ -1,6 +1,12 @@
 1.0a10 (unreleased)
 -------------------
 
+- Adding a base chart helm configuration
+  [bloodbare]
+
+- Updating guillotina
+  [bloodbare]
+
 - Fix image deserialization error
   [vangheem]
 
