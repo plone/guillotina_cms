@@ -1,4 +1,4 @@
-1.0a10 (unreleased)
+1.0a10 (2018-10-02)
 -------------------
 
 - Split search function to call it from other code
