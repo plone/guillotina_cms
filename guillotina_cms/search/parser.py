@@ -190,8 +190,12 @@ class Parser:
         self.request = request
         self.context = context
 
-    def __call__(self):
-        get_params = dict(self.request.rel_url.query)
+    def __call__(self, get_params=None, container=None):
+        if get_params is None:
+            get_params = dict(self.request.rel_url.query)
+
+        if container is None:
+            container = self.request.container
 
         # Fullobject
         if '_fullobject' in get_params:
@@ -269,7 +273,7 @@ class Parser:
         # TODO _aggregations
 
         call_params = {
-            'container': self.request.container,
+            'container': container,
             'path': path,
             'query': query
         }
