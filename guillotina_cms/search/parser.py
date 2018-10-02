@@ -244,10 +244,6 @@ class Parser:
             query['_sources']['excludes'] = convert(get_params['_metadata_not'])
             del get_params['_metadata_not']
 
-        # From
-        if '_from' in get_params:
-            query['from'] = get_params['_from']
-            del get_params['_from']
 
         # Sort
         if '_sort_asc' in get_params:
@@ -281,6 +277,11 @@ class Parser:
         if '_size' in get_params:
             call_params['size'] = get_params['_size']
             del get_params['_size']
+
+        # From
+        if '_from' in get_params:
+            call_params['from'] = get_params['_from']
+            del get_params['_from']
 
         for field, value in get_params.items():
             process_field(field, convert(value), query)
