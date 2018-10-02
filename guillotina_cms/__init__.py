@@ -11,8 +11,7 @@ app_settings = {
     'applications': [
         'guillotina_swagger',
         'guillotina_elasticsearch',
-        'guillotina_rediscache',
-        'guillotina_linkintegrity'
+        'guillotina_rediscache'
     ],
     'available_tiles': {},
     'pubsub_connector': 'guillotina_cms.pubsub.RedisPubSubConnector',

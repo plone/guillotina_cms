@@ -115,3 +115,9 @@ Cleanup postgres env::
 Cleanup cockroachdb env::
 
     docker-compose -f docker-compose-pg.yaml rm -s -v elasticsearch redis cockroachdb cockroachdb2
+
+
+Optional addons
+---------------
+
+- guillotina_linkintegrity

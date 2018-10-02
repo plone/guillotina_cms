@@ -1,4 +1,4 @@
-import guillotina_linkintegrity as li
+from guillotina import app_settings
 from guillotina import configure
 from guillotina.component import get_adapter
 from guillotina.exceptions import ValueDeserializationError
@@ -12,11 +12,15 @@ from guillotina_cms.fields.interfaces import IRichTextFieldSchema
 from zope.interface import implementer
 
 
+try:
+    import guillotina_linkintegrity as li
+except ImportError:
+    li = None
+
+
 # This class is hacky because the rest api
 # uses a subfield on richtext called content-type
 # Yes ... with a - ....
-
-
 class RichTextFieldValue(object):
 
     content_type = None
@@ -58,7 +62,8 @@ def field_deserializer(field, value, context):
                     get_adapter(f, IJSONToValue, args=[val, context]))
             else:
                 setattr(new_obj, key, None)
-    if new_obj.data is not None:
+    if (new_obj.data is not None and
+            'guillotina_linkintegrity' in app_settings['applications']):
         execute.after_request(
             li.update_links_from_html(context, new_obj.data))
 
@@ -67,9 +72,12 @@ def field_deserializer(field, value, context):
 
 @configure.value_serializer(RichTextFieldValue)
 async def field_serializer(field):
+    data = field.data
+    if 'guillotina_linkintegrity' in app_settings['applications']:
+        data = await li.translate_links(data)
     return {
         'content-type': field.content_type,
         'raw': field.data,
-        'data': await li.translate_links(field.data),
+        'data': data,
         'encoding': field.encoding
     }

@@ -3,7 +3,6 @@ guillotina-dbusers>=2.0.2
 guillotina-elasticsearch==3.0.26
 guillotina-rediscache==2.0.3
 guillotina-swagger
-guillotina-linkintegrity>=1.0.3
 diff-match-patch==20121119
 Pillow
 plone.scale>=3.0.1
