@@ -38,5 +38,6 @@ def json_converter(value):
 @configure.value_deserializer(ICloudImageFileField)
 async def deserialize_image_cloud_field(field, value, context):
     val = await deserialize_cloud_field(field, value, context)
-    alsoProvides(val, IImageFile)
+    if val is not None:
+        alsoProvides(val, IImageFile)
     return val

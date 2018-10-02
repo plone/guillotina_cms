@@ -7,6 +7,9 @@
 - Updating guillotina
   [bloodbare]
 
+- Fix image deserialization error
+  [vangheem]
+
 
 1.0a9 (2018-09-28)
 ------------------
