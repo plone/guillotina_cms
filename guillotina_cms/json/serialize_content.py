@@ -1,9 +1,12 @@
 from guillotina import configure
-from guillotina.interfaces import IResourceSerializeToJsonSummary
-from guillotina.interfaces import IResource
 from guillotina.interfaces import IAbsoluteURL
+from guillotina.interfaces import IResource
+from guillotina.interfaces import IResourceSerializeToJson
+from guillotina.interfaces import IResourceSerializeToJsonSummary
+from guillotina.json.serialize_content import SerializeToJson
 from guillotina.json.serialize_value import json_compatible
 from guillotina_cms.interfaces import ICMSLayer
+from guillotina_cms.interfaces import IFile
 
 
 @configure.adapter(
@@ -31,3 +34,17 @@ class DefaultJSONSummarySerializer(object):
             'title': self.context.title
         })
         return summary
+
+
+@configure.adapter(
+    for_=(IFile, ICMSLayer),
+    provides=IResourceSerializeToJson)
+class FileJSONSerializer(SerializeToJson):
+
+    async def __call__(self):
+        data = await super().__call__()
+        if data.get('file'):
+            data['file']['download'] = '{}/@download/file/{}'.format(
+                IAbsoluteURL(self.context)(), data['file']['filename']
+            )
+        return data

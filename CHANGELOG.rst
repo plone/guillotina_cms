@@ -1,7 +1,8 @@
 1.0a11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Provide file download url in file type response
+  [vangheem]
 
 
 1.0a10 (2018-10-02)
