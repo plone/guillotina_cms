@@ -1,6 +1,9 @@
 1.0a11 (unreleased)
 -------------------
 
+- Be able to provide initial state when creating object
+  [vangheem]
+
 - Fix image scaling
   [vangheem]
 

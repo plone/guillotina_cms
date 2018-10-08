@@ -1,12 +1,14 @@
+import datetime
+
 from guillotina import configure
-from guillotina.interfaces import IResource
+from guillotina.component import query_adapter
 from guillotina.interfaces import IObjectAddedEvent
+from guillotina.interfaces import IResource
+from guillotina.security.utils import apply_sharing
+from guillotina.utils import get_authenticated_user_id
+from guillotina.utils import get_current_request
 from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.interfaces import IWorkflow
-from guillotina.component import query_adapter
-from guillotina.utils import get_authenticated_user_id, get_current_request
-from guillotina.security.utils import apply_sharing
-import datetime
 
 
 @configure.subscriber(for_=(IResource, IObjectAddedEvent))
@@ -18,9 +20,10 @@ async def cms_object_added(obj, event):
 
         workflow = IWorkflow(obj)
         await cms.load(create=True)
-        initial_state = workflow.initial_state
+        state = cms.review_state
 
-        await apply_sharing(obj, workflow.states[initial_state]['set_permission'])
+        if 'set_permission' in workflow.states[state]:
+            await apply_sharing(obj, workflow.states[state]['set_permission'])
 
         setattr(cms, 'history', [])
         cms.history.append(
@@ -32,7 +35,7 @@ async def cms_object_added(obj, event):
                 'type': 'workflow',
                 'data': {
                     'action': None,
-                    'review_state': initial_state,
+                    'review_state': state,
                 }
             }
         )
