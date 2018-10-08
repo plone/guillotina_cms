@@ -1,6 +1,9 @@
 1.0a11 (unreleased)
 -------------------
 
+- Fix image scaling
+  [vangheem]
+
 - Provide file download url in file type response
   [vangheem]
 

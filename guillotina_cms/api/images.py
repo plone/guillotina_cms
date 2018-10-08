@@ -49,7 +49,9 @@ class DownloadImageScale(TraversableFieldService):
         width, _, height = allowed_sizes[scale_name].partition(':')
 
         result, format_, size = scaleImage(
-            data, int(width), int(height), quality=settings['quality'])
+            data, int(width), int(height),
+            quality=settings['quality'],
+            direction='thumbnail')
 
         cors_renderer = app_settings['cors_renderer'](self.request)
         headers = await cors_renderer.get_headers()
