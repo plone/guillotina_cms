@@ -4,12 +4,12 @@ from guillotina.content import Item
 from guillotina.interfaces import IItem
 from guillotina import schema
 from guillotina_cms import _
-from guillotina.directives import index
+from guillotina.directives import index_field
 
 
 class ILink(IItem):
 
-    index('url', type='text')
+    index_field('url', type='text')
     url = schema.TextLine(
         title=_('URL'),
         required=False)
