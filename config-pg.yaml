@@ -48,6 +48,7 @@ cors:
   - HEAD
   - PATCH
   - OPTIONS
+  - PUT
   allow_headers:
   - "*"
   expose_headers:
