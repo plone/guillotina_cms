@@ -1,4 +1,4 @@
-1.0a11 (unreleased)
+1.0a11 (2018-10-23)
 -------------------
 
 - News has a text field
