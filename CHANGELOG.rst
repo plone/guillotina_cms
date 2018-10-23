@@ -1,6 +1,9 @@
 1.0a11 (unreleased)
 -------------------
 
+- News has a text field
+  [bloodbare]
+
 - Be able to provide initial state when creating object
   [vangheem]
 

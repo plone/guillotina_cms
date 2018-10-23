@@ -34,7 +34,7 @@ class IFile(IItem):
 
 class INews(IItem):
 
-    fieldset_field('file', 'default')
+    fieldset_field('text', 'default')
     text = RichTextField(
         title='Text',
         required=False,
