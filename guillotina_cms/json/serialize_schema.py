@@ -7,6 +7,7 @@ from guillotina_cms.interfaces import ICMSLayer
 from guillotina_cms.directives import fieldset
 from guillotina_cms.directives import merged_tagged_value_dict_merged
 from guillotina.schema.interfaces import ISource
+from guillotina import app_settings
 
 
 @configure.adapter(
@@ -35,6 +36,7 @@ class SerializeCMSFactoryToJson(SerializeFactoryToJson):
 
         fieldsets = [{'fields': value, 'id': key, 'title': key} for key, value in fieldsets_dict.items()]
         result['fieldsets'] = fieldsets
+        result['layouts'] = app_settings['layouts'].get(self.factory.schema.__identifier__, [])
         return result
 
 

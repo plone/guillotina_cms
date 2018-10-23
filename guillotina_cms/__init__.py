@@ -18,6 +18,37 @@ app_settings = {
     'commands': {
         'upgrade': 'guillotina_cms.commands.upgrade.UpgradeCommand'
     },
+    'layouts': {
+        'guillotina.interfaces.content.IFolder': [
+            'listing_view',
+            'tabular_view',
+            'summary_view',
+            'layout_view',
+            'full_view',
+            'album_view',
+            'event_listing'
+        ],
+        'guillotina_cms.interfaces.content.IDocument': [
+            'document_view',
+            'layout_view'
+        ],
+        'guillotina_cms.interfaces.content.INews': [
+            'document_view',
+            'layout_view'
+        ],
+        'guillotina_cms.interfaces.content.IEvent': [
+            'document_view',
+            'layout_view'
+        ],
+        'guillotina_cms.interfaces.content.ILink': [
+            'document_view',
+            'layout_view'
+        ],
+        'guillotina_cms.interfaces.content.IFile': [
+            'document_view',
+            'layout_view'
+        ]
+    },
     'workflows': {
         'private': {
             'initial_state': 'private',
