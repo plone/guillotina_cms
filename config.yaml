@@ -10,6 +10,7 @@ databases:
     pool_size: 100
 applications:
 - guillotina_cms
+- guillotina_elasticsearch
 address: 8081
 static:
 - favicon.png: static/favicon.png

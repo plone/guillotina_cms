@@ -10,7 +10,6 @@ _ = MessageFactory('guillotina_cms')
 app_settings = {
     'applications': [
         'guillotina_swagger',
-        'guillotina_elasticsearch',
         'guillotina_rediscache'
     ],
     'available_tiles': {},
