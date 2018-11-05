@@ -1,7 +1,8 @@
 1.0a12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Content layout support
+  [bloodbare]
 
 
 1.0a11 (2018-10-23)
