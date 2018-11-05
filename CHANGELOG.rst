@@ -1,4 +1,4 @@
-1.0a12 (unreleased)
+1.0a12 (2018-11-05)
 -------------------
 
 - Content layout support
