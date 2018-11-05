@@ -28,6 +28,10 @@ services:
       - redis
   guillotina:
     build: .
+    command:
+    - guillotina
+    - -c
+    - config-pg.yaml
     ports:
     - "8081:8081"
     - "50101:50101"
