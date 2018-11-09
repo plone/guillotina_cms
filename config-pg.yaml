@@ -5,7 +5,7 @@ databases:
 - db:
     storage: postgresql
     transaction_strategy: dbresolve_readcommitted
-    dsn: postgresql://postgres:secret@postgres:5432/guillotina
+    dsn: postgresql://postgres:secret@localhost:5432/guillotina
     read_only: false
     pool_size: 100
 applications:
