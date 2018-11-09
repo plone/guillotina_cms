@@ -1,4 +1,4 @@
-1.0a13 (unreleased)
+1.0a13 (2018-11-09)
 -------------------
 
 - Update guillotina
