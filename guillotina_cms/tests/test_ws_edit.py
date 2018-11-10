@@ -44,5 +44,5 @@ async def test_ws_edit(guillotina, cms_requester, pubsub):
                         'foobar', 'flub barsh dsfksld'))
                 }
                 await ws.send_str(json.dumps(sending))
-                await asyncio.sleep(1)
+                await asyncio.sleep(10)
                 assert 'barsh' in json.loads(RECEIVED.data)['v']
