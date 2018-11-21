@@ -54,7 +54,8 @@ class ICMSBehavior(Interface):
     content_layout = schema.Choice(
         title='Content Layout',
         required=False,
-        source='content_layouts')
+        source='content_layouts',
+        default='default')
 
     index_field('position_in_parent', type='int')
     position = schema.Int(

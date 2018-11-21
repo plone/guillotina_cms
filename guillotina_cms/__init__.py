@@ -17,6 +17,18 @@ app_settings = {
     'commands': {
         'upgrade': 'guillotina_cms.commands.upgrade.UpgradeCommand'
     },
+    'load_utilities': {
+        'guillotina_cms.workflow': {
+            'provides': 'guillotina_cms.interfaces.IWorkflowUtility',
+            'factory': 'guillotina_cms.utilities.workflow.WorkflowUtility',
+            'settings': {}
+        },
+        'guillotina_cms.pubsub': {
+            'provides': 'guillotina_cms.interfaces.IPubSubUtility',
+            'factory': 'guillotina_cms.utilities.pubsub.PubSubUtility',
+            'settings': {}
+        }
+    },
     'layouts': {
         'guillotina.interfaces.content.IFolder': [
             'listing_view',

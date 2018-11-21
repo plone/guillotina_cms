@@ -25,6 +25,7 @@ matrix:
 
 services:
   - postgresql
+  - redis-server
   - docker
 # make sure we're on the latest version of postgresql
 addons:

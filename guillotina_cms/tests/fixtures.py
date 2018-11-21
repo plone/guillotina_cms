@@ -20,11 +20,6 @@ def base_settings_configurator(settings):
         settings['applications'].append('guillotina_cms')
     else:
         settings['applications'] = ['guillotina_cms']
-    settings['utilities'].append({
-        'provides': 'guillotina_cms.interfaces.IWorkflowUtility',
-        'factory': 'guillotina_cms.utilities.workflow.WorkflowUtility',
-        'settings': {}
-    })
 
 
 testing.configure_with(base_settings_configurator)
@@ -37,7 +32,7 @@ class CMSRequester(ContainerRequesterAsyncContextManager):
         # aioes caches loop, we need to continue to reset it
         search = get_utility(ICatalogUtility)
         search.loop = loop
-        if search._conn:
+        if getattr(search, '_conn', None):
             search._conn.close()
         search._conn = None
 
@@ -50,20 +45,14 @@ class CMSRequester(ContainerRequesterAsyncContextManager):
 
 
 @pytest.fixture(scope='function')
-async def cms_requester(elasticsearch, redis_container, guillotina, loop):
-    # from guillotina import app_settings
-    # app_settings['redis']['port'] = redis_container[1]
-    # app_settings['elasticsearch']['connection_settings']['hosts'] = [':'.join(elasticsearch)]
-    return CMSRequester(guillotina, loop)
+async def cms_requester(redis_container, elasticsearch, guillotina, loop):
+    from guillotina import app_settings
+    app_settings['redis']['port'] = redis_container[1]
+    app_settings['elasticsearch']['connection_settings']['hosts'] = ['{}:{}'.format(
+        elasticsearch[0], elasticsearch[1])]
+    yield CMSRequester(guillotina, loop)
 
 
 @pytest.fixture(scope='function')
-async def pubsub(guillotina, redis_container, loop):
-    util = {
-        'provides': 'guillotina_cms.interfaces.IPubSubUtility',
-        'factory': 'guillotina_cms.utilities.pubsub.PubSubUtility',
-        'settings': {}
-    }
-    guillotina.root.add_async_utility(util, loop=loop)
-    yield
-    guillotina.root.del_async_utility(util)
+async def pubsub(redis_container, elasticsearch, guillotina, loop):
+    yield CMSRequester(guillotina, loop)

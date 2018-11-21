@@ -19,6 +19,7 @@ class PubSubUtility:
         self._loop = loop
         self.publisher = None
         self.conn = None
+        self.tasks = {}
 
     async def initialize(self, app=None):
         settings = app_settings['redis']
@@ -32,8 +33,16 @@ class PubSubUtility:
             loop=self._loop)
 
     async def finalize(self):
-        self.conn.close()
-        self.publisher.close()
+        for channel in self.tasks.values():
+            if not channel.done():
+                channel.cancel()
+        await asyncio.sleep(0.1)
+        if self.publisher is not None:
+            # In case of tests without redis let finalize pass
+            self.publisher.close()
+        if self.conn is not None:
+            # In case of tests without redis let finalize pass
+            self.conn.close()
 
     async def real_subscribe(self, channel_name):
         channel, = await self.conn.subscribe(channel_name)
@@ -53,26 +62,30 @@ class PubSubUtility:
         finally:
             try:
                 await self.conn.unsubscribe(channel_name)
-            except:
+            except Exception:
                 pass
 
-
     async def subscribe(self, channel_name, req_id, callback):
-
         if channel_name in self.subscribers:
             self.subscribers[channel_name][req_id] = callback
         else:
             self.subscribers[channel_name] = {
                 req_id: callback
             }
-            asyncio.ensure_future(
+            task = asyncio.ensure_future(
                 self.real_subscribe(channel_name))
+            self.tasks[channel_name] = task
 
     async def unsubscribe(self, channel_name, req_id):
+        self.tasks.remove(asyncio.current_task())
         del self.subscribers[self.channel_name][req_id]
-        if len(self.subscribers[self.channel_name]):
+        if len(self.subscribers[self.channel_name]) == 0:
             await self.conn.unsubscribe(self.channel_name)
             del self.subscribers[self.channel_name]
+
+            if not self.tasks[channel_name].done():
+                self.tasks[channel_name].cancel()
+            del self.tasks[channel_name]
 
     async def publish(self, channel_name, data):
         await self.publisher.publish(channel_name, ujson.dumps(data))
