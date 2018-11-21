@@ -1,4 +1,4 @@
-1.0a14 (unreleased)
+1.0a14 (2018-11-21)
 -------------------
 
 - Upgrade to work with guillotina >= 4.3.0
