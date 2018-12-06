@@ -1,4 +1,4 @@
-1.0a15 (unreleased)
+1.0a15 (2018-12-06)
 -------------------
 
 - Fix id generation to produce valid ids
