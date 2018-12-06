@@ -8,7 +8,7 @@ async def test_id_generator(cms_requester):
             '/db/guillotina',
             data=json.dumps({
                 '@type': 'Folder',
-                'title': 'Folder 32',
+                'title': 'Folder 32!*&[]#',
             })
         )
         assert 'folder-32' in resp['@id']

@@ -1,5 +1,6 @@
 from guillotina import configure
 from guillotina.interfaces import IIDGenerator
+from guillotina.utils.content import _valid_id_characters
 from guillotina_cms.interfaces import ICMSLayer
 
 
@@ -18,17 +19,23 @@ class IDGenerator(object):
     def __call__(self, data):
 
         if 'title' in data:
-            new_title = data['title'].lower().replace(' ', '-')
-            return new_title
+            new_id = data['title'].lower().replace(' ', '-')
+            return new_id
         if '@type' in data and data['@type'] == 'Image':
             try:
-                return data['image']['filename']
+                new_id = data['image']['filename']
             except KeyError:
                 return None
         elif '@type' in data and data['@type'] == 'File':
             try:
-                return data['file']['filename']
+                new_id = data['file']['filename']
             except KeyError:
                 return None
         else:
             return None
+        if new_id[0] in ('_', '@'):
+            new_id = new_id[1:]
+        return ''.join(
+            l for l in new_id
+            if l in _valid_id_characters
+        )

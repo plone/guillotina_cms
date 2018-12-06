@@ -1,7 +1,8 @@
 1.0a15 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix id generation to produce valid ids
+  [vangheem]
 
 
 1.0a14 (2018-11-21)
