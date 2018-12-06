@@ -1,7 +1,7 @@
 1.0a16 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix release
 
 
 1.0a15 (2018-12-06)
