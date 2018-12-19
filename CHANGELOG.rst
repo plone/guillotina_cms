@@ -1,4 +1,4 @@
-1.0a17 (unreleased)
+1.0a17 (2018-12-19)
 -------------------
 
 - Handle issue when detected id is empty string
