@@ -1,7 +1,8 @@
 1.0a17 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Handle issue when detected id is empty string
+  [vangheem]
 
 
 1.0a16 (2018-12-06)

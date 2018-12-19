@@ -32,9 +32,12 @@ class IDGenerator(object):
                 return None
         else:
             return None
-        if new_id[0] in ('_', '@'):
-            new_id = new_id[1:]
-        return ''.join(
-            l for l in new_id
-            if l in _valid_id_characters
-        )
+        if new_id:
+            if new_id[0] in ('_', '@'):
+                new_id = new_id[1:]
+            return ''.join(
+                l for l in new_id
+                if l in _valid_id_characters
+            )
+        else:
+            return None
