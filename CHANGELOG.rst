@@ -1,7 +1,12 @@
 1.0a19 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Do elasticsearch queries with retrieving data against reverse indexes
+  and not the original doc
+  [vangheem]
+
+- Store more fields for es lookup
+  [vangheem]
 
 
 1.0a18 (2019-01-31)

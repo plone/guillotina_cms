@@ -25,21 +25,21 @@ class ICMSLayer(Interface):
 
 class ICMSBehavior(Interface):
 
-    index_field('hidden_navigation', type='boolean')
+    index_field('hidden_navigation', store=True, type='boolean')
     fieldset('hidden_navigation', 'settings')
     hidden_navigation = schema.Bool(
         title='Should be hidden on navigation',
         required=False,
         default=False)
 
-    index_field('language', type='keyword')
+    index_field('language', store=True, type='keyword')
     fieldset('language', 'categorization')
     language = schema.Choice(
         title='Language',
         required=False,
         source='languages')
 
-    index_field('content_layout', type='keyword')
+    index_field('content_layout', store=True, type='keyword')
     fieldset('content_layout', 'settings')
     content_layout = schema.Choice(
         title='Content Layout',
@@ -55,7 +55,7 @@ class ICMSBehavior(Interface):
         default=-1,
         required=False)
 
-    index_field('review_state', type='keyword')
+    index_field('review_state', store=True, type='keyword')
     review_state = schema.Choice(
         readonly=True,
         title='Workflow review state',

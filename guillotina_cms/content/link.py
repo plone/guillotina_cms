@@ -9,7 +9,7 @@ from guillotina.directives import index_field
 
 class ILink(IItem):
 
-    index_field('url', type='text')
+    index_field('url', store=True, type='text')
     url = schema.TextLine(
         title=_('URL'),
         required=False)

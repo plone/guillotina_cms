@@ -41,8 +41,8 @@ class DefaultJSONSummarySerializer(object):
     provides=IResourceSerializeToJson)
 class FileJSONSerializer(SerializeToJson):
 
-    async def __call__(self):
-        data = await super().__call__()
+    async def __call__(self, include=[], omit=[]):
+        data = await super().__call__(include=include, omit=omit)
         if data.get('file'):
             data['file']['download'] = '{}/@download/file/{}'.format(
                 IAbsoluteURL(self.context)(), data['file']['filename']

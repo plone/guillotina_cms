@@ -16,6 +16,23 @@ logger = logging.getLogger('guillotina_cms')
 
 INDEXES_CACHE = None
 MAX_AGGS = 20
+SEARCH_DATA_FIELDS = [
+    'content_layout',
+    'contributors',
+    'creation_date',
+    'creators',
+    'hidden_navigation',
+    'id',
+    'language',
+    'modification_date',
+    'parent_uuid',
+    'path',
+    'review_state',
+    'tags',
+    'title',
+    'type_name',
+    'uuid'
+]
 
 
 def convert(value):
@@ -205,10 +222,7 @@ class Parser:
             full_objects = False
 
         query = {
-            '_source': {
-                'includes': [],
-                'excludes': []
-            },
+            'stored_fields': SEARCH_DATA_FIELDS,
             'query': {
                 'bool': {
                     'must': [],

@@ -1,13 +1,15 @@
 from guillotina import configure
-from guillotina.interfaces import IAbsoluteURL
-from guillotina.interfaces import IResource
+from guillotina.api.service import Service
 from guillotina.component import query_utility
-from guillotina.utils import get_content_path
-from guillotina.utils import get_content_depth
+from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import ICatalogUtility
 from guillotina.interfaces import IDatabase
-from guillotina.api.service import Service
+from guillotina.interfaces import IResource
+from guillotina.utils import get_content_depth
+from guillotina.utils import get_content_path
+
 from guillotina_cms.interfaces import ICMSLayer
+from guillotina_cms.search.parser import SEARCH_DATA_FIELDS
 
 
 @configure.service(
@@ -103,9 +105,7 @@ class Navigation(Service):
         else:
             musts = [{'term': {'depth': depth}}]
         query = {
-            '_source': {
-                'includes': ['title', '_id', 'depth', 'parent_uuid', '@absolute_url', 'type_name', 'path'],
-            },
+            'stored_fields': SEARCH_DATA_FIELDS,
             'query': {
                 'bool': {
                     'must': musts,
