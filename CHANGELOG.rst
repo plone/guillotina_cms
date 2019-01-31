@@ -1,4 +1,4 @@
-1.0a19 (unreleased)
+1.0a19 (2019-01-31)
 -------------------
 
 - Do elasticsearch queries with retrieving data against reverse indexes
