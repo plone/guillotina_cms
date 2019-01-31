@@ -1,4 +1,4 @@
-1.0a18 (unreleased)
+1.0a18 (2019-01-31)
 -------------------
 
 - Implement content ordering
