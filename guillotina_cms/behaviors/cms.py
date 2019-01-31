@@ -30,5 +30,6 @@ class CMS(AnnotationBehavior):
     review_state = ContextProperty('review_state', default_review_state)
     language = ContextProperty('language', default_language)
     content_layout = ContextProperty('content_layout', default_layout)
+    position_in_parent = ContextProperty('position_in_parent', -1)
 
-    __local__properties__ = ('review_state', 'language')
+    __local__properties__ = ('review_state', 'language', 'position_in_parent')

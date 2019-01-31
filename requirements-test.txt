@@ -6,5 +6,6 @@ pytest-runner==2.11.1
 backoff==1.4.1
 docker==2.2.1
 docker-pycreds==0.2.1
-psycopg2==2.7.1
+psycopg2-binary
 pytest-docker-fixtures
+guillotina_linkintegrity

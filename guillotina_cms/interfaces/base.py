@@ -18,16 +18,6 @@ HISTORY_SCHEMA = json.dumps({
     }
 })
 
-# If its a workflow:
-#     type: workflow
-#     data:
-#         action: string (action)
-#         review_state: string (review state moved to)
-
-# If its a versioning:
-#     type: versioning
-#         version: int (action)
-
 
 class ICMSLayer(Interface):
     """Marker interface layer Plone.CMS."""
@@ -57,9 +47,12 @@ class ICMSBehavior(Interface):
         source='content_layouts',
         default='default')
 
+    # not absolute positioning, just a relative positioning
+    # based on ordered numbers. It won't be numbers like 1,2,3,4,5,etc
     index_field('position_in_parent', type='int')
-    position = schema.Int(
+    position_in_parent = schema.Int(
         title='Position in parent',
+        default=-1,
         required=False)
 
     index_field('review_state', type='keyword')

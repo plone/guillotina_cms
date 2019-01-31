@@ -175,7 +175,7 @@ def bbb_parser(get_params):
             del get_params['b_start']
 
         if get_params['sort_on'] == 'getObjPositionInParent':
-            get_params['_sort_des'] = 'position_in_parent'
+            get_params['_sort_asc'] = 'position_in_parent'
             del get_params['sort_on']
 
         get_params['depth'] = get_params['path.depth']

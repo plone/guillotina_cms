@@ -8,6 +8,7 @@ databases:
     dsn: postgresql://postgres:secret@localhost:5432/guillotina
     read_only: false
     pool_size: 100
+store_json: true
 applications:
 - guillotina_swagger
 - guillotina_cms

@@ -133,7 +133,8 @@ app_settings = {
             {'type': 'title'},
             {'type': 'text'}
         ]
-    }
+    },
+    'store_json': True
 }
 
 path = '/'.join(__file__.split('/')[:-1])

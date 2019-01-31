@@ -1,11 +1,10 @@
+import json
+
+import pytest
 from guillotina import testing
 from guillotina.component import get_utility
 from guillotina.interfaces import ICatalogUtility
 from guillotina.tests.fixtures import ContainerRequesterAsyncContextManager
-
-import json
-import pytest
-
 from pytest_docker_fixtures import images
 
 
@@ -38,7 +37,7 @@ class CMSRequester(ContainerRequesterAsyncContextManager):
 
     async def __aenter__(self):
         await super().__aenter__()
-        resp = await self.requester('POST', '/db/guillotina/@addons', data=json.dumps({
+        await self.requester('POST', '/db/guillotina/@addons', data=json.dumps({
             'id': 'cms'
         }))
         return self.requester

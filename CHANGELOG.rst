@@ -1,7 +1,8 @@
 1.0a18 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Implement content ordering
+  [vangheem]
 
 
 1.0a17 (2018-12-19)
