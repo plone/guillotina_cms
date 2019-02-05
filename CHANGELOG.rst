@@ -1,4 +1,4 @@
-1.0a20 (unreleased)
+1.0a20 (2019-02-05)
 -------------------
 
 - improve plone compatible search parser
