@@ -10,14 +10,14 @@ async def test_search(cms_requester):
         # @search?path_starts=folder&depth_gte=2
         resp, status = await requester(
             'GET',
-            '/db/guillotina/@search?path__starts=cms-folder0&depth__gte=2'
+            '/db/guillotina/@search?path__starts=cms-folder0&depth__gte=1'
         )
         # Folder included
         assert resp['items_total'] == 11
 
         resp, status = await requester(
             'GET',
-            '/db/guillotina/@search?path__starts=cms-folder0&depth__gte=3'
+            '/db/guillotina/@search?path__starts=cms-folder0&depth__gte=2'
         )
         assert resp['items_total'] == 10
 

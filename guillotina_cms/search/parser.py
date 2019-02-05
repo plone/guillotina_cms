@@ -79,6 +79,11 @@ def process_field(field, value, query):
         # XXX: Compatibility with plone?
         field = 'type_name'
 
+    match_type = 'must'
+    if field.endswith('__should'):
+        match_type = 'should'
+        field = field.rstrip('__should')
+
     if field not in indices:
         if field.endswith('__not'):
             modifier = 'not'
@@ -89,6 +94,12 @@ def process_field(field, value, query):
         elif field.endswith('__eq'):
             modifier = 'eq'
             field = field.rstrip('__eq')
+        elif field.endswith('__gt'):
+            modifier = 'gt'
+            field = field.rstrip('__gt')
+        elif field.endswith('__lt'):
+            modifier = 'lt'
+            field = field.rstrip('__lt')
         elif field.endswith('__gte'):
             modifier = 'gte'
             field = field.rstrip('__gte')
@@ -127,7 +138,7 @@ def process_field(field, value, query):
 
         if modifier is None:
             # Keyword we expect an exact match
-            query['query']['bool']['must'].append(
+            query['query']['bool'][match_type].append(
                 {
                     term_keyword: {
                         field: value
@@ -141,9 +152,9 @@ def process_field(field, value, query):
                         field: value
                     }
                 })
-        elif modifier == 'in' and _type == 'text':
+        elif modifier == 'in' and _type in ('text', 'searchabletext'):
             # The value list can be inside the field
-            query['query']['bool']['must'].append(
+            query['query']['bool'][match_type].append(
                 {
                     'match': {
                         field: value
@@ -152,22 +163,18 @@ def process_field(field, value, query):
         elif modifier == 'eq':
             # The sentence must appear as is it
             value = ' '.join(value)
-            query['query']['bool']['must'].append(
+            query['query']['bool'][match_type].append(
                 {
                     'match': {
                         field: value
                     }
                 })
-        elif modifier == 'gte':
-            query['query']['bool']['must'].append(
+        elif modifier in ('gte', 'lte', 'gt', 'lt'):
+            query['query']['bool'][match_type].append(
                 {
-                    'range': {field: {'gte': value}}})
-        elif modifier == 'lte':
-            query['query']['bool']['must'].append(
-                {
-                    'range': {field: {'lte': value}}})
+                    'range': {field: {modifier: value}}})
         elif modifier == 'wildcard':
-            query['query']['bool']['must'].append(
+            query['query']['bool'][match_type].append(
                 {
                     'wildcard': {
                         field: value
@@ -181,24 +188,27 @@ def process_field(field, value, query):
 
 def bbb_parser(get_params):
 
-    if 'path.depth' in get_params and 'sort_on' in get_params and 'b_size' in get_params:
-        if 'SearchableText' in get_params:
-            get_params['title_in'] = get_params['SearchableText']
-            get_params['text_in'] = get_params['SearchableText']
-            del get_params['SearchableText']
+    if 'SearchableText' in get_params:
+        indices = get_indexes()
+        value = get_params.pop('SearchableText')
+        for index_name, idx_data in indices.items():
+            if idx_data['type'] in ('text', 'searchabletext'):
+                get_params['{}__in__should'.format(index_name)] = value
 
+    if get_params.get('sort_on') == 'getObjPositionInParent':
+        get_params['_sort_asc'] = 'position_in_parent'
+        del get_params['sort_on']
+
+    if 'b_size' in get_params:
         if 'b_start' in get_params:
             get_params['_from'] = get_params['b_start']
             del get_params['b_start']
-
-        if get_params['sort_on'] == 'getObjPositionInParent':
-            get_params['_sort_asc'] = 'position_in_parent'
-            del get_params['sort_on']
-
-        get_params['depth'] = get_params['path.depth']
-        del get_params['path.depth']
         get_params['_size'] = get_params['b_size']
         del get_params['b_size']
+
+    if 'path.depth' in get_params:
+        get_params['depth'] = get_params['path.depth']
+        del get_params['path.depth']
 
 
 class Parser:
@@ -226,6 +236,8 @@ class Parser:
             'query': {
                 'bool': {
                     'must': [],
+                    'should': [],
+                    "minimum_should_match": 1,
                     'must_not': []
                 }
             },
@@ -234,8 +246,15 @@ class Parser:
 
         bbb_parser(get_params)
 
-        if 'depth' in get_params:
-            get_params['depth'] = str(int(get_params['depth']) + get_content_depth(self.context))
+        # normalize depth
+        found = False
+        for param in get_params.keys():
+            if param == 'depth' or param.startswith('depth__'):
+                found = True
+                get_params[param] = str(int(get_params[param]) + get_content_depth(self.context))
+        if not found:
+            # default to a depth so we don't show container
+            get_params['depth__gte'] = str(1 + get_content_depth(self.context))
 
         if '_aggregations' in get_params:
             query['aggregations'] = {}
@@ -250,12 +269,17 @@ class Parser:
                 }
             del get_params['_aggregations']
         # Metadata
-        if '_metadata' in get_params:
-            query['_sources']['includes'] = convert(get_params['_metadata'])
-            del get_params['_metadata']
+        if ('_metadata' in get_params or 'metadata_fields' in get_params):
+            fields = convert(
+                get_params.get('_metadata') or get_params.get('metadata_fields'))
+            if '_all' not in fields:
+                query['stored_fields'] = fields
+            get_params.pop('_metadata', None)
+            get_params.pop('metadata_fields', None)
 
         if '_metadata_not' in get_params:
-            query['_sources']['excludes'] = convert(get_params['_metadata_not'])
+            query['stored_fields'] = list(
+                set(SEARCH_DATA_FIELDS) - set(convert(get_params['_metadata_not'])))
             del get_params['_metadata_not']
 
         # From
@@ -299,4 +323,7 @@ class Parser:
         for field, value in get_params.items():
             process_field(field, convert(value), query)
 
+        if len(query['query']['bool']['should']) == 0:
+            del query['query']['bool']['should']
+            del query['query']['bool']['minimum_should_match']
         return call_params, full_objects
