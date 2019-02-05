@@ -1,7 +1,8 @@
-1.0a110 (unreleased)
---------------------
+1.0a20 (unreleased)
+-------------------
 
-- Nothing changed yet.
+- improve plone compatible search parser
+  [vangheem]
 
 
 1.0a19 (2019-01-31)
