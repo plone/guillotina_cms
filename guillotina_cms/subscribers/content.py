@@ -52,6 +52,8 @@ async def cms_object_added(obj, event):
             pos = await get_next_order()
             cms.position_in_parent = pos
             fut = index.get_future()
+            if fut is None:
+                return
             if obj.uuid not in fut.index:
                 fut.index[obj.uuid] = {}
             fut.index[obj.uuid]['position_in_parent'] = cms.position_in_parent
