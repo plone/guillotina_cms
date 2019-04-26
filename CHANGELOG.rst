@@ -2,7 +2,7 @@
 1.0a22 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Another fix for latest
 
 
 1.0a21 (2019-04-26)
