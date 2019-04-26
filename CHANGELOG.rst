@@ -1,5 +1,5 @@
 
-1.0a22 (unreleased)
+1.0a21 (2019-04-26)
 -------------------
 
 - Fixes with latest guillotina
