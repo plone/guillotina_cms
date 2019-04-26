@@ -8,15 +8,13 @@ from guillotina_cms.interfaces import IVersioning
 from guillotina_cms.interfaces import IVersioningMarker
 
 
-@configure.subscriber(for_=(IBeforeObjectModifiedEvent))
+@configure.subscriber(for_=(IVersioningMarker, IBeforeObjectModifiedEvent))
 async def before_object_modified(context, event):
-
-    if IVersioningMarker.providedBy(context):
-        # its enabled to copy the diff
-        diff_calculator = IDiffCalculator(event.context, None)
-        if diff_calculator is None:
-            return
-        context._v_temporal_versioning = await diff_calculator(event.payload)
+    # its enabled to copy the diff
+    diff_calculator = IDiffCalculator(event.context, None)
+    if diff_calculator is None:
+        return
+    context._v_temporal_versioning = await diff_calculator(event.payload)
 
 
 @configure.subscriber(for_=(IResource, IObjectModifiedEvent))
