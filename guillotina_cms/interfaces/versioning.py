@@ -14,3 +14,6 @@ class IVersioningMarker(Interface):
 
 class IDiffCalculator(Interface):
     """Interface for an adapter to look for diffs"""
+
+    async def __call__(payload):
+        pass

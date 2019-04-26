@@ -1,7 +1,8 @@
-1.0a21 (unreleased)
+
+1.0a22 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fixes with latest guillotina
 
 
 1.0a20 (2019-02-05)

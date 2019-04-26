@@ -62,13 +62,3 @@ elasticsearch:
   index: {}
   mapping_overrides:
     "*": {}
-utilities:
-- provides: guillotina.async_util.IQueueUtility
-  factory: guillotina.async_util.QueueUtility
-  settings: {}
-- provides: guillotina_cms.interfaces.IWorkflowUtility
-  factory: guillotina_cms.utilities.workflow.WorkflowUtility
-  settings: {}
-- provides: guillotina_cms.interfaces.IPubSubUtility
-  factory: guillotina_cms.utilities.pubsub.PubSubUtility
-  settings: {}
