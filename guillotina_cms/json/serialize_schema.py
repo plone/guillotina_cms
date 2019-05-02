@@ -35,7 +35,20 @@ class SerializeCMSFactoryToJson(SerializeFactoryToJson):
                     fieldsets_dict[key].extend(behavior_fields)
 
         fieldsets = [{'fields': value, 'id': key, 'title': key} for key, value in fieldsets_dict.items()]
-        result['fieldsets'] = fieldsets
+        # Some naive order
+        result['fieldsets'] = []
+        to_append = None
+        for fsobj in fieldsets:
+            if fsobj['id'] == 'default':
+                result['fieldsets'].insert(0, fsobj)
+            elif fsobj['id'] == 'settings':
+                to_append = fsobj
+            else:
+                result['fieldsets'].append(fsobj)
+
+        if to_append is not None:
+            result['fieldsets'].append(to_append)
+
         result['layouts'] = app_settings['layouts'].get(self.factory.schema.__identifier__, [])
         return result
 
