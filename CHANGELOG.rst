@@ -2,7 +2,8 @@
 1.0a23 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- A naive fieldset order
+  [ramon]
 
 
 1.0a22 (2019-04-26)
