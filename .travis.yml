@@ -29,7 +29,7 @@ services:
   - docker
 # make sure we're on the latest version of postgresql
 addons:
-  postgresql: "9.6"
+  postgresql: "10"
 before_script:
   - psql -c 'create database guillotina;' -U postgres
 
