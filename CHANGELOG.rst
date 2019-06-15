@@ -5,6 +5,12 @@
 - A naive fieldset order
   [ramon]
 
+- Add Makefile and assosciated helper scripts for initialize the DB and install
+  CMS required packages
+  [sneridagh]
+
+- Fix local development G enviroment config
+  [sneridagh]
 
 1.0a22 (2019-04-26)
 -------------------

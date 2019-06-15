@@ -35,5 +35,10 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     install_requires=requirements,
-    tests_require=test_requirements
+    tests_require=test_requirements,
+    entry_points={
+        'console_scripts': [
+            'initdb=guillotina_cms.scripts:initdb',
+            'deletedb=guillotina_cms.scripts:deletedb'],
+    }
 )

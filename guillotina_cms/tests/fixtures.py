@@ -10,7 +10,7 @@ from pytest_docker_fixtures import images
 
 images.configure(
     'elasticsearch',
-    'docker.elastic.co/elasticsearch/elasticsearch-oss', '6.2.4'
+    'docker.elastic.co/elasticsearch/elasticsearch', '6.8.0'
 )
 
 
