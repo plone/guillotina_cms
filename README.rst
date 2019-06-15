@@ -17,6 +17,29 @@ MacOS::
     sysctl -w vm.max_map_count=262144
     (to exit Ctrl + a + d)
 
+Quick Start
+-----------
+
+There's in place a convenience Makefile that setups all the basic enviroment
+required for Guillotina CMS to work::
+
+    make
+
+It will install the default virtualenv, pull and launch the docker containers,
+and setup the default objects in the DB for the CMS to work. If you do this,
+you can pass on the next steps. Follow the next steps in case you want to have
+more control over how the environment is set up.
+
+You can always run::
+
+    make initdb
+
+to populate the DB. You can run::
+
+    make deletedb
+
+to reset and remove the default container.
+
 Start Docker Background
 -----------------------
 
@@ -82,28 +105,39 @@ If you want to access and browse the guillotina tree you can use the Angular Fro
     http://localhost:8081/+admin
 
 
-Running Plone-React
+Running Volto
 -------------------
 
-Checkout Plone-React::
+Checkout Volto::
 
-    git clone https://github.com/plone/plone-react.git
- 
+    git clone https://github.com/plone/volto.git
+
 Install JS package dependencies with Yarn::
 
-    cd plone-react
-    yarn install
+    $ cd volto
+    $ yarn
 
-Then edit "src/config/index.js" to point to http://localhost:8081/db/web.
+Then edit "src/config/index.js" to change the default Plone backend parameter
+``RAZZLE_API_PATH``::
 
-Start frontend dev server::
+    apiPath: process.env.RAZZLE_API_PATH || 'http://localhost:8081/db/web
 
-    yarn dev
+then start the server in development mode::
 
-Then go to http://localhost:4300 to see the Plone-React frontend running on Guillotina!
+    $ yarn start
 
-You can log into Plone-React with username "root" and password "root".
+or alternativelly, setup the environment variable to modify it::
 
+    $ RAZZLE_API_PATH=http://localhost:8081/db/web yarn start
+
+Then go to http://localhost:3000 to see the Volto frontend running on Guillotina!
+
+You can log into Volto with username "root" and password "root".
+
+If you are interested in start a Volto project instead of developing Volto, you
+can follow the instructions in::
+
+    https://docs.voltocms.com/01-getting-started/01-install/#install-volto
 
 Cleanup DB
 ----------
