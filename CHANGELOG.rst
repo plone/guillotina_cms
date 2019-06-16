@@ -12,6 +12,9 @@
 - Fix local development G enviroment config
   [sneridagh]
 
+- Fix breadcrumbs initial object
+  [sneridagh]
+
 1.0a22 (2019-04-26)
 -------------------
 

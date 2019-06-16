@@ -3,7 +3,7 @@ from guillotina.api.service import Service
 from guillotina.component import query_utility
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import ICatalogUtility
-from guillotina.interfaces import IDatabase
+from guillotina.interfaces import IContainer
 from guillotina.interfaces import IResource
 from guillotina.utils import get_content_depth
 from guillotina.utils import get_content_path
@@ -43,7 +43,7 @@ class Breadcrumbs(Service):
     async def __call__(self):
         result = []
         context = self.context
-        while context is not None and not IDatabase.providedBy(context):
+        while context is not None and not IContainer.providedBy(context):
             result.append({
                 'title': context.title,
                 '@id': IAbsoluteURL(context, self.request)()
