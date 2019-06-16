@@ -30,3 +30,6 @@ deletedb: ## Deletes and resets the DB
 
 start-backend: ## Starts Guillotina
 	guillotina -c config-pg.yaml
+
+start-dependencies: ## Starts dependencies (PG, ES, Redis)
+	docker-compose -f docker-compose-pg.yaml up postgres elasticsearch redis
