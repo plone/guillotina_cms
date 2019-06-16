@@ -124,10 +124,10 @@ class Navigation(Service):
         pending_dict = {}
         for brain in result['member']:
             brain_serialization = {
-                'title': brain['title'],
-                '@id': brain['@absolute_url']
+                'title': brain.get('title'),
+                '@id': brain.get('@absolute_url')
             }
-            pending_dict.setdefault(brain['parent_uuid'], []).append(brain_serialization)
+            pending_dict.setdefault(brain.get('parent_uuid'), []).append(brain_serialization)
 
         parent_uuid = context.uuid
         if parent_uuid not in pending_dict:
