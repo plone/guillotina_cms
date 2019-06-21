@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.app }}-front
+  name: volto-front
 spec:
   type: {{ .Values.front.service.type }}
   ports:
@@ -10,6 +10,5 @@ spec:
     targetPort: {{ .Values.front.service.internalPort }}
     protocol: {{ .Values.front.service.protocol }}
   selector:
-    app: {{ .Values.app }}
-    role: front
-    heritage: {{ .Release.Service }}
+    app: {{ template "name" . }}
+    role: volto

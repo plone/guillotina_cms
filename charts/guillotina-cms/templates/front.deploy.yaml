@@ -1,0 +1,55 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ template "fullname" . }}-volto
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    role: volto
+spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  replicas: {{ .Values.front.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "fullname" . }}-volto
+      labels:
+        app: {{ template "name" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+        role: volto
+    spec:
+      dnsPolicy: ClusterFirst
+      affinity:
+{{ toYaml .Values.front.affinity | indent 8 }}
+      tolerations:
+{{ toYaml .Values.front.tolerations | indent 8 }}
+      containers:
+      - name: volto
+        image: {{ .Values.front.image }}
+        imagePullPolicy: Always
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: {{ .Values.front.service.internalPort }}
+        #   initialDelaySeconds: 600
+        #   timeoutSeconds: 120
+        #   periodSeconds: 100
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: {{ .Values.front.service.internalPort }}
+        #   initialDelaySeconds: 30
+        #   timeoutSeconds: 90
+        #   periodSeconds: 60
+        env:
+        - name: API_PATH
+          value: {{ .Values.api.service.externalUrl }}
+        ports:
+        - name: front
+          containerPort: {{ .Values.front.service.internalPort }}
+          protocol: {{ .Values.front.service.protocol }}
+        resources:
+{{ toYaml .Values.front.resources | indent 10 }}

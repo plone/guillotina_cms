@@ -1,21 +1,25 @@
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: {{ .Values.app }}-api
+  name: {{ template "fullname" . }}
   labels:
-    app: {{ .Values.app }}
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
     role: api
-    heritage: {{ .Release.Service }}
 spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   replicas: {{ .Values.api.replicaCount }}
   template:
     metadata:
-      name: {{ .Values.app }}-api
+      name: {{ template "fullname" . }}
       labels:
-        app: {{ .Values.app }}
+        app: {{ template "name" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
         role: api
-        heritage: {{ .Release.Service }}
     spec:
       dnsPolicy: ClusterFirst
       affinity:
@@ -23,9 +27,9 @@ spec:
       tolerations:
 {{ toYaml .Values.api.tolerations | indent 8 }}
       containers:
-      - name: {{ .Values.app }}-api
-        image: "{{ .Values.image_guillotina }}"
-        imagePullPolicy: IfNotPresent
+      - name: api
+        image: "{{ .Values.api.image }}"
+        imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /
@@ -40,8 +44,7 @@ spec:
           initialDelaySeconds: 30
           timeoutSeconds: 90
           periodSeconds: 60
-        command: ["/app/docker-entrypoint.sh"]
-        args: ["guillotina", "-c" ,"/app/config.yaml"]
+        command: ["guillotina", "-c" ,"/app/config.yaml"]
         volumeMounts:
         - mountPath: /app/config.yml
           name: config

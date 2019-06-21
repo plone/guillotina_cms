@@ -20,13 +20,12 @@ data:
         pool_size: 100
     applications:
     - guillotina_cms
-    # - guillotina_dbuser
-    address: {{ .Values.service.api.internalPort }}
+    - guillotina_dbuser
+    - guillotina.contrib.cache
+    address: {{ .Values.api.service.internalPort }}
     static:
       favicon.png: static/favicon.png
-    # pastanaga: pastanaga-angular/dist
-    # ng: plone-angular-demo/dist
-    # plone: plone-react
+      assets: guillotina:static/assets
     root_user:
       password: {{ .Values.api.root_passwd }}
     auth_extractors:
@@ -37,9 +36,6 @@ data:
     auth_token_validators:
     - guillotina.auth.validators.SaltedHashPasswordValidator
     - guillotina.auth.validators.JWTValidator
-    redis:
-      host: "{{ .Values.app }}-cache-master"
-      port: 6379
     jwt:
       secret: {{ .Values.api.jwtsecret }}
       algorithm: HS256
@@ -47,7 +43,7 @@ data:
       +admin: guillotina:static/executioner
     cors:
       allow_origin:
-      - "{{ .Values.api.externalUrl }}"
+      - "{{ .Values.front.service.externalUrl }}"
       allow_methods:
       - GET
       - POST
@@ -61,13 +57,3 @@ data:
       - "*"
       allow_credentials: true
       max_age: 3660
-    elasticsearch:
-      bulk_size: 20
-      index_name_prefix: ges-
-      connection_settings:
-        hosts:
-        - {{ .Values.app }}-index-client:9200
-        sniffer_timeout: 0.5
-      index: {}
-      mapping_overrides:
-        "*": {}

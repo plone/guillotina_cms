@@ -1,5 +1,5 @@
 description: Guillotina CMS
-name: gcms
+name: guillotina-cms
 sources:
 - https://github.com/plone/guillotina_cms
 icon: https://avatars0.githubusercontent.com/u/72034?s=200&v=4

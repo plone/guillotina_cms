@@ -5,10 +5,10 @@ api:
   image: plone/guillotina_cms:master
   service:
     type: LoadBalancer
-    externalPort: 80
+    externalPort: 8080
     internalPort: 8080
     protocol: TCP
-    externalUrl: https://
+    externalUrl: http://localhost:8080
   resources:
     limits:
       memory: "600Mi"
@@ -18,34 +18,17 @@ api:
   replicaCount: 1
 
 front:
-  image: plone/plone-react:master.latest
+  image: plone/volto:latest
   resources:
     limits:
       memory: "600Mi"
       cpu: "400m"
   service:
     type: LoadBalancer
-    externalPort: 80
+    externalPort: 3001
     internalPort: 4300
     protocol: TCP
-    externalUrl: https://
-
-
-index:
-  single: true
-  data:
-    replicas: 1
-    exposeHttp: true
-  cluster:
-    env:
-      MINIMUM_MASTER_NODES: "1"
-      EXPECTED_MASTER_NODES: "1"
-      RECOVER_AFTER_MASTER_NODES: "1"
-
-cache:
-  cluster:
-    enabled: false
-  usePassword: false
+    externalUrl: http://localhost:3000
 
 db:
   postgresUser: postgres
