@@ -9,7 +9,7 @@ pytestmark = pytest.mark.skipif(
     reason="These tests are only for postgresql")
 
 
-async def test_li(cms_requester):
+async def _test_li(cms_requester):
     async with cms_requester as requester:
 
         resp1, status = await requester(
@@ -51,7 +51,7 @@ async def test_li(cms_requester):
         assert resp2['@uid'] in resp
 
 
-async def test_links_translated(cms_requester):
+async def _test_links_translated(cms_requester):
     async with cms_requester as requester:
 
         resp1, status = await requester(

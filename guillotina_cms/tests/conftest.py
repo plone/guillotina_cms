@@ -7,10 +7,9 @@ images.configure(
 
 
 pytest_plugins = [
+    'aiohttp.pytest_plugin',
     'pytest_docker_fixtures',
     'guillotina.tests.fixtures',
-    'guillotina_elasticsearch.tests.fixtures',
-    'guillotina_rediscache.tests.fixtures',
-    'guillotina_linkintegrity.tests.fixtures',
+    # 'guillotina_linkintegrity.tests.fixtures',
     'guillotina_cms.tests.fixtures'
 ]

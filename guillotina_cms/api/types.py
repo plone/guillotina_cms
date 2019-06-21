@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 from guillotina import configure
-from guillotina.api.service import Service
-from guillotina.component import getMultiAdapter
-from guillotina.component import queryUtility
-from guillotina.interfaces import IResource
-from guillotina.interfaces import IFactorySerializeToJson
-from guillotina.interfaces import IResourceFactory
-from guillotina.interfaces import IAbsoluteURL
-from guillotina.response import HTTPNotFound
-from guillotina.interfaces import IConstrainTypes
 from guillotina._cache import FACTORY_CACHE
 from guillotina._cache import PERMISSIONS_CACHE
-from guillotina.interfaces import IPermission
+from guillotina.api.service import Service
+from guillotina.component import getMultiAdapter
 from guillotina.component import query_utility
-from guillotina.interfaces import IInteraction
-from guillotina.exceptions import NoPermissionToAdd
+from guillotina.component import queryUtility
+from guillotina.interfaces import IAbsoluteURL
+from guillotina.interfaces import IConstrainTypes
 from guillotina.interfaces import IContainer
+from guillotina.interfaces import IFactorySerializeToJson
+from guillotina.interfaces import IPermission
+from guillotina.interfaces import IResource
+from guillotina.interfaces import IResourceFactory
+from guillotina.response import HTTPNotFound
+from guillotina.utils import get_security_policy
 
 
 @configure.service(
@@ -62,6 +61,7 @@ async def get_all_types(context, request):
     result = []
     base_url = IAbsoluteURL(context, request)()
     constrains = IConstrainTypes(context, None)
+    policy = get_security_policy()
 
     for id, factory in FACTORY_CACHE.items():
         add = True
@@ -78,8 +78,7 @@ async def get_all_types(context, request):
                 PERMISSIONS_CACHE[factory.add_permission] = permission
 
             if permission is not None and \
-                    not IInteraction(request).check_permission(
-                        permission.id, context):
+                    not policy.check_permission(permission.id, context):
                 add = False
         if add:
             result.append({

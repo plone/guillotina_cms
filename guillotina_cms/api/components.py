@@ -1,15 +1,12 @@
 from guillotina import configure
 from guillotina.api.service import Service
-from guillotina.component import query_utility
 from guillotina.interfaces import IAbsoluteURL
-from guillotina.interfaces import ICatalogUtility
 from guillotina.interfaces import IContainer
 from guillotina.interfaces import IResource
+from guillotina.utils import find_container
 from guillotina.utils import get_content_depth
-from guillotina.utils import get_content_path
-
 from guillotina_cms.interfaces import ICMSLayer
-from guillotina_cms.search.parser import SEARCH_DATA_FIELDS
+from guillotina_cms.utils import get_search_utility
 
 
 @configure.service(
@@ -92,44 +89,38 @@ def recursive_fill(mother_list, pending_dict):
 class Navigation(Service):
 
     async def __call__(self):
-        search = query_utility(ICatalogUtility)
-        context = self.request.container
-        path = get_content_path(context)
-        depth = get_content_depth(context) + 1
+        search = get_search_utility()
+        container = find_container(self.context)
+        depth = get_content_depth(container)
         max_depth = None
         if 'expand.navigation.depth' in self.request.rel_url.query:
             max_depth = str(int(self.request.rel_url.query['expand.navigation.depth']) + depth)
-            musts = [
-                {'range': {'depth': {'gte': depth}}},
-                {'range': {'depth': {'lte': max_depth}}}]
+            depth_query = {
+                'depth__gte': depth,
+                'depth__lte': max_depth
+            }
         else:
-            musts = [{'term': {'depth': depth}}]
-        query = {
-            'stored_fields': SEARCH_DATA_FIELDS,
-            'query': {
-                'bool': {
-                    'must': musts,
-                }
-            },
-            'sort': [{'position_in_parent': 'desc'}],
-        }
-        call_params = {
-            'container': self.request.container,
-            'path': path,
-            'query': query,
-            'size': 100
-        }
-        result = await search.get_by_path(**call_params)
+            depth_query = {
+                'depth': depth
+            }
+
+        result = await search.query(
+            container,
+            {**{
+                '_sort_asc': 'position_in_parent',
+                '_size': 100
+            }, **depth_query}
+        )
 
         pending_dict = {}
         for brain in result['member']:
             brain_serialization = {
                 'title': brain.get('title'),
-                '@id': brain.get('@absolute_url')
+                '@id': brain.get('@id')
             }
             pending_dict.setdefault(brain.get('parent_uuid'), []).append(brain_serialization)
 
-        parent_uuid = context.uuid
+        parent_uuid = container.uuid
         if parent_uuid not in pending_dict:
             final_list = []
         else:

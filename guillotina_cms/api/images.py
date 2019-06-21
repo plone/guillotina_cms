@@ -7,6 +7,7 @@ from guillotina.api.service import TraversableFieldService
 from guillotina.component import get_multi_adapter
 from guillotina.interfaces import IFileManager
 from guillotina.response import HTTPNotFound
+from guillotina.utils import get_registry
 from guillotina_cms.interfaces import IHasImage
 from guillotina_cms.interfaces import IImagingSettings
 from plone.scale.scale import scaleImage
@@ -27,7 +28,8 @@ class DownloadImageFile(DownloadFile):
 class DownloadImageScale(TraversableFieldService):
 
     async def __call__(self):
-        settings = self.request.container_settings.for_interface(IImagingSettings)
+        registry = await get_registry()
+        settings = registry.for_interface(IImagingSettings)
         scale_name = self.request.matchdict['scale']
         allowed_sizes = settings['allowed_sizes']
         if scale_name not in allowed_sizes:

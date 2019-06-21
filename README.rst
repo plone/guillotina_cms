@@ -25,7 +25,7 @@ required for Guillotina CMS to work::
 
     make
 
-It will install the default virtualenv, pull and launch the docker containers,
+It will install the default venv, pull and launch the docker containers,
 and setup the default objects in the DB for the CMS to work. If you do this,
 you can pass on the next steps. Follow the next steps in case you want to have
 more control over how the environment is set up.
@@ -34,7 +34,7 @@ You can always run::
 
     make initdb
 
-to populate the DB. You can run::
+to delete the DB. You can run::
 
     make deletedb
 
@@ -43,17 +43,10 @@ to reset and remove the default container.
 Start Docker Background
 -----------------------
 
-Start it (with cockroach) ::
-
-    docker-compose create
-    docker-compose up cockroachdb cockroachdb2 elasticsearch redis
-    docker exec -it guillotina_cms_cockroachdb_1 /cockroach/cockroach sql --insecure --execute="CREATE DATABASE guillotina;"
-
-
 Start it (with postgres) ::
 
     docker-compose create
-    docker-compose -f docker-compose-pg.yaml up postgres elasticsearch redis
+    docker-compose -f docker-compose.yaml up postgres redis
 
 Build dev image (a.k.a. ./bin/buildout)
 ---------------------------------------
@@ -67,9 +60,7 @@ To install with virtualenv (python 3.7) ::
     virtualenv .
     source bin/activate
     pip install -r requirements.txt
-    python setup.py develop
-    # If you want to run tests
-    pip install -r requirements-test.txt
+    pip install -e .[test]
 
 
 Run dev (a.k.a. ./bin/instance fg)
@@ -81,11 +72,11 @@ Run docker dev container (with cockroach) ::
 
 Run docker dev container (with postgres) ::
 
-    docker-compose -f docker-compose-pg.yaml run --service-ports guillotina
+    docker-compose -f docker-compose.yaml run --service-ports guillotina
 
 Run on virtualenv (with postgres) ::
 
-    g -c config-pg.yaml
+    g -c config.yaml
 
 
 Add CMS container
@@ -108,14 +99,7 @@ If you want to access and browse the guillotina tree you can use the Angular Fro
 Running Volto
 -------------------
 
-Checkout Volto::
-
-    git clone https://github.com/plone/volto.git
-
-Install JS package dependencies with Yarn::
-
-    $ cd volto
-    $ yarn
+First, install Volo: https://github.com/plone/volto
 
 Then edit "src/config/index.js" to change the default Plone backend parameter
 ``RAZZLE_API_PATH``::
@@ -144,14 +128,27 @@ Cleanup DB
 
 Cleanup postgres env::
 
-    docker-compose -f docker-compose-pg.yaml rm -s -v elasticsearch redis postgres
-
-Cleanup cockroachdb env::
-
-    docker-compose -f docker-compose-pg.yaml rm -s -v elasticsearch redis cockroachdb cockroachdb2
-
+    docker-compose -f docker-compose.yaml rm -s -v redis postgres
 
 Optional addons
 ---------------
 
 - guillotina_linkintegrity
+
+
+With Elasticsearch
+------------------
+
+By default, postgresql indexes are used for search. You can use elasticsearch
+for full text searching as well though.
+
+
+Run docker with elasticsearch::
+
+    docker-compose -f docker-compose.yaml rm -s -v redis postgres elasticsearch
+
+
+Uncomment `guillotina_elasticsearch` from applications list in config.yaml::
+
+    - guillotina_elasticsearch
+

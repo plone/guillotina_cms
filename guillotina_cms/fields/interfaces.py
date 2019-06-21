@@ -25,5 +25,6 @@ class IRichTextFieldSchema(Interface):
 class IImageFile(IFile):
     """Image file"""
 
+
 class ICloudImageFileField(ICloudFileField):
     """Image on the cloud file"""

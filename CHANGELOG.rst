@@ -1,3 +1,7 @@
+1.1.0a1 (unreleased)
+-------------------
+
+- upgrade to guillotina > 5
 
 1.0a23 (unreleased)
 -------------------

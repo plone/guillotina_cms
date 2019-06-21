@@ -24,7 +24,7 @@ async def await_for_value(url):
 
 pytest.mark.skipif(os.environ.get('DATABASE') == 'postgresql',
                    reason="Flaky pg test")
-async def test_ws_edit(pubsub):
+async def _test_ws_edit(pubsub):
     async with pubsub as requester:
         resp, status = await requester(
             'POST',

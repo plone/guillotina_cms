@@ -1,11 +1,12 @@
-import logging
-import aioredis
-from guillotina import app_settings
-from guillotina_cms.interfaces import IPubSubUtility
-from guillotina import configure
-import ujson
 import asyncio
+import logging
+
+import aioredis
+import ujson
 from async_timeout import timeout
+from guillotina import app_settings
+from guillotina import configure
+from guillotina_cms.interfaces import IPubSubUtility
 
 
 logger = logging.getLogger('guillotina_cms')
@@ -55,9 +56,9 @@ class PubSubUtility:
                         for req, callback in self.subscribers[channel_name].items():
                             if data.get('ruid') != req:
                                 await callback(data)
-        except asyncio.CancelledError as ex:
+        except asyncio.CancelledError:
             await self.conn.unsubscribe(channel_name)
-        except Exception as ex:
+        except Exception:
             logger.error(f'Problem with redis pubsub', exc_info=True)
         finally:
             try:

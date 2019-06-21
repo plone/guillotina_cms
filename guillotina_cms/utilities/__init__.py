@@ -1,1 +1,1 @@
-from . import workflow
+from . import workflow  # noqa

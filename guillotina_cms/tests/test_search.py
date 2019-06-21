@@ -1,11 +1,14 @@
-import asyncio
+import os
+
+import pytest
 from guillotina_cms.tests.utils import add_content
 
 
+@pytest.mark.skipif(os.environ.get('DATABASE', 'DUMMY') in ('cockroachdb', 'DUMMY'),
+                    reason='Not for dummy db')
 async def test_search(cms_requester):
     async with cms_requester as requester:
-        total = await add_content(requester)
-        await asyncio.sleep(1)
+        await add_content(requester)
         # Make sure ES is fully sync
         # @search?path_starts=folder&depth_gte=2
         resp, status = await requester(
@@ -26,12 +29,3 @@ async def test_search(cms_requester):
             '/db/guillotina/@search?text__in=needs&portal_type=Document&_size=30'
         )
         assert resp['items_total'] == 20
-
-        # @search?title_in=lorem&portal_type=Document&review_state=published&_aggregations=portal_type+review_state
-
-        resp, status = await requester(
-            'GET',
-            '/db/guillotina/@search?title__in=Document&portal_type=Document&review_state=private&_aggregations=portal_type+review_state&_size=30'
-        )
-        assert resp['aggregations']['type_name'][0]['key'] == 'Document'
-        assert resp['aggregations']['type_name'][0]['doc_count'] == 20

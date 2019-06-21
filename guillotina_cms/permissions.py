@@ -6,6 +6,7 @@ configure.permission('guillotina.ManageConstraints', 'Allow to check and change 
 
 configure.permission('guillotina.ReviewContent', 'Review content permission')
 configure.permission('guillotina.RequestReview', 'Request review content permission')
+configure.permission('guillotina.Copy', 'Request review content permission')
 
 configure.grant(
     permission='guillotina.ManageVersioning',

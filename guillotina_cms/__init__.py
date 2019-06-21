@@ -11,8 +11,9 @@ _ = MessageFactory('guillotina_cms')
 
 app_settings = {
     'applications': [
-        'guillotina_swagger',
-        'guillotina_rediscache'
+        'guillotina.contrib.swagger',
+        'guillotina.contrib.catalog.pg',
+        'guillotina_dbusers'
     ],
     'available_tiles': {},
     'pubsub_connector': 'guillotina_cms.pubsub.RedisPubSubConnector',
@@ -25,11 +26,11 @@ app_settings = {
             'factory': 'guillotina_cms.utilities.workflow.WorkflowUtility',
             'settings': {}
         },
-        'guillotina_cms.pubsub': {
-            'provides': 'guillotina_cms.interfaces.IPubSubUtility',
-            'factory': 'guillotina_cms.utilities.pubsub.PubSubUtility',
-            'settings': {}
-        }
+        # 'guillotina_cms.pubsub': {
+        #     'provides': 'guillotina_cms.interfaces.IPubSubUtility',
+        #     'factory': 'guillotina_cms.utilities.pubsub.PubSubUtility',
+        #     'settings': {}
+        # }
     },
     'layouts': {
         'guillotina.interfaces.content.IFolder': [
@@ -129,7 +130,6 @@ app_settings = {
         'guillotina.interfaces.IContainer': 'basic',
         'guillotina_cms.content.document.IDocument': 'basic'
     },
-    'search_parser': 'guillotina_cms.search.parser.Parser',
     'default_tiles': {
         'Document': [
             {'type': 'title'},
@@ -143,11 +143,11 @@ path = '/'.join(__file__.split('/')[:-1])
 
 for workflow_file in glob.glob(path + '/workflows/*.yaml'):
     with open(workflow_file, 'r') as f:
-        workflow_content = yaml.load(f)
+        workflow_content = yaml.load(f, Loader=yaml.FullLoader)
     ident = workflow_file.split('/')[-1].rstrip('.yaml')
     app_settings['workflows'][ident] = workflow_content
 
-def includeme(root):
+def includeme(root, settings):
     configure.scan('guillotina_cms.interfaces')
     configure.scan('guillotina_cms.api')
     configure.scan('guillotina_cms.behaviors')
@@ -160,3 +160,14 @@ def includeme(root):
     configure.scan('guillotina_cms.install')
     configure.scan('guillotina_cms.subscribers')
     configure.scan('guillotina_cms.tiles')
+
+    if 'guillotina_elasticsearch' in settings.get('applications', []):
+        if 'load_utilities' not in settings:
+            settings['load_utilities'] = {}
+        from guillotina.contrib.catalog.pg import app_settings as pg_app_settings
+        settings['load_utilities']['pg_catalog'] = {
+            **pg_app_settings['load_utilities']['catalog'],
+            **{
+                'name': 'pg_catalog'
+            }
+        }

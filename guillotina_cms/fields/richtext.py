@@ -62,8 +62,7 @@ def field_deserializer(field, value, context):
                     get_adapter(f, IJSONToValue, args=[val, context]))
             else:
                 setattr(new_obj, key, None)
-    if (new_obj.data is not None and
-            'guillotina_linkintegrity' in app_settings['applications']):
+    if (new_obj.data is not None and 'guillotina_linkintegrity' in app_settings['applications']):
         execute.after_request(
             li.update_links_from_html(context, new_obj.data))
 

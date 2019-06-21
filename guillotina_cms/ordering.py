@@ -25,7 +25,7 @@ async def get_last_child_position(folder):
     results = await conn.fetch('''select json from {}
 WHERE parent_id = $1 AND of IS NULL
 ORDER BY (json->>'position_in_parent')::int DESC
-limit 1'''.format(txn.storage._objects_table_name), folder._p_oid)
+limit 1'''.format(txn.storage._objects_table_name), folder.__uuid__)
     if len(results) > 0:
         item = json.loads(results[0]['json'])
         return item.get('position_in_parent', 0)

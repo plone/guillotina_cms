@@ -4,24 +4,12 @@ sudo: true
 language: python
 matrix:
   include:
-  - name: "3.6 Dummy DB"
-    python: "3.6"
-    env: DATABASE=DUMMY
-  - name: "3.6 PG"
-    python: "3.6"
-    env: DATABASE=postgresql
-  - name: "3.6 CockroachDB"
-    python: "3.6"
-    env: DATABASE=cockroachdb
   - name: "3.7 Dummy DB"
     python: "3.7"
     env: DATABASE=DUMMY
   - name: "3.7 PG"
     python: "3.7"
     env: DATABASE=postgresql
-  - name: "3.7 CockroachDB"
-    python: "3.7"
-    env: DATABASE=cockroachdb
 
 services:
   - postgresql
@@ -41,9 +29,10 @@ install:
   - pip install coverage==4.0.3
   - pip install -r requirements.txt
   - pip install -r requirements-test.txt
-  - pip install guillotina_linkintegrity
+  # - pip install guillotina_linkintegrity
   - python setup.py develop
 script:
+  - flake8 guillotina --config=setup.cfg
   - pytest -s --cov=guillotina_cms -v --cov-report term-missing guillotina_cms
 after_success:
   - pip install coveralls

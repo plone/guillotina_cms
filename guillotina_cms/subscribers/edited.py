@@ -24,5 +24,5 @@ async def object_modified(object, event):
         await version_behavior.load(create=True)
         if hasattr(object, '_v_temporal_versioning'):
             version_behavior.diffs.append(object._v_temporal_versioning)
-            version_behavior._p_register()
+            version_behavior.register()
             del object._v_temporal_versioning

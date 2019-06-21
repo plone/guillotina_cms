@@ -5,13 +5,6 @@ from guillotina import testing
 from guillotina.component import get_utility
 from guillotina.interfaces import ICatalogUtility
 from guillotina.tests.fixtures import ContainerRequesterAsyncContextManager
-from pytest_docker_fixtures import images
-
-
-images.configure(
-    'elasticsearch',
-    'docker.elastic.co/elasticsearch/elasticsearch', '6.8.0'
-)
 
 
 def base_settings_configurator(settings):
@@ -19,6 +12,10 @@ def base_settings_configurator(settings):
         settings['applications'].append('guillotina_cms')
     else:
         settings['applications'] = ['guillotina_cms']
+    settings["load_utilities"]["catalog"] = {
+        "provides": "guillotina.interfaces.ICatalogUtility",
+        "factory": "guillotina.contrib.catalog.pg.PGSearchUtility"
+    }
 
 
 testing.configure_with(base_settings_configurator)
@@ -44,14 +41,5 @@ class CMSRequester(ContainerRequesterAsyncContextManager):
 
 
 @pytest.fixture(scope='function')
-async def cms_requester(redis_container, elasticsearch, guillotina, loop):
-    from guillotina import app_settings
-    app_settings['redis']['port'] = redis_container[1]
-    app_settings['elasticsearch']['connection_settings']['hosts'] = ['{}:{}'.format(
-        elasticsearch[0], elasticsearch[1])]
-    yield CMSRequester(guillotina, loop)
-
-
-@pytest.fixture(scope='function')
-async def pubsub(redis_container, elasticsearch, guillotina, loop):
+async def cms_requester(guillotina, loop):
     yield CMSRequester(guillotina, loop)

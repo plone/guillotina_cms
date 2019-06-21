@@ -44,7 +44,7 @@ async def set_constraint(context, request):
                 status=412, reason=error_reasons.DESERIALIZATION_FAILED)
 
     setattr(context, '__allowed_types__', data)
-    context._p_register()
+    context.register()
 
 
 @configure.service(
@@ -103,4 +103,4 @@ async def append_constraint(context, request):
             if element in at:
                 at.remove(element)
         setattr(context, '__allowed_types__', at)
-    context._p_register()
+    context.register()

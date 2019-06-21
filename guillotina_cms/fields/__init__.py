@@ -1,1 +1,1 @@
-from . import richtext
+from . import richtext  # noqa

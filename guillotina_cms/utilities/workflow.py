@@ -7,9 +7,8 @@ from guillotina import configure
 from guillotina.component import provide_adapter
 from guillotina.utils import import_class
 from guillotina_cms.interfaces.base import ICMSBehavior
-from guillotina.interfaces import IInteraction
 from guillotina.response import HTTPUnauthorized
-from guillotina.utils import get_authenticated_user_id
+from guillotina.utils import get_authenticated_user_id, get_security_policy
 from guillotina.security.utils import apply_sharing
 from guillotina_cms.events import WorkflowChangedEvent
 from guillotina.event import notify
@@ -40,10 +39,10 @@ def create_workflow_factory(proto_name, proto_definition):
             return self._states[state]['actions']
 
         async def available_actions(self, request):
-            security = IInteraction(request)
+            policy = get_security_policy()
             for action_name, action in self.actions.items():
                 add = False
-                if 'check_permission' in action and security.check_permission(
+                if 'check_permission' in action and policy.check_permission(
                         action['check_permission'], self.context):
                     add = True
                 elif 'check_permission' not in action:
@@ -62,8 +61,8 @@ def create_workflow_factory(proto_name, proto_definition):
                 raise KeyError('Unavailable action')
 
             action_def = available_actions[action]
-            security = IInteraction(request)
-            if 'check_permission' in action_def and not security.check_permission(
+            policy = get_security_policy()
+            if 'check_permission' in action_def and not policy.check_permission(
                     action_def['check_permission'], self.context):
                 raise HTTPUnauthorized()
 
@@ -74,7 +73,7 @@ def create_workflow_factory(proto_name, proto_definition):
                 await apply_sharing(self.context, self.states[new_state]['set_permission'])
 
             # Write history
-            user = get_authenticated_user_id(request)
+            user = get_authenticated_user_id()
             history = {
                 'actor': user,
                 'comments': comments,
@@ -92,7 +91,7 @@ def create_workflow_factory(proto_name, proto_definition):
             cms_behavior.review_state = new_state
 
             cms_behavior.history.append(history)
-            cms_behavior._p_register()
+            cms_behavior.register()
 
             await notify(WorkflowChangedEvent(self.context, self, action, comments))
             return history

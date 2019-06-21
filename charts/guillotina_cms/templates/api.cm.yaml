@@ -19,18 +19,14 @@ data:
         read_only: false
         pool_size: 100
     applications:
-    - guillotina_swagger
     - guillotina_cms
-    - guillotina_dbuser
-    - guillotina_elasticsearch
-    - guillotina_rediscache
+    # - guillotina_dbuser
     address: {{ .Values.service.api.internalPort }}
     static:
-    - favicon.png: static/favicon.png
-    - swagger_static: guillotina_swagger:static
-    # - pastanaga: pastanaga-angular/dist
-    # - ng: plone-angular-demo/dist
-    # - plone: plone-react
+      favicon.png: static/favicon.png
+    # pastanaga: pastanaga-angular/dist
+    # ng: plone-angular-demo/dist
+    # plone: plone-react
     root_user:
       password: {{ .Values.api.root_passwd }}
     auth_extractors:

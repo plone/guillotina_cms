@@ -1,10 +1,11 @@
 from guillotina import configure
-from guillotina_cms.fields.interfaces import IImageFile
-from guillotina_cms.fields.interfaces import ICloudImageFileField
-from guillotina_cms.interfaces import IImagingSettings
-from guillotina.utils import to_str
-from guillotina.utils import get_current_request
+from guillotina import task_vars
 from guillotina.files.field import deserialize_cloud_field
+from guillotina.utils import get_current_request
+from guillotina.utils import to_str
+from guillotina_cms.fields.interfaces import ICloudImageFileField
+from guillotina_cms.fields.interfaces import IImageFile
+from guillotina_cms.interfaces import IImagingSettings
 from zope.interface import alsoProvides
 
 
@@ -14,7 +15,8 @@ def json_converter(value):
         return value
 
     request = get_current_request()
-    settings = request.container_settings.for_interface(IImagingSettings)
+    registry = task_vars.registry.get()
+    settings = registry.for_interface(IImagingSettings)
     scales = {}
     url = request.url.human_repr().split('?')[0]
     for size, dimension in settings['allowed_sizes'].items():

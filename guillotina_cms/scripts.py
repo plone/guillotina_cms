@@ -10,21 +10,20 @@ def initdb():
         auth=("root", "root"),
         json={"@type": "Container", "id": "web", "title": "Guillotina CMS Site"},
     )
-    assert(resp.status_code == 200)
+    assert resp.status_code in (200, 409)
 
     # Install CMS package
     resp = requests.post(
         "{}/web/@addons".format(groot), auth=("root", "root"), json={"id": "cms"}
     )
-
-    assert(resp.status_code == 200)
+    assert resp.status_code in (200, 412)
 
     # Install DB users package
     resp = requests.post(
         "{}/web/@addons".format(groot), auth=("root", "root"), json={"id": "dbusers"}
     )
 
-    assert(resp.status_code == 200)
+    assert resp.status_code in (200, 412)
 
     # Create initial user
     payload = {
@@ -35,7 +34,7 @@ def initdb():
     }
     resp = requests.post("{}/web/users".format(groot), auth=("root", "root"), json=payload)
 
-    assert(resp.status_code == 201)
+    assert resp.status_code == 201
 
     # Grant initial permissions to admin user
     resp = payload = {

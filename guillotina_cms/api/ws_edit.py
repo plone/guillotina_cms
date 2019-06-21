@@ -1,6 +1,5 @@
 from aiohttp import web
 from diff_match_patch import diff_match_patch
-from guillotina import app_settings
 from guillotina import configure
 from guillotina.browser import View
 from guillotina.content import get_cached_factory
@@ -103,7 +102,7 @@ class WSEdit(View):
         try:
             self.pubsub = get_utility(IPubSubUtility)
             self.channel_name = 'ws-field-edit-{}'.format(
-                self.context._p_oid
+                self.context.__uuid__
             )
 
             # subscribe to redis channel for this context
@@ -125,7 +124,7 @@ class WSEdit(View):
             try:
                 await self.pubsub.unsubscribe(self.channel_name, self.request.uid)
                 await self.ws.close()  # make sure to close socket
-            except:
+            except Exception:
                 pass
 
         logger.debug('websocket connection closed')
@@ -157,7 +156,7 @@ class WSEdit(View):
             try:
                 data = json.loads(msg.data)
                 operation = data['t']
-            except:
+            except Exception:
                 self.ws.send_str(json.dumps({
                     't': 'e',
                     'v': 'Not a valid payload'
@@ -242,9 +241,9 @@ class WSEdit(View):
             setattr(context, field.__name__, value)
             if IAsyncBehavior.implementedBy(context.__class__):
                 # it's a behavior we're editing...
-                context.data._p_register()
+                context.data.register()
             else:
-                context._p_register()
+                context.register()
 
         await tm.commit(txn=txn)
 

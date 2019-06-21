@@ -11,7 +11,7 @@ from guillotina_cms.interfaces import ICMSLayer
     context=IFollowingMarker, layer=ICMSLayer, name='@favorite',
     method='POST', permission='guillotina.AccessContent')
 async def addfavorite(context, request):
-    user = get_authenticated_user_id(request)
+    user = get_authenticated_user_id()
     behavior = IFollowing(context)
     await behavior.load(True)
     users_list = behavior.favorites
@@ -20,7 +20,7 @@ async def addfavorite(context, request):
         users_list = behavior.favorites
     if user not in users_list:
         users_list.append(user)
-    behavior.data._p_register()
+    behavior.data.register()
     await notify(ObjectModifiedEvent(context, payload={
         'favorites': ''
     }))
@@ -30,7 +30,7 @@ async def addfavorite(context, request):
     context=IFollowingMarker, name='@favorite', method='DELETE',
     permission='guillotina.AccessContent')
 async def deletefavorite(context, request):
-    user = get_authenticated_user_id(request)
+    user = get_authenticated_user_id()
     behavior = IFollowing(context)
     await behavior.load(True)
     users_list = behavior.favorites
@@ -39,7 +39,7 @@ async def deletefavorite(context, request):
         users_list = behavior.favorites
     if user in users_list:
         users_list.remove(user)
-    behavior.data._p_register()
+    behavior.data.register()
     await notify(ObjectModifiedEvent(context, payload={
         'favorites': ''
     }))
