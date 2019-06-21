@@ -1,46 +1,46 @@
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}-processing
   labels:
     app: {{ template "name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    role: api
+    role: processing
 spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  replicas: {{ .Values.api.replicaCount }}
+  replicas: {{ .Values.processing.replicaCount }}
   template:
     metadata:
-      name: {{ template "fullname" . }}
+      name: {{ template "fullname" . }}-processing
       labels:
         app: {{ template "name" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
-        role: api
+        role: processing
     spec:
       dnsPolicy: ClusterFirst
       affinity:
-{{ toYaml .Values.api.affinity | indent 8 }}
+{{ toYaml .Values.processing.affinity | indent 8 }}
       tolerations:
-{{ toYaml .Values.api.tolerations | indent 8 }}
+{{ toYaml .Values.processing.tolerations | indent 8 }}
       containers:
-      - name: api
-        image: "{{ .Values.api.image }}"
+      - name: processing
+        image: "{{ .Values.processing.image }}"
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /
-            port: {{ .Values.api.service.internalPort }}
+            port: {{ .Values.processing.service.internalPort }}
           initialDelaySeconds: 30
           timeoutSeconds: 90
           periodSeconds: 60
         readinessProbe:
           httpGet:
             path: /
-            port: {{ .Values.api.service.internalPort }}
+            port: {{ .Values.processing.service.internalPort }}
           initialDelaySeconds: 30
           timeoutSeconds: 90
           periodSeconds: 60
@@ -50,11 +50,11 @@ spec:
           name: config
           subPath: config.yml
         ports:
-        - name: api
+        - name: processing
           containerPort: {{ .Values.api.service.internalPort }}
           protocol: {{ .Values.api.service.protocol }}
         resources:
-{{ toYaml .Values.api.resources | indent 10 }}
+{{ toYaml .Values.processing.resources | indent 10 }}
       volumes:
       - name: config
         configMap:

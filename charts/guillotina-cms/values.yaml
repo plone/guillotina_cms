@@ -2,7 +2,7 @@ app: gcms
 revisionHistoryLimit: 2
 
 api:
-  image: plone/guillotina_cms:master
+  image: plone/guillotina_cms:latest
   service:
     type: LoadBalancer
     externalPort: 8080
@@ -29,6 +29,19 @@ front:
     internalPort: 4300
     protocol: TCP
     externalUrl: http://localhost:3000
+
+
+processing:
+  image: ramonnb/guillotina_processing:latest
+  resources:
+    limits:
+      memory: "600Mi"
+      cpu: "400m"
+  service:
+    type: LoadBalancer
+    externalPort: 8888
+    internalPort: 8888
+    protocol: TCP
 
 db:
   postgresUser: postgres

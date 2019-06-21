@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: guillotina-cms-processing
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: {{ .Values.api.service.type }}
+  ports:
+  - name: processing
+    port: {{ .Values.api.service.externalPort }}
+    targetPort: {{ .Values.api.service.internalPort }}
+    protocol: {{ .Values.api.service.protocol }}
+  selector:
+    app: {{ template "name" . }}
+    role: processing
