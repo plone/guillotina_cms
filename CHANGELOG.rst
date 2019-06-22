@@ -1,4 +1,4 @@
-5.0.0a1 (unreleased)
+5.0.0a1 (2019-06-22)
 --------------------
 
 - fix link integrity tests
