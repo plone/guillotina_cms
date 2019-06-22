@@ -1,5 +1,5 @@
-1.1.0a1 (unreleased)
--------------------
+5.0.0a1 (unreleased)
+--------------------
 
 - fix link integrity tests
 
