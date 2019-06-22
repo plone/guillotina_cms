@@ -46,9 +46,9 @@ spec:
           periodSeconds: 60
         command: ["guillotina", "-c" ,"/app/config.yaml"]
         volumeMounts:
-        - mountPath: /app/config.yml
+        - mountPath: /app/config.yaml
           name: config
-          subPath: config.yml
+          subPath: config.yaml
         ports:
         - name: api
           containerPort: {{ .Values.api.service.internalPort }}

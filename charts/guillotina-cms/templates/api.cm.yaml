@@ -8,7 +8,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
-  config.yml: |-
+  config.yaml: |-
     aiohttp_settings:
       client_max_size: 20971520
     databases:
@@ -20,7 +20,7 @@ data:
         pool_size: 100
     applications:
     - guillotina_cms
-    - guillotina_dbuser
+    - guillotina_dbusers
     - guillotina.contrib.cache
     address: {{ .Values.api.service.internalPort }}
     static:
@@ -57,3 +57,7 @@ data:
       - "*"
       allow_credentials: true
       max_age: 3660
+      workflow:
+{{ toYaml .Values.workflow | indent 8 }}
+      content:
+{{ toYaml .Values.content | indent 8 }}
