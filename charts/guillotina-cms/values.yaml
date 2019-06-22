@@ -8,9 +8,10 @@ api:
     internalPort: 8080
     protocol: TCP
     externalUrl: http://localhost:8080/db/cms
+    internalAPIUrl: http://guillotina-cms-service:8080/db/cms
   resources:
     limits:
-      memory: "600Mi"
+      memory: "400Mi"
       cpu: "300m"
   root_passwd: root
   jwtsecret: secret
@@ -20,11 +21,11 @@ front:
   image: plone/volto:latest
   resources:
     limits:
-      memory: "600Mi"
-      cpu: "400m"
+      memory: "400Mi"
+      cpu: "300m"
   service:
     type: LoadBalancer
-    externalPort: 3001
+    externalPort: 3003
     internalPort: 3000
     protocol: TCP
     externalUrl: http://localhost:3000
@@ -46,7 +47,6 @@ db:
   postgresqlUsername: postgres
   postgresqlPassword: secret
   postgresqlDatabase: guillotina
-
 
 workflows:
   myworkflow:

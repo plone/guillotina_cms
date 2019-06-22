@@ -60,6 +60,6 @@ data:
       allow_credentials: true
       max_age: 3660
       workflow:
-{{ toYaml .Values.workflow | indent 8 }}
+    {{ toYaml .Values.workflow | indent 4 }}
       content:
-{{ toYaml .Values.content | indent 8 }}
+    {{ toYaml .Values.content | indent 4 }}

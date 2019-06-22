@@ -55,3 +55,110 @@ cors:
   - "*"
   allow_credentials: true
   max_age: 3660
+behaviors:
+  myannotationdata:
+    title: MyData
+    type: guillotina.behaviors.instance.AnnotationBehavior
+    properties:
+      mydata1: 
+        type: guillotina.schema.TextLine
+        title: Text
+        required: false
+        default: Hello
+  mycontextdata:
+    title: MyLocalData
+    type: guillotina.behaviors.instance.ContextBehavior
+    properties:
+      mydata2: 
+        type: guillotina.schema.TextLine
+        title: Text
+        required: false
+        default: Hello
+contents:
+  document:
+    title: Document
+    allowed_types:
+    - Image
+    - File
+    required:
+    - type_name
+    - uid
+    behaviors:
+      guillotina.behaviors.dublincore.IDublinCore
+      guillotina_cms.interfaces.base.ICMSBehavior
+      guillotina_cms.interfaces.tiles.ITiles
+    properties:
+      text: 
+        type: guillotina_cms.fields.richtext.RichTextField
+        widget: richtext
+        title: Text
+        required: false
+        default: Hello
+        index: searchabletext        
+    fieldsets:
+      default:
+      - title
+      - text
+      - guillotina.behaviors.dublincore.IDublinCore.description
+      dates:
+      - guillotina.behaviors.dublincore.IDublinCore.effective_date
+      - guillotina.behaviors.dublincore.IDublinCore.expiration_date
+      ownership:
+      - guillotina.behaviors.dublincore.IDublinCore.creators
+      - guillotina.behaviors.dublincore.IDublinCore.publisher
+      - guillotina.behaviors.dublincore.IDublinCore.contributors
+      categorization:
+      - guillotina.behaviors.dublincore.IDublinCore.tags
+      - guillotina_cms.interfaces.base.ICMSBehavior.language
+      settings:
+      - guillotina_cms.interfaces.base.ICMSBehavior.hidden_navigation
+      - guillotina_cms.interfaces.base.ICMSBehavior.content_layout
+    layouts:
+    - document_view
+    - layout_view
+    tiles_layout:
+    - example1:
+        tiles:
+          tile1:
+            '@type': tilte
+          tile2:
+            '@type': description
+        tiles_layouts:
+        - tile1
+        - tile2
+workflows:
+  basic:
+    initial_state: private
+    states:
+      private:
+        actions:
+            publish:
+                title: Publish
+                to: public
+                check_permission: guillotina.ReviewContent
+        set_permission:
+            roleperm:
+            - setting: Deny
+              role: guillotina.Anonymous
+              permission: guillotina.ViewContent
+            - setting: Deny
+              role: guillotina.Anonymous
+              permission: guillotina.AccessContent
+      public:
+        actions:
+            retire:
+                title: Retire
+                to: private
+                check_permission: guillotina.ReviewContent
+        set_permission:
+            roleperm:
+            - setting: AllowSingle
+              role: guillotina.Anonymous
+              permission: guillotina.ViewContent
+            - setting: AllowSingle
+              role: guillotina.Anonymous
+              permission: guillotina.AccessContent
+workflows_content:
+  guillotina.interfaces.IResource: basic
+  guillotina_cms.content.document.IDocument: guillotina_simple_publication
+  document: guillotina_simple_publication

@@ -47,6 +47,8 @@ spec:
         env:
         - name: API_PATH
           value: {{ .Values.api.service.externalUrl }}
+        - name: INTERNAL_API_PATH
+          value: {{ .Values.api.service.internalAPIUrl }}
         ports:
         - name: front
           containerPort: {{ .Values.front.service.internalPort }}
