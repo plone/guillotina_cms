@@ -7,7 +7,7 @@ api:
     externalPort: 8080
     internalPort: 8080
     protocol: TCP
-    externalUrl: http://localhost:8080
+    externalUrl: http://localhost:8080/db/cms
   resources:
     limits:
       memory: "600Mi"
