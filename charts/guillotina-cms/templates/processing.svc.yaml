@@ -8,12 +8,12 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  type: {{ .Values.api.service.type }}
+  type: {{ .Values.processing.service.type }}
   ports:
   - name: processing
-    port: {{ .Values.api.service.externalPort }}
-    targetPort: {{ .Values.api.service.internalPort }}
-    protocol: {{ .Values.api.service.protocol }}
+    port: {{ .Values.processing.service.externalPort }}
+    targetPort: {{ .Values.processing.service.internalPort }}
+    protocol: {{ .Values.processing.service.protocol }}
   selector:
     app: {{ template "name" . }}
     role: processing

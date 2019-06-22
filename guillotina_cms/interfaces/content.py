@@ -5,6 +5,8 @@ from guillotina_cms.directives import fieldset_field
 from guillotina_cms.fields.image import CloudImageFileField
 from guillotina_cms.fields.richtext import RichTextField
 from guillotina_cms.interfaces.image import IHasImage
+from guillotina.interfaces import IAsyncUtility
+from zope.interface import Interface
 
 
 class IDocument(IFolder):
@@ -39,3 +41,8 @@ class INews(IItem):
         title='Text',
         required=False,
         widget='richtext')
+
+
+class IContentUtility(IAsyncUtility):
+    pass
+

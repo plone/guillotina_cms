@@ -44,7 +44,6 @@ spec:
           initialDelaySeconds: 30
           timeoutSeconds: 90
           periodSeconds: 60
-        command: ["guillotina", "-c" ,"/app/config.yaml"]
         volumeMounts:
         - mountPath: /app/config.yml
           name: config

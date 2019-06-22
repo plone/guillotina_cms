@@ -15,17 +15,18 @@ data:
     - db:
         storage: postgresql
         transaction_strategy: dbresolve_readcommitted
-        dsn: postgresql://{{ .Values.db.postgresUser }}:{{ .Values.db.postgresPassword }}@{{ .Values.app }}-db:5432/{{ .Values.db.postgresDatabase }}
+        dsn: postgresql://{{ .Values.db.postgresqlUsername }}:{{ .Values.db.postgresqlPassword }}@{{ .Release.Name }}-db:5432/{{ .Values.db.postgresqlDatabase }}
         read_only: false
         pool_size: 100
     applications:
     - guillotina_cms
     - guillotina_dbusers
     - guillotina.contrib.cache
+    - guillotina.contrib.swagger
     address: {{ .Values.api.service.internalPort }}
     static:
-      favicon.png: static/favicon.png
-      assets: guillotina:static/assets
+    - favicon.png: static/favicon.png
+    - assets: guillotina:static/assets
     root_user:
       password: {{ .Values.api.root_passwd }}
     auth_extractors:
