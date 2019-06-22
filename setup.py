@@ -36,6 +36,12 @@ setup(
     packages=find_packages(),
     install_requires=requirements,
     tests_require=test_requirements,
+    extras_require={
+        'extras': [
+            'guillotina_elasticsearch',
+            'guillotina_linkintegrity'
+        ]
+    },
     entry_points={
         'console_scripts': [
             'initdb=guillotina_cms.scripts:initdb',

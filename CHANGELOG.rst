@@ -1,6 +1,8 @@
 1.1.0a1 (unreleased)
 -------------------
 
+- fix link integrity tests
+
 - upgrade to guillotina > 5
 
 1.0a23 (unreleased)

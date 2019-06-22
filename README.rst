@@ -128,22 +128,24 @@ Cleanup DB
 
 Cleanup postgres env::
 
-    docker-compose -f docker-compose.yaml rm -s -v redis postgres
+    docker-compose -f docker-compose.yaml rm -s -v postgres
 
 Optional addons
 ---------------
 
 - guillotina_linkintegrity
 
+(with link integrity you'll also need redis)
 
-With Elasticsearch
-------------------
+With Extras
+-----------
 
-By default, postgresql indexes are used for search. You can use elasticsearch
-for full text searching as well though.
+Install guillotina_cms with `pip install guillotina_cms[extras]`
+
+Which enabled elasticsearch full text search, pubsub and link integrity support.
 
 
-Run docker with elasticsearch::
+Run docker with elasticsearch and redis::
 
     docker-compose -f docker-compose.yaml rm -s -v redis postgres elasticsearch
 
@@ -151,4 +153,4 @@ Run docker with elasticsearch::
 Uncomment `guillotina_elasticsearch` from applications list in config.yaml::
 
     - guillotina_elasticsearch
-
+    - guillotina_linkintegrity
