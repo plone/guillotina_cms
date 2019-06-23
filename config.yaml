@@ -55,16 +55,17 @@ cors:
   - "*"
   allow_credentials: true
   max_age: 3660
-global_dissallowed_types:
+global_disallowed_types:
 - User
-- UserFolder
+- UserManager
 - Group
-- GroupFolder
+- GroupManager
+- Item
+- Container
 behaviors:
   myannotationdata:
     title: MyData
-    for:
-    - guillotina.interfaces.Item
+    for: guillotina.interfaces.IItem
     inherited_class: guillotina.behaviors.instance.AnnotationBehavior
     properties:
       mydata1: 
@@ -74,8 +75,7 @@ behaviors:
         required: true
   mycontextdata:
     title: MyLocalData
-    for:
-    - guillotina.interfaces.Item
+    for: guillotina.interfaces.IItem
     inherited_class: guillotina.behaviors.instance.ContextBehavior
     properties:
       mydata2: 
@@ -83,8 +83,8 @@ behaviors:
         title: Text
         default: Hello
 contents:
-  document:
-    title: Document
+  mydoc:
+    title: My Doc
     inherited_interface: guillotina.interfaces.IFolder
     inherited_class: guillotina.content.Folder
     add_permission: guillotina.AddContent
@@ -92,10 +92,10 @@ contents:
     - Image
     - File
     behaviors:
-      guillotina.behaviors.dublincore.IDublinCore
-      guillotina_cms.interfaces.base.ICMSBehavior
-      guillotina_cms.interfaces.tiles.ITiles
-      guillotina_cms.behaviors.mycontextdata
+    - guillotina.behaviors.dublincore.IDublinCore
+    - guillotina_cms.interfaces.base.ICMSBehavior
+    - guillotina_cms.interfaces.tiles.ITiles
+    - guillotina_cms.interfaces.Imycontextdata
     properties:
       json_example:
         type: guillotina.schema.JSONField
@@ -109,34 +109,16 @@ contents:
         type: guillotina_cms.fields.richtext.RichTextField
         widget: richtext
         title: Text
-        default: Hello
         write_permission: guillotina.Manager
-        index: searchabletext
+        index:
+          type: searchabletext
         required: true
-      myoption: 
-        type: guillotina.schema.Choice
-        title: MyChoice
-        index: keyword
-        read_permission: guillotina.Member
-        required: false
-        vocabulary:
-          guillotina: Love Guillotina
-          volto: Love Volto     
-      mysecondoption:
-        type: guillotina.schema.Choice
-        title: My second option
-        index: keyword
-        vocabulary: appsettings:myoptions
-      mylovedlanguage:
-        type: guillotina.schema.Choice
-        title: My loved action
-        index: keyword
-        vocabulary: language
       mylovedlist:
         type: guillotina.schema.List
         value_type: guillotina.schema.TextLine
         title: My loved action
-        index: keyword
+        index:
+          type: keyword
     fieldsets:
       default:
       - title
@@ -144,6 +126,8 @@ contents:
       - text
       - myoption
       - mysecondoption
+      - mylovedlist
+      - mylovedlanguage
       dates:
       - guillotina.behaviors.dublincore.IDublinCore.effective_date
       - guillotina.behaviors.dublincore.IDublinCore.expiration_date
@@ -171,10 +155,11 @@ default_tiles:
         tiles_layouts:
         - tile1
         - tile2
-vocabulary:
-  myoptions:
-    guillotina: Also Love Guillotina
-    volto: Also Love Volto
+myoptions:
+- - guillotina
+  - Also Love Guillotina
+- - volto
+  - Also Love Volto
 workflows:
   basic:
     initial_state: private
@@ -210,4 +195,4 @@ workflows:
 workflows_content:
   guillotina.interfaces.IResource: basic
   guillotina_cms.content.document.IDocument: guillotina_simple_publication
-  document: guillotina_simple_publication
+  guillotina_cms.interfaces.Imydoc: guillotina_simple_publication

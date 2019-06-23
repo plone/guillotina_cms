@@ -1,5 +1,7 @@
+import asyncio
 import logging
 import typing
+import json
 from guillotina import app_settings
 from guillotina_cms.vocabularies.source import AppSettingSource
 from guillotina_cms.directives import fieldset_field
@@ -17,10 +19,12 @@ from guillotina.directives import metadata
 from guillotina.directives import read_permission
 from guillotina.directives import write_permission
 from guillotina.interfaces import IApplication
+from guillotina.interfaces import IBehavior
 from guillotina.interfaces import IApplicationInitializedEvent
 from guillotina.interfaces import IResourceFactory
 from guillotina.utils import import_class
 from zope.interface import Interface
+from zope.interface.interface import InterfaceClass
 
 SUPPORTED_DIRECTIVES = {
     'fieldset': fieldset_field,
@@ -36,20 +40,20 @@ def get_vocabulary(prop, params):
     # Vocabulary option
     if 'vocabulary' in prop:
         if isinstance(prop['vocabulary'], dict):
-            prop['source'] = prop['vocabulary']
+            params['values'] = prop['vocabulary']
         elif prop['vocabulary'].startswith('appsettings:'):
             params['source'] = AppSettingSource(
                 prop['vocabulary'].replace('appsettings:', '')
             )
         else:
-            params['source'] = prop['vocabulary']
+            params['vocabulary'] = prop['vocabulary']
 
 
 def get_fields(*, properties: typing.Dict[str, typing.Dict]):
     fields = {}
     tags = {}
 
-    for prop_id, prop in properties.items:
+    for prop_id, prop in properties.items():
 
         params = {}
 
@@ -64,10 +68,14 @@ def get_fields(*, properties: typing.Dict[str, typing.Dict]):
         # Title
         params['title'] = prop.get('title')
 
+        widget = prop.get('widget', None)
+        if widget:
+            params['widget'] = widget
+
         # Schema
         schema = prop.get('schema', None)
         if schema:
-            params['schema'] = schema
+            params['schema'] = json.dumps(schema)
 
         # Value type
         value_type = prop.get('value_type', None)
@@ -78,7 +86,8 @@ def get_fields(*, properties: typing.Dict[str, typing.Dict]):
                 title=params['title'] + ' value')
 
         # Default
-        params['default'] = prop.get('default')
+        if prop.get('default', None) is not None:
+            params['default'] = prop.get('default')
 
         # Index
         index = prop.get('index', None)
@@ -89,8 +98,12 @@ def get_fields(*, properties: typing.Dict[str, typing.Dict]):
         if write_permission:
             tags.setdefault(prop_id, {})['write_permission'] = write_permission
 
+        metadata = prop.get('metadata', None)
+        if metadata:
+            tags.setdefault(prop_id, {})['metadata'] = None
+
         read_permission = prop.get('read_permission', None)
-        if write_permission:
+        if read_permission:
             tags.setdefault(prop_id, {})['read_permission'] = read_permission
 
         fields[prop_id] = field_class(**params)
@@ -103,44 +116,58 @@ def create_content_factory(proto_name, proto_definition):
     parent_interface = import_class(proto_definition.get(
         'inherited_interface',
         'guillotina.interfaces.content.IFolder'))
-    parent_class = import_class(proto_definition(
+    parent_class = import_class(proto_definition.get(
         'inherited_class',
         'guillotina.content.Folder'))
 
     schema_fields, tags = get_fields(
-        properties=proto_definition.get('properties'),
-        required=proto_definition.get('required'))
+        properties=proto_definition.get('properties'))
 
     for fieldset_id, fieldset_list in proto_definition.get('fieldsets', {}).items():
         for field_id in fieldset_list:
             tags.setdefault(field_id, {})['fieldset'] = fieldset_id
 
-    class_interface = type(
+    class_interface = InterfaceClass(
         'I' + proto_name,
-        (parent_interface),
-        schema_fields)
+        (parent_interface,),
+        schema_fields,
+        __module__='guillotina_cms.interfaces')
 
     for field_id, tag in tags.items():
         for tag_id, tag_metadata in tag.items():
             if tag_id in SUPPORTED_DIRECTIVES:
-                SUPPORTED_DIRECTIVES[tag_id].apply(class_interface, field_id, tag_metadata)
+                if tag_metadata is None:
+                    SUPPORTED_DIRECTIVES[tag_id].apply(class_interface, field_id)
+                elif isinstance(tag_metadata, dict):
+                    SUPPORTED_DIRECTIVES[tag_id].apply(class_interface, field_id, **tag_metadata)
+                elif isinstance(tag_metadata, list):
+                    SUPPORTED_DIRECTIVES[tag_id].apply(class_interface, field_id, *tag_metadata)
+                elif tag_id == 'fieldset':
+                    SUPPORTED_DIRECTIVES[tag_id].apply(class_interface, field_id, tag_metadata)
+                elif isinstance(tag_metadata, str):
+                    SUPPORTED_DIRECTIVES[tag_id].apply(class_interface, **{
+                        field_id: tag_metadata})
 
     klass = type(
         proto_name,
-        (parent_class),
+        (parent_class,),
         {})
 
     klass.__module__ = 'guillotina_cms.content'
 
+    behaviors = []
+    for bhr in proto_definition.get('behaviors', []):
+        if bhr in BEHAVIOR_CACHE:
+            behaviors.append(BEHAVIOR_CACHE[bhr])
+        else:
+            raise Exception(f"Behavior not found {bhr}")
+
     contenttype = {
-        'config': {},
-        'klass': klass,
         'schema': class_interface,
         'type_name': proto_name,
         'allowed_types': proto_definition.get('allowed_types', []),
         'add_permission': proto_definition.get('add_permission', 'guillotina.AddContent'),
-        'behaviors': proto_definition.get('behaviors', [])
-
+        'behaviors': behaviors
     }
 
     utility = query_utility(IResourceFactory, name=proto_name)
@@ -156,6 +183,8 @@ def create_content_factory(proto_name, proto_definition):
     root.app.config.execute_actions()
     configure.clear()
     load_cached_schema()
+
+    # Verify its created
     if proto_name in FACTORY_CACHE:
         del FACTORY_CACHE[proto_name]
     get_cached_factory(proto_name)
@@ -163,19 +192,30 @@ def create_content_factory(proto_name, proto_definition):
 
 def create_behaviors_factory(proto_name, proto_definition):
 
+    if proto_definition.get('for', None) is None:
+        raise Exception('We need a for interface')
+    else:
+        for_ = import_class(proto_definition.get('for'))
+
+    if for_ is None:
+        raise Exception('Wrong for interface')
 
     parent_class = import_class(proto_definition.get(
         'inherited_class',
         'guillotina.behaviors.instance.AnnotationBehavior'))
 
     schema_fields, tags = get_fields(
-        properties=proto_definition.get('properties'),
-        required=proto_definition.get('required'))
+        properties=proto_definition.get('properties'))
 
-    class_interface = type(
+    base_interface = proto_definition.get('base_interface', None)
+    if base_interface is None:
+        base_interface = Interface
+
+    class_interface = InterfaceClass(
         'I' + proto_name,
-        (Interface),
-        schema_fields)
+        (base_interface,),
+        schema_fields,
+        __module__='guillotina_cms.interfaces')
 
     for field_id, tag in tags.items():
         for tag_id, tag_metadata in tag.items():
@@ -184,19 +224,20 @@ def create_behaviors_factory(proto_name, proto_definition):
 
     klass = type(
         proto_name,
-        (parent_class),
+        (parent_class,),
         {})
 
     klass.__module__ = 'guillotina_cms.behaviors'
 
     behavior = {
-        'for_': proto_definition.get('for', []),
+        'for_': for_,
+        'provides': class_interface,
         'data_key': proto_definition.get('data_key', 'default'),
         'auto_serialize': proto_definition.get('auto_serialize', True),
-        'name': proto_definition.get('name', ''),
+        'name': proto_name,
         'name_only': proto_definition.get('name_only', False),
         'title': proto_definition.get('title', ''),
-        'marker': proto_definition.get('marker', ''),
+        'marker': proto_definition.get('marker', None),
         'description': proto_definition.get('description', '')
     }
 
@@ -204,13 +245,19 @@ def create_behaviors_factory(proto_name, proto_definition):
 
     root = get_utility(IApplication, name='root')
     configure.load_configuration(
-        root.app.config, 'guillotina_cms.behaviors', 'contenttype')
+        root.app.config, 'guillotina_cms.behaviors', 'behavior')
     root.app.config.execute_actions()
     configure.clear()
     load_cached_schema()
-    if proto_name in BEHAVIOR_CACHE:
-        del BEHAVIOR_CACHE[proto_name]
-    get_cached_factory(proto_name)
+
+    # Verify its created
+    interface_name = 'guillotina_cms.interfaces.I' + proto_name
+    utility = get_utility(IBehavior, name=interface_name)
+    interface_name = 'guillotina_cms.interfaces.I' + proto_name
+    utility2 = get_utility(IBehavior, name=proto_name)
+    assert BEHAVIOR_CACHE[interface_name] == class_interface
+    utility.interface == class_interface
+    utility2.interface == class_interface
 
 
 @configure.subscriber(for_=IApplicationInitializedEvent)
