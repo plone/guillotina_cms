@@ -37,10 +37,11 @@ async def get_tile_schema(context, request):
         return HTTPNotFound()
 
     result = {}
+    result['@id'] = join(IAbsoluteURL(context)(), "@vocabularies", key)
+    result['items'] = []
     for term in vocab.keys():
-        result[term] = {
-            '@id': join(IAbsoluteURL(context)(), "@vocabularies", key, term),
+        result['items'].append({
             'title': vocab.getTerm(term),
             'token': term
-        }
+        })
     return result

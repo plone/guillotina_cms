@@ -113,6 +113,26 @@ contents:
         index:
           type: searchabletext
         required: true
+      myoption:
+        type: guillotina.schema.Choice
+        title: My loved option
+        vocabulary:
+          guillotina: Guillotina
+          volto: Volto
+        index:
+          type: keyword
+      mysecondoption:
+        type: guillotina.schema.Choice
+        title: My loved option
+        vocabulary: appsettings:myoptions
+        index:
+          type: keyword
+      mylovedlanguage:
+        type: guillotina.schema.Choice
+        title: My loved option
+        vocabulary: languages
+        index:
+          type: keyword
       mylovedlist:
         type: guillotina.schema.List
         value_type: guillotina.schema.TextLine

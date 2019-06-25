@@ -14,6 +14,7 @@ from guillotina.component import get_utility
 from guillotina.component import query_utility
 from guillotina.content import get_cached_factory
 from guillotina.content import load_cached_schema
+from guillotina.schema.vocabulary import SimpleVocabulary
 from guillotina.directives import index_field
 from guillotina.directives import metadata
 from guillotina.directives import read_permission
@@ -40,7 +41,7 @@ def get_vocabulary(prop, params):
     # Vocabulary option
     if 'vocabulary' in prop:
         if isinstance(prop['vocabulary'], dict):
-            params['values'] = prop['vocabulary']
+            params['vocabulary'] = SimpleVocabulary.fromItems([x for x in prop['vocabulary'].items()])
         elif prop['vocabulary'].startswith('appsettings:'):
             params['source'] = AppSettingSource(
                 prop['vocabulary'].replace('appsettings:', '')
