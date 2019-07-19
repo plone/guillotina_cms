@@ -1,7 +1,7 @@
 5.0.0a2 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Choice converter fix
 
 
 5.0.0a1 (2019-06-22)

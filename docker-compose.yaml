@@ -1,34 +1,5 @@
 version: '3'
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
-    container_name: elasticsearch
-    environment:
-      - "discovery.type=single-node"
-      - "http.host=0.0.0.0"
-      - "transport.host=127.0.0.1"
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "network.publish_host=127.0.0.1"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata1:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-    networks:
-      - esnet
-
-  redis:
-    image: redis
-    container_name: redis
-    ports:
-      - 6379:6379
-    networks:
-      - redis
   guillotina:
     build: .
     command:
@@ -45,16 +16,6 @@ services:
     - postgres
     networks:
     - postgres
-    - esnet
-    - redis
-  test:
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-    volumes:
-    - .:/usr/src/app
-    - /var/run/docker.sock:/var/run/docker.sock
-    - logvolume01:/var/log
   postgres:
     image: postgres:10
     ports:
@@ -72,10 +33,6 @@ services:
 volumes:
   logvolume01: {}
   postgres_data_cms: {}
-  esdata1:
-    driver: local
 
 networks:
-  esnet:
   postgres:
-  redis:
