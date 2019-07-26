@@ -6,6 +6,7 @@ from .content import IFile  # noqa
 from .content import IImage  # noqa
 from .content import INews  # noqa
 from .content import IContentUtility  # noqa
+from .content import ICMSFolder  # noqa
 from .events import IWorkflowChangedEvent  # noqa
 from .following import IFollowing  # noqa
 from .following import IFollowingMarker  # noqa

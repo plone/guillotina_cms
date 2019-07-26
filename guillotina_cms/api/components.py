@@ -10,10 +10,12 @@ from guillotina_cms.utils import get_search_utility
 
 
 @configure.service(
-    context=IResource, method='GET',
+    context=IResource,
+    method="GET",
     layer=ICMSLayer,
-    permission='guillotina.AccessContent', name='@breadcrumbs',
-    summary='Components for a bredcrumbs',
+    permission="guillotina.AccessContent",
+    name="@breadcrumbs",
+    summary="Components for a bredcrumbs",
     responses={
         "200": {
             "description": "Result results on breadcrumbs",
@@ -25,46 +27,39 @@ from guillotina_cms.utils import get_search_utility
                         "type": "array",
                         "items": {
                             "type": "object",
-                            "properties": {
-                                "@id": {"type": "string"},
-                                "title": {"type": "string"},
-                            }
-                        }
-                    }
-                }
-            }
+                            "properties": {"@id": {"type": "string"}, "title": {"type": "string"}},
+                        },
+                    },
+                },
+            },
         }
-    })
+    },
+)
 class Breadcrumbs(Service):
-
     async def __call__(self):
         result = []
         context = self.context
         while context is not None and not IContainer.providedBy(context):
-            result.append({
-                'title': context.title,
-                '@id': IAbsoluteURL(context, self.request)()
-            })
-            context = getattr(context, '__parent__', None)
+            result.append({"title": context.title, "@id": IAbsoluteURL(context, self.request)()})
+            context = getattr(context, "__parent__", None)
         result.reverse()
 
-        return {
-            "@id": self.request.url.human_repr(),
-            "items": result
-        }
+        return {"@id": self.request.url.human_repr(), "items": result}
 
 
 def recursive_fill(mother_list, pending_dict):
     for element in mother_list:
-        if element['@id'] in pending_dict:
-            element['items'] = pending_dict[element['@id']]
-            recursive_fill(element['items'], pending_dict)
+        if element["@name"] in pending_dict:
+            element["items"] = pending_dict[element["@name"]]
+            recursive_fill(element["items"], pending_dict)
 
 
 @configure.service(
-    context=IResource, method='GET',
-    permission='guillotina.AccessContent', name='@navigation',
-    summary='Navigation view',
+    context=IResource,
+    method="GET",
+    permission="guillotina.AccessContent",
+    name="@navigation",
+    summary="Navigation view",
     responses={
         "200": {
             "description": "Result results on navigation",
@@ -76,49 +71,38 @@ def recursive_fill(mother_list, pending_dict):
                         "type": "array",
                         "items": {
                             "type": "object",
-                            "properties": {
-                                "@id": {"type": "string"},
-                                "title": {"type": "string"},
-                            }
-                        }
-                    }
-                }
-            }
+                            "properties": {"@id": {"type": "string"}, "title": {"type": "string"}},
+                        },
+                    },
+                },
+            },
         }
-    })
+    },
+)
 class Navigation(Service):
-
     async def __call__(self):
         search = get_search_utility()
         container = find_container(self.context)
         depth = get_content_depth(container)
         max_depth = None
-        if 'expand.navigation.depth' in self.request.rel_url.query:
-            max_depth = str(int(self.request.rel_url.query['expand.navigation.depth']) + depth)
-            depth_query = {
-                'depth__gte': depth,
-                'depth__lte': max_depth
-            }
+        if "expand.navigation.depth" in self.request.rel_url.query:
+            max_depth = str(int(self.request.rel_url.query["expand.navigation.depth"]) + depth)
+            depth_query = {"depth__gte": depth, "depth__lte": max_depth}
         else:
-            depth_query = {
-                'depth': depth
-            }
+            depth_query = {"depth": depth}
 
         result = await search.query(
-            container,
-            {**{
-                '_sort_asc': 'position_in_parent',
-                '_size': 100
-            }, **depth_query}
+            container, {**{"_sort_asc": "position_in_parent", "_size": 100}, **depth_query}
         )
 
         pending_dict = {}
-        for brain in result['member']:
+        for brain in result["member"]:
             brain_serialization = {
-                'title': brain.get('title'),
-                '@id': brain.get('@id')
+                "title": brain.get("title"),
+                "@id": brain.get("@id"),
+                "@name": brain.get("uuid"),
             }
-            pending_dict.setdefault(brain.get('parent_uuid'), []).append(brain_serialization)
+            pending_dict.setdefault(brain.get("parent_uuid"), []).append(brain_serialization)
 
         parent_uuid = container.uuid
         if parent_uuid not in pending_dict:
@@ -128,91 +112,35 @@ class Navigation(Service):
         if max_depth is not None:
             recursive_fill(final_list, pending_dict)
 
-        return {
-            "@id": self.request.url.human_repr(),
-            "items": final_list
-        }
+        return {"@id": self.request.url.human_repr(), "items": final_list}
 
 
 @configure.service(
-    context=IResource, method='GET',
-    permission='guillotina.AccessContent', name='@actions',
-    summary='Actions view',
-    responses={
-        "200": {
-            "description": "Result results on actions",
-            "schema": {
-                "properties": {}
-            }
-        }
-    })
+    context=IResource,
+    method="GET",
+    permission="guillotina.AccessContent",
+    name="@actions",
+    summary="Actions view",
+    responses={"200": {"description": "Result results on actions", "schema": {"properties": {}}}},
+)
 class Actions(Service):
-
     async def __call__(self):
         return {
-            'document_actions': [],
-            'object': [
-                {
-                    'icon': '',
-                    'id': 'view',
-                    'title': 'View'
-                },
-                {
-                    'icon': '',
-                    'id': 'edit',
-                    'title': 'Edit'
-                },
-                {
-                    'icon': '',
-                    'id': 'add',
-                    'title': 'Add'
-                },
-                {
-                    'icon': '',
-                    'id': 'folderContents',
-                    'title': 'Contents'
-                },
-                {
-                    'icon': '',
-                    'id': 'history',
-                    'title': 'History'
-                },
-                {
-                    'icon': '',
-                    'id': 'local_roles',
-                    'title': 'Sharing'
-                }
+            "document_actions": [],
+            "object": [
+                {"icon": "", "id": "view", "title": "View"},
+                {"icon": "", "id": "edit", "title": "Edit"},
+                {"icon": "", "id": "add", "title": "Add"},
+                {"icon": "", "id": "folderContents", "title": "Contents"},
+                {"icon": "", "id": "history", "title": "History"},
+                {"icon": "", "id": "local_roles", "title": "Sharing"},
             ],
-            'object_buttons': [
-                {
-                    'icon': '',
-                    'id': 'rename',
-                    'title': 'Rename'
-                }
+            "object_buttons": [{"icon": "", "id": "rename", "title": "Rename"}],
+            "portal_tabs": [{"icon": "", "id": "index_html", "title": "Home"}],
+            "site_actions": [],
+            "user": [
+                {"icon": "", "id": "preferences", "title": "Preferences"},
+                {"icon": "", "id": "plone_setup", "title": "Site Setup"},
+                {"icon": "", "id": "logout", "title": "Log out"},
             ],
-            'portal_tabs': [
-                {
-                    'icon': '',
-                    'id': 'index_html',
-                    'title': 'Home'
-                }
-            ],
-            'site_actions': [],
-            'user': [
-                {
-                    'icon': '',
-                    'id': 'preferences',
-                    'title': 'Preferences'
-                },
-                {
-                    'icon': '',
-                    'id': 'plone_setup',
-                    'title': 'Site Setup'
-                },
-                {
-                    'icon': '',
-                    'id': 'logout',
-                    'title': 'Log out'
-                }
-            ]
         }

@@ -62,6 +62,7 @@ global_disallowed_types:
 - GroupManager
 - Item
 - Container
+- Folder
 behaviors:
   myannotationdata:
     title: MyData

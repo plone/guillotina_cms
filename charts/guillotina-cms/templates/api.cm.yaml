@@ -37,6 +37,14 @@ data:
     auth_token_validators:
     - guillotina.auth.validators.SaltedHashPasswordValidator
     - guillotina.auth.validators.JWTValidator
+    global_disallowed_types:
+    - User
+    - UserManager
+    - Group
+    - GroupManager
+    - Item
+    - Container
+    - Folder
     jwt:
       secret: {{ .Values.api.jwtsecret }}
       algorithm: HS256
