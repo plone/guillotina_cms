@@ -3,7 +3,30 @@ import json
 from guillotina import schema
 from guillotina.directives import index_field
 from guillotina_cms.directives import fieldset
+from guillotina.fields import BucketListField
 from zope.interface import Interface
+
+DISCUSSION_SCHEMA = json.dumps(
+    {
+        "type": "object",
+        "properties": {
+            "@parent": {"type": "string"},
+            "@type": {"type": "string"},
+            "author_name": {"type": "string"},
+            "author_username": {"type": "string"},
+            "creation_date": {"type": "string"},
+            "in_reply_to": {"type": "string"},
+            "is_deletable": {"type": "boolean"},
+            "is_editable": {"type": "boolean"},
+            "modification_date": {"type": "boolean"},
+            "text": {
+                "type": "object",
+                "properties": {"data": {"type": "string"}, "mime-type": {"type": "string"}},
+            },
+            "user_notification": {"type": "boolean"},
+        },
+    }
+)
 
 
 HISTORY_SCHEMA = json.dumps(
@@ -41,6 +64,9 @@ class ICMSBehavior(Interface):
         title="Content Layout", required=False, source="content_layouts", default="default"
     )
 
+    fieldset("allow_discussion", "settings")
+    allow_discussion = schema.Bool(title="Allow discussion", required=False, default=False)
+
     # not absolute positioning, just a relative positioning
     # based on ordered numbers. It won't be numbers like 1,2,3,4,5,etc
     index_field("position_in_parent", type="int")
@@ -56,4 +82,11 @@ class ICMSBehavior(Interface):
         readonly=True,
         required=False,
         value_type=schema.JSONField(title="History element", schema=HISTORY_SCHEMA),
+    )
+
+    comments = schema.Dict(
+        title="Comments list field",
+        required=False,
+        key_type=schema.TextLine(title="CommentID"),
+        value_type=schema.JSONField(title="Comment", schema=HISTORY_SCHEMA),
     )
