@@ -10,7 +10,7 @@ async def test_default_tiles_layout(cms_requester):
     async with cms_requester as requester:
         # now test it...
         response, status = await requester("GET", "/db/guillotina/")
-        assert len(response["guillotina_cms.interfaces.tiles.ITiles"]["tiles_layout"]) == 2
+        assert len(response["guillotina_cms.interfaces.tiles.ITiles"]["tiles_layout"]["items"]) == 2
         assert "tile1" in response["guillotina_cms.interfaces.tiles.ITiles"]["tiles"]
 
 

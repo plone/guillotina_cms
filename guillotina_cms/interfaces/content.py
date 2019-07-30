@@ -6,7 +6,6 @@ from guillotina_cms.fields.image import CloudImageFileField
 from guillotina_cms.fields.richtext import RichTextField
 from guillotina_cms.interfaces.image import IHasImage
 from guillotina.interfaces import IAsyncUtility
-from zope.interface import Interface
 
 
 class IDocument(IFolder):

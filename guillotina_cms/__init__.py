@@ -10,21 +10,15 @@ _ = MessageFactory("guillotina_cms")
 
 
 app_settings = {
-    "applications": ["guillotina.contrib.swagger", "guillotina.contrib.catalog.pg", "guillotina_dbusers"],
+    "applications": ["guillotina.contrib.swagger", "guillotina_dbusers"],
     "available_tiles": {},
-    "pubsub_connector": "guillotina_cms.pubsub.RedisPubSubConnector",
     "commands": {"upgrade": "guillotina_cms.commands.upgrade.UpgradeCommand"},
     "load_utilities": {
         "guillotina_cms.workflow": {
             "provides": "guillotina_cms.interfaces.IWorkflowUtility",
             "factory": "guillotina_cms.utilities.workflow.WorkflowUtility",
             "settings": {},
-        },
-        # 'guillotina_cms.pubsub': {
-        #     'provides': 'guillotina_cms.interfaces.IPubSubUtility',
-        #     'factory': 'guillotina_cms.utilities.pubsub.PubSubUtility',
-        #     'settings': {}
-        # }
+        }
     },
     "layouts": {
         "CMSFolder": [
