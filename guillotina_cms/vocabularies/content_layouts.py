@@ -2,17 +2,14 @@ from guillotina import configure
 from guillotina import app_settings
 
 
-@configure.vocabulary(
-    name="content_layouts")
+@configure.vocabulary(name="content_layouts")
 class ContentLayoutVocabulary:
-
     def __init__(self, context):
         self.context = context
-        if hasattr(self.context, 'context'):
-            main_interface = [x for x in self.context.context.__provides__][0].__identifier__
+        if hasattr(self.context, "context"):
+            self.values = app_settings["layouts"].get(self.context.context.type_name, [])
         else:
-            main_interface = [x for x in self.context.__provides__][0].__identifier__
-        self.values = app_settings['layouts'].get(main_interface, [])
+            self.values = app_settings["layouts"].get(self.context.type_name, [])
 
     def keys(self):
         return self.values
@@ -30,4 +27,4 @@ class ContentLayoutVocabulary:
         if value in self.values:
             return value
         else:
-            raise KeyError('No valid state')
+            raise KeyError("No valid state")

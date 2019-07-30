@@ -6,15 +6,23 @@ from guillotina_cms.behaviors.tiles import Tiles
 import json
 
 
+async def test_default_tiles_layout(cms_requester):
+    async with cms_requester as requester:
+        # now test it...
+        response, status = await requester("GET", "/db/guillotina/")
+        assert len(response["guillotina_cms.interfaces.tiles.ITiles"]["tiles_layout"]["items"]) == 2
+        assert "tile1" in response["guillotina_cms.interfaces.tiles.ITiles"]["tiles"]
+
+
 async def test_tiles_endpoint_gives_us_registered_tiles(cms_requester):
     async with cms_requester as requester:
         # now test it...
-        response, status = await requester('GET', '/db/guillotina/@tiles')
+        response, status = await requester("GET", "/db/guillotina/@tiles")
         assert status == 200
         assert len(response) >= 1
-        assert '@tiles/' in response[0]['@id']
+        assert "@tiles/" in response[0]["@id"]
 
-        response, status = await requester('GET', '/db/guillotina/@tiles/title')
+        response, status = await requester("GET", "/db/guillotina/@tiles/title")
         assert status == 200
         assert response["type"] == "object"
 
@@ -28,31 +36,24 @@ def test_conversation_behavior_returns_instance(dummy_request):
 async def test_storing_tiles_behavior_data(cms_requester):
     async with cms_requester as requester:
         resp, status = await requester(
-            'POST',
-            '/db/guillotina/',
-            data=json.dumps({
-                '@type': 'Folder',
-                'title': 'foobar',
-                'id': 'foobar',
-                '@behaviors': ['guillotina_cms.interfaces.tiles.ITiles'],
-                'guillotina_cms.interfaces.tiles.ITiles': {
-                    'tiles_layout': {
-                        'cols': ['#title-1', '#description-1']
+            "POST",
+            "/db/guillotina/",
+            data=json.dumps(
+                {
+                    "@type": "Folder",
+                    "title": "foobar",
+                    "id": "foobar",
+                    "@behaviors": ["guillotina_cms.interfaces.tiles.ITiles"],
+                    "guillotina_cms.interfaces.tiles.ITiles": {
+                        "tiles_layout": {"cols": ["#title-1", "#description-1"]},
+                        "tiles": {"#title-1": {"@type": "title"}},
                     },
-                    'tiles': {
-                        '#title-1': {
-                            "@type": "title"
-                        }
-                    }
                 }
-            })
+            ),
         )
         assert status == 201
 
-        resp, status = await requester(
-            'GET',
-            '/db/guillotina/foobar'
-        )
+        resp, status = await requester("GET", "/db/guillotina/foobar")
         assert status == 200
-        assert 'guillotina_cms.interfaces.tiles.ITiles' in resp
-        assert 'tiles_layout' in resp['guillotina_cms.interfaces.tiles.ITiles']
+        assert "guillotina_cms.interfaces.tiles.ITiles" in resp
+        assert "tiles_layout" in resp["guillotina_cms.interfaces.tiles.ITiles"]

@@ -10,24 +10,18 @@ _ = MessageFactory("guillotina_cms")
 
 
 app_settings = {
-    "applications": ["guillotina.contrib.swagger", "guillotina.contrib.catalog.pg", "guillotina_dbusers"],
+    "applications": ["guillotina.contrib.swagger", "guillotina_dbusers"],
     "available_tiles": {},
-    "pubsub_connector": "guillotina_cms.pubsub.RedisPubSubConnector",
     "commands": {"upgrade": "guillotina_cms.commands.upgrade.UpgradeCommand"},
     "load_utilities": {
         "guillotina_cms.workflow": {
             "provides": "guillotina_cms.interfaces.IWorkflowUtility",
             "factory": "guillotina_cms.utilities.workflow.WorkflowUtility",
             "settings": {},
-        },
-        # 'guillotina_cms.pubsub': {
-        #     'provides': 'guillotina_cms.interfaces.IPubSubUtility',
-        #     'factory': 'guillotina_cms.utilities.pubsub.PubSubUtility',
-        #     'settings': {}
-        # }
+        }
     },
     "layouts": {
-        "guillotina.interfaces.content.IFolder": [
+        "CMSFolder": [
             "listing_view",
             "tabular_view",
             "summary_view",
@@ -36,12 +30,12 @@ app_settings = {
             "album_view",
             "event_listing",
         ],
-        "guillotina_cms.interfaces.content.IDocument": ["document_view", "layout_view"],
-        "guillotina.interfaces.content.IContainer": ["document_view", "layout_view"],
-        "guillotina_cms.interfaces.content.INews": ["document_view", "layout_view"],
-        "guillotina_cms.interfaces.content.IEvent": ["document_view", "layout_view"],
-        "guillotina_cms.interfaces.content.ILink": ["document_view", "layout_view"],
-        "guillotina_cms.interfaces.content.IFile": ["document_view", "layout_view"],
+        "Document": ["document_view", "layout_view"],
+        "Container": ["document_view", "layout_view"],
+        "News": ["document_view", "layout_view"],
+        "Event": ["document_view", "layout_view"],
+        "Link": ["document_view", "layout_view"],
+        "File": ["document_view", "layout_view"],
     },
     "workflows": {
         "private": {"initial_state": "private", "states": {"private": {"set_permission": {}, "actions": {}}}},
@@ -102,7 +96,18 @@ app_settings = {
         "guillotina.interfaces.IContainer": "basic",
         "guillotina_cms.content.document.IDocument": "basic",
     },
-    "default_tiles": {"Document": [{"type": "title"}, {"type": "text"}]},
+    "default_tiles": {
+        "Document": {
+            "tiles": {"tile1": {"type": "title"}, "tile2": {"type": "text"}},
+            "tiles_layout": {"items": ["tile1", "tile2"]},
+        },
+        "Container": {
+            "tiles": {"tile1": {"type": "title"}, "tile2": {"type": "text"}},
+            "tiles_layout": {"items": ["tile1", "tile2"]},
+        },
+    },
+    "default_allow_discussion": False,
+    "allow_discussion_types": [],
     "store_json": True,
 }
 

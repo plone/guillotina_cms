@@ -1,3 +1,4 @@
+from . import comments  # noqa
 from . import components  # noqa
 from . import constraint  # noqa
 from . import content  # noqa

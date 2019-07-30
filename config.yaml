@@ -12,6 +12,7 @@ store_json: true
 applications:
 - guillotina_cms
 - guillotina.contrib.cache
+- guillotina.contrib.catalog.pg
 # - guillotina_elasticsearch
 # - guillotina_linkintegrity
 address: 8081
@@ -167,15 +168,30 @@ contents:
     - layout_view
 default_tiles:
   Document:
-    example1:
-        tiles:
-          tile1:
-            '@type': tilte
-          tile2:
-            '@type': description
-        tiles_layouts:
-        - tile1
-        - tile2
+    tiles:
+      tile1:
+        '@type': title
+      tile2:
+        '@type': description
+      tile3:
+        '@type': text
+    tiles_layout:
+    - tile1
+    - tile2
+    - tile3
+  Container:
+    tiles:
+      tile1:
+        '@type': title
+      tile2:
+        '@type': description
+      tile3:
+        '@type': text
+    tiles_layout:
+      items:
+      - tile1
+      - tile2
+      - tile3
 myoptions:
 - - guillotina
   - Also Love Guillotina
@@ -217,3 +233,5 @@ workflows_content:
   guillotina.interfaces.IResource: basic
   guillotina_cms.content.document.IDocument: guillotina_simple_publication
   guillotina_cms.interfaces.Imydoc: guillotina_simple_publication
+allow_discussion_types:
+- Document

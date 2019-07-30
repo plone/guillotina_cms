@@ -7,26 +7,26 @@ from guillotina_cms.behaviors.image import IImageAttachment
 from guillotina_cms.behaviors.syndication import ISyndicationSettings
 from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.interfaces import IImagingSettings
+from guillotina_cms.interfaces import ITiles
+from guillotina.behaviors.dublincore import IDublinCore
 
 
-CMS_LAYER = 'guillotina_cms.interfaces.ICMSLayer'
+CMS_LAYER = "guillotina_cms.interfaces.ICMSLayer"
 
 
-@configure.addon(
-    name='cms',
-    title='Guillotina CMS')
+@configure.addon(name="cms", title="Guillotina CMS")
 class CMSAddon(Addon):
-
     @classmethod
     async def install(cls, container, request):
         container.add_behavior(ISyndicationSettings)
         container.add_behavior(IImageAttachment)
         container.add_behavior(ICMSBehavior)
+        container.add_behavior(IDublinCore)
+        container.add_behavior(ITiles)
+        container.register()
 
         registry = await get_registry()
-        registry.for_interface(ILayers)['active_layers'] |= {
-            CMS_LAYER
-        }
+        registry.for_interface(ILayers)["active_layers"] |= {CMS_LAYER}
         registry.register_interface(IImagingSettings)
         registry.register()
 
@@ -34,7 +34,5 @@ class CMSAddon(Addon):
     async def uninstall(cls, container, request):
         container.remove_behavior(ISyndicationSettings)
         registry = await get_registry()
-        registry.for_interface(ILayers)['active_layers'] -= {
-            CMS_LAYER
-        }
+        registry.for_interface(ILayers)["active_layers"] -= {CMS_LAYER}
         registry.register()

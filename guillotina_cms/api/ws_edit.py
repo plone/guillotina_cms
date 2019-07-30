@@ -7,7 +7,7 @@ from guillotina.interfaces import IAsyncBehavior
 from guillotina.transactions import get_tm
 from guillotina.utils import resolve_dotted_name
 from guillotina.interfaces import IResource
-from guillotina_cms.interfaces import IPubSubUtility
+from guillotina.interfaces import IPubSubUtility
 from guillotina.component import get_utility
 
 import aiohttp
@@ -15,21 +15,18 @@ import asyncio
 import json
 import logging
 
-logger = logging.getLogger('guillotina_cms')
+logger = logging.getLogger("guillotina_cms")
 
 dmp = diff_match_patch()
 
 
 @configure.service(
-    context=IResource, method='GET',
-    permission='guillotina.ModifyContent', name='@ws-edit',
-    parameters=[{
-        "name": "ws_token",
-        "in": "query",
-        "type": "string",
-        "required": True
-    }],
-    summary='''This is a web socket using google's diff-match-patch algorithm.
+    context=IResource,
+    method="GET",
+    permission="guillotina.ModifyContent",
+    name="@ws-edit",
+    parameters=[{"name": "ws_token", "in": "query", "type": "string", "required": True}],
+    summary="""This is a web socket using google's diff-match-patch algorithm.
 
 Socket payload examples:
 
@@ -82,7 +79,8 @@ Operator values:
 
 The only payload we handle is when `t=(dmp|fdmp|load|save|saved)`. Otherwise, everything is
 passed along to the other subscribers without interpretation. So if you want to pass
-along editor data in any other way, it would be fine.''',)
+along editor data in any other way, it would be fine.""",
+)
 class WSEdit(View):
     auto_save_delay = 30
     auto_save_handle = None
@@ -101,13 +99,12 @@ class WSEdit(View):
 
         try:
             self.pubsub = get_utility(IPubSubUtility)
-            self.channel_name = 'ws-field-edit-{}'.format(
-                self.context.__uuid__
-            )
+            self.channel_name = "ws-field-edit-{}".format(self.context.__uuid__)
 
             # subscribe to redis channel for this context
             asyncio.ensure_future(
-                self.pubsub.subscribe(self.channel_name, self.request.uid, self.subscriber_callback))
+                self.pubsub.subscribe(self.channel_name, self.request.uid, self.subscriber_callback)
+            )
 
             self.configure_auto_save()
 
@@ -115,10 +112,11 @@ class WSEdit(View):
                 if msg.type == aiohttp.WSMsgType.text:
                     await self.handle_message(msg)
                 elif msg.type == aiohttp.WSMsgType.error:
-                    logger.debug('resource ws connection closed with exception {0:s}'
-                                 .format(self.ws.exception()))
+                    logger.debug(
+                        "resource ws connection closed with exception {0:s}".format(self.ws.exception())
+                    )
         except asyncio.CancelledError:
-            logger.debug('browser closed')
+            logger.debug("browser closed")
             pass
         finally:
             try:
@@ -127,7 +125,7 @@ class WSEdit(View):
             except Exception:
                 pass
 
-        logger.debug('websocket connection closed')
+        logger.debug("websocket connection closed")
 
         return {}
 
@@ -142,71 +140,52 @@ class WSEdit(View):
         self.auto_save_handle = loop.call_later(self.auto_save_delay, self.auto_save_callback)
 
     async def subscriber_callback(self, data):
-        if data['t'] == 'saved':
+        if data["t"] == "saved":
             # reset our auto save counter
             pass
         await self.ws.send_str(json.dumps(data))  # send along to user
 
     async def handle_message(self, msg):
-        if msg.data == 'close':
+        if msg.data == "close":
             await self.ws.close()
-        elif msg.data.lower() in ('ping', 'ping!'):
+        elif msg.data.lower() in ("ping", "ping!"):
             pass
         else:
             try:
                 data = json.loads(msg.data)
-                operation = data['t']
+                operation = data["t"]
             except Exception:
-                self.ws.send_str(json.dumps({
-                    't': 'e',
-                    'v': 'Not a valid payload'
-                }))
+                self.ws.send_str(json.dumps({"t": "e", "v": "Not a valid payload"}))
                 return
 
-            if operation == 'dmp':
+            if operation == "dmp":
                 try:
                     await self.apply_edit(data)
                 except Exception:
-                    await self.ws.send_str(json.dumps({
-                        't': 'e',
-                        'v': 'Error applying dmp'
-                    }))
-                    logger.warn('Error applying dmp', exc_info=True)
-            elif operation == 'save':
+                    await self.ws.send_str(json.dumps({"t": "e", "v": "Error applying dmp"}))
+                    logger.warn("Error applying dmp", exc_info=True)
+            elif operation == "save":
                 await self.save()
-                self.ws.send_str(json.dumps({
-                    't': 'saved'
-                }))
-                await self.pubsub.publish(
-                    self.channel_name,
-                    {
-                        't': 'saved',
-                        'ruid': self.request.uid
-                    })
-            elif operation == 'saved':
+                self.ws.send_str(json.dumps({"t": "saved"}))
+                await self.pubsub.publish(self.channel_name, {"t": "saved", "ruid": self.request.uid})
+            elif operation == "saved":
                 # reset the counter, only one person needs to save it every 30 seconds
                 self.configure_auto_save()
             else:
                 # all other operations are just passed through.
-                data['ruid'] = self.request.uid
+                data["ruid"] = self.request.uid
                 await self.pubsub.publish(self.channel_name, data)
 
     async def get_field(self, field_name):
         context = self.context
-        if '.' in field_name:
-            schema_klass, field_name = field_name.rsplit('.', 1)
+        if "." in field_name:
+            schema_klass, field_name = field_name.rsplit(".", 1)
             if schema_klass not in self.context.__behaviors__:
-                self.ws.send_str(json.dumps({
-                    't': 'e',
-                    'v': 'Not a valid field on a behavior'
-                }))
+                self.ws.send_str(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
                 return
             schema = resolve_dotted_name(schema_klass)
             if schema is None:
-                self.ws.send_str(json.dumps({
-                    't': 'e',
-                    'v': 'Could not find specified schema'
-                }))
+                self.ws.send_str(json.dumps({"t": "e", "v": "Could not find specified schema"}))
                 return
             behavior = schema(context)
             context = behavior
@@ -217,10 +196,7 @@ class WSEdit(View):
         try:
             field = schema[field_name]
         except KeyError:
-            self.ws.send_str(json.dumps({
-                't': 'e',
-                'v': 'Not a valid field on a behavior'
-            }))
+            self.ws.send_str(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
             return
         return context, field
 
@@ -262,14 +238,14 @@ class WSEdit(View):
         return val
 
     async def apply_edit(self, data):
-        field_name = data['f']
+        field_name = data["f"]
         if field_name not in self.data:
-            self.data[field_name] = await self.get_value(data['f'])
+            self.data[field_name] = await self.get_value(data["f"])
         value = self.data[field_name]
 
-        dmp_value = data['v']
+        dmp_value = data["v"]
         value, results = dmp.patch_apply(dmp.patch_fromText(dmp_value), value)
         self.data[field_name] = value
 
-        data['ruid'] = self.request.uid
+        data["ruid"] = self.request.uid
         await self.pubsub.publish(self.channel_name, data)

@@ -6,21 +6,24 @@ from guillotina_cms.interfaces import IDocument
 
 
 @configure.contenttype(
-    type_name='Document',
+    type_name="Document",
     schema=IDocument,
     behaviors=[
-        'guillotina.behaviors.dublincore.IDublinCore',
-        'guillotina_cms.interfaces.base.ICMSBehavior',
-        'guillotina_cms.interfaces.tiles.ITiles'],
-    allowed_types=[
-        'Image', 'File']  # dynamically calculated
+        "guillotina.behaviors.dublincore.IDublinCore",
+        "guillotina_cms.interfaces.base.ICMSBehavior",
+        "guillotina_cms.interfaces.tiles.ITiles",
+    ],
+    allowed_types=["Image", "File"],  # dynamically calculated
 )
 class Document(Folder):
     pass
 
 
-@index.with_accessor(IDocument, 'text', type='searchabletext')
+@index.with_accessor(IDocument, "text", type="searchabletext")
 def get_text_from_richtext(ob):
     # Richtext is a dict and we only care about the text
-    if ob.text is not None:
-        return ob.text.data
+    try:
+        if ob.text is not None:
+            return ob.text.data
+    except AttributeError:
+        pass

@@ -6,6 +6,18 @@ import os
 @pytest.mark.skipif(
     os.environ.get("DATABASE", "DUMMY") in ("cockroachdb", "DUMMY"), reason="Not for dummy db"
 )
+@pytest.mark.app_settings(
+    {
+        "applications": ["guillotina.contrib.catalog.pg"],
+        "load_utilities": {
+            "catalog": {
+                "provides": "guillotina.interfaces.ICatalogUtility",
+                "factory": "guillotina.contrib.catalog.pg.PGSearchUtility",
+            }
+        },
+    }
+)
+@pytest.mark.app_settings({"applications": ["guillotina.contrib.catalog.pg"]})
 async def test_navigation(cms_requester):
     async with cms_requester as requester:
         resp, status = await requester(
