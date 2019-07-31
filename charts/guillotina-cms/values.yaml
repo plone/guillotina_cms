@@ -18,6 +18,7 @@ api:
   replicaCount: 1
 
 front:
+  enabled: true
   image: plone/volto:latest
   resources:
     limits:
@@ -32,6 +33,7 @@ front:
 
 
 processing:
+  enabled: true
   image: ramonnb/guillotina_processing:latest
   resources:
     limits:
@@ -223,5 +225,43 @@ workflows:
             permission: guillotina.ViewContent
             role: guillotina.Anonymous
 
+global_disallowed_types:
+- User
+- UserManager
+- Group
+- GroupManager
+- Item
+- Container
+- Folder
 
 content:
+
+
+layouts:
+  CMSFolder:
+  - listing_view
+  - tabular_view
+  - summary_view
+  - layout_view
+  - full_view
+  - album_view
+  - event_listing
+  - document_view
+  Document:
+  - document_view
+  - layout_view
+  Container:
+  - document_view
+  - layout_view
+  News:
+  - document_view
+  - layout_view
+  Event:
+  - document_view
+  - layout_view
+  Link:
+  - document_view
+  - layout_view
+  File:
+  - document_view
+  - layout_view

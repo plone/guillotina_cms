@@ -39,13 +39,11 @@ data:
     - guillotina.auth.validators.SaltedHashPasswordValidator
     - guillotina.auth.validators.JWTValidator
     global_disallowed_types:
-    - User
-    - UserManager
-    - Group
-    - GroupManager
-    - Item
-    - Container
-    - Folder
+    {{ toYaml .Values.global_disallowed_types | indent 4 }}
+    layouts:
+    {{ toYaml .Values.layouts | indent 4 }}
+    global_disallowed_types:
+    {{ toYaml .Values.global_disallowed_types | indent 4 }}
     jwt:
       secret: {{ .Values.api.jwtsecret }}
       algorithm: HS256

@@ -29,6 +29,7 @@ app_settings = {
             "full_view",
             "album_view",
             "event_listing",
+            "document_view",
         ],
         "Document": ["document_view", "layout_view"],
         "Container": ["document_view", "layout_view"],
