@@ -21,6 +21,7 @@ data:
     applications:
     - guillotina_cms
     - guillotina_dbusers
+    - guillotina.contrib.catalog.pg
     - guillotina.contrib.cache
     - guillotina.contrib.swagger
     address: {{ .Values.api.service.internalPort }}
