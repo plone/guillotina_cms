@@ -3,7 +3,6 @@ import json
 from guillotina import schema
 from guillotina.directives import index_field
 from guillotina_cms.directives import fieldset
-from guillotina.fields import BucketListField
 from zope.interface import Interface
 
 DISCUSSION_SCHEMA = json.dumps(
@@ -88,5 +87,5 @@ class ICMSBehavior(Interface):
         title="Comments list field",
         required=False,
         key_type=schema.TextLine(title="CommentID"),
-        value_type=schema.JSONField(title="Comment", schema=HISTORY_SCHEMA),
+        value_type=schema.JSONField(title="Comment", schema=DISCUSSION_SCHEMA),
     )

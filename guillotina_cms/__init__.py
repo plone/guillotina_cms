@@ -99,11 +99,11 @@ app_settings = {
     },
     "default_tiles": {
         "Document": {
-            "tiles": {"tile1": {"type": "title"}, "tile2": {"type": "text"}},
+            "tiles": {"tile1": {"@type": "title"}, "tile2": {"@type": "text", "text": {}}},
             "tiles_layout": {"items": ["tile1", "tile2"]},
         },
         "Container": {
-            "tiles": {"tile1": {"type": "title"}, "tile2": {"type": "text"}},
+            "tiles": {"tile1": {"@type": "title"}, "tile2": {"@type": "text", "text": {}}},
             "tiles_layout": {"items": ["tile1", "tile2"]},
         },
     },

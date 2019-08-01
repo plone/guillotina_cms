@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: guillotina-cms-processing
+  name: {{ template "name" . }}-processing
   labels:
     app: {{ template "name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

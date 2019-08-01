@@ -49,7 +49,7 @@ spec:
         - name: API_PATH
           value: {{ .Values.api.service.externalUrl }}
         - name: INTERNAL_API_PATH
-          value: {{ .Values.api.service.internalAPIUrl }}
+          value: "http://{{ template "name" . }}-cms:{{ .Values.api.service.externalPort }}/db/cms"
         ports:
         - name: front
           containerPort: {{ .Values.front.service.internalPort }}

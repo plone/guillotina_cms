@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: guillotina-cms-service
+  name: {{ template "name" . }}-service
   labels:
     app: {{ template "name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

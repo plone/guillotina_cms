@@ -11,13 +11,15 @@ databases:
 store_json: true
 applications:
 - guillotina_cms
+- guillotina_dbusers
 - guillotina.contrib.cache
 - guillotina.contrib.catalog.pg
 # - guillotina_elasticsearch
 # - guillotina_linkintegrity
-address: 8081
+address: 8080
 static:
-  favicon.png: static/favicon.png
+- favicon.png: static/favicon.png
+- assets: guillotina:static/assets
 # pastanaga: pastanaga-angular/dist
 # ng: plone-angular-demo/dist
 # plone: plone-react
@@ -174,6 +176,7 @@ default_tiles:
       tile2:
         '@type': description
       tile3:
+        text: null
         '@type': text
     tiles_layout:
     - tile1
@@ -186,6 +189,7 @@ default_tiles:
       tile2:
         '@type': description
       tile3:
+        text: null
         '@type': text
     tiles_layout:
       items:

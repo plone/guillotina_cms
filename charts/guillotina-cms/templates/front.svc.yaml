@@ -2,7 +2,12 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: volto-front
+  name: {{ template "name" . }}-volto
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   type: {{ .Values.front.service.type }}
   ports:
