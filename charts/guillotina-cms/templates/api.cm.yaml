@@ -26,8 +26,8 @@ data:
     - guillotina.contrib.swagger
     address: {{ .Values.api.service.internalPort }}
     static:
-    - favicon.png: static/favicon.png
-    - assets: guillotina:static/assets
+      favicon.png: static/favicon.png
+      assets: guillotina:static/assets
     root_user:
       password: {{ .Values.api.root_passwd }}
     auth_extractors:
@@ -38,19 +38,6 @@ data:
     auth_token_validators:
     - guillotina.auth.validators.SaltedHashPasswordValidator
     - guillotina.auth.validators.JWTValidator
-    {{- if .Values.cms.global_disallowed_types }}
-    global_disallowed_types:
-    {{- toYaml .Values.cms.global_disallowed_types | nindent 4 }}
-    {{- end }}
-    {{- if .Values.cms.layouts -}}
-    layouts:
-    {{- toYaml .Values.cms.layouts | nindent 6 -}}
-    {{- end -}}
-    {{- if .Values.cms.default_tiles -}}
-    default_tiles:
-    {{- toYaml .Values.cms.default_tiles | nindent 4 -}}
-    {{- end -}}
-    default_allow_discussion: {{ .Values.cms.default_allow_discussion }}
     jwt:
       secret: {{ .Values.api.jwtsecret }}
       algorithm: HS256
@@ -73,11 +60,4 @@ data:
       - "*"
       allow_credentials: true
       max_age: 3660
-    {{- if .Values.cms.workflows }}
-    workflows:
-    {{- toYaml .Values.cms.workflows | nindent 6 -}}
-    {{- end }}
-    {{- if .Values.cms.content }}
-    content:
-    {{- toYaml .Values.cms.content | nindent 6 -}}
-    {{- end }}
+    {{- toYaml .Values.cms | nindent 4}}
