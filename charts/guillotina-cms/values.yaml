@@ -264,9 +264,9 @@ cms:
     Document:
       tiles:
         tile1:
-          type: title
+          '@type': title
         tile2:
-          type: text
+          '@type': text
           text: null
       tiles_layout:
         items:
@@ -275,9 +275,9 @@ cms:
     Container:
       tiles:
         tile1:
-          type: title
+          '@type': title
         tile2:
-          type: text
+          '@type': text
           text: null
       tiles_layout:
         items:
@@ -286,9 +286,9 @@ cms:
     CMSFolder:
       tiles:
         tile1:
-          type: title
+          '@type': title
         tile2:
-          type: text
+          '@type': text
           text: null
       tiles_layout:
         items:
