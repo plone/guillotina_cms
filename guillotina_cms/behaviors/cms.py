@@ -5,6 +5,7 @@ from guillotina.behaviors.properties import ContextProperty
 from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.interfaces import IWorkflow
 from guillotina.utils import iter_parents
+from guillotina.interfaces import IFolder
 
 
 def default_review_state(context=None, name=None):
@@ -30,6 +31,10 @@ class CMS(AnnotationBehavior):
     content_layout = ContextProperty("content_layout", default_layout)
     position_in_parent = ContextProperty("position_in_parent", -1)
     _allow_discussion = ContextProperty("_allow_discussion", None)
+
+    @property
+    def is_folderish(self):
+        return IFolder.providedBy(self.context)
 
     @property
     def allow_discussion(self):

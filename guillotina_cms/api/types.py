@@ -7,7 +7,6 @@ from guillotina.component import getMultiAdapter
 from guillotina.component import query_utility
 from guillotina.component import queryUtility
 from guillotina.interfaces import IAbsoluteURL
-from guillotina.interfaces import IConstrainTypes
 from guillotina.interfaces import IContainer
 from guillotina.interfaces import IFactorySerializeToJson
 from guillotina.interfaces import IPermission
@@ -15,12 +14,15 @@ from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceFactory
 from guillotina.response import HTTPNotFound
 from guillotina.utils import get_security_policy
+from guillotina_cms.interfaces import ICMSConstrainTypes
 
 
 @configure.service(
-    context=IContainer, method='GET',
-    permission='guillotina.AccessContent', name='@types',
-    summary='Read information on available types',
+    context=IContainer,
+    method="GET",
+    permission="guillotina.AccessContent",
+    name="@types",
+    summary="Read information on available types",
     responses={
         "200": {
             "description": "Result results on types",
@@ -31,16 +33,19 @@ from guillotina.utils import get_security_policy
                     "properties": {
                         "@id": {"type": "string"},
                         "title": {"type": "string"},
-                        "addable": {"type": "boolean"}
-                    }
-                }
-            }
+                        "addable": {"type": "boolean"},
+                    },
+                },
+            },
         }
-    })
+    },
+)
 @configure.service(
-    context=IResource, method='GET',
-    permission='guillotina.AccessContent', name='@types',
-    summary='Read information on available types',
+    context=IResource,
+    method="GET",
+    permission="guillotina.AccessContent",
+    name="@types",
+    summary="Read information on available types",
     responses={
         "200": {
             "description": "Result results on types",
@@ -51,16 +56,17 @@ from guillotina.utils import get_security_policy
                     "properties": {
                         "@id": {"type": "string"},
                         "title": {"type": "string"},
-                        "addable": {"type": "boolean"}
-                    }
-                }
-            }
+                        "addable": {"type": "boolean"},
+                    },
+                },
+            },
         }
-    })
+    },
+)
 async def get_all_types(context, request):
     result = []
     base_url = IAbsoluteURL(context, request)()
-    constrains = IConstrainTypes(context, None)
+    constrains = ICMSConstrainTypes(context, None)
     policy = get_security_policy()
 
     for id, factory in FACTORY_CACHE.items():
@@ -73,61 +79,41 @@ async def get_all_types(context, request):
             if factory.add_permission in PERMISSIONS_CACHE:
                 permission = PERMISSIONS_CACHE[factory.add_permission]
             else:
-                permission = query_utility(
-                    IPermission, name=factory.add_permission)
+                permission = query_utility(IPermission, name=factory.add_permission)
                 PERMISSIONS_CACHE[factory.add_permission] = permission
 
-            if permission is not None and \
-                    not policy.check_permission(permission.id, context):
+            if permission is not None and not policy.check_permission(permission.id, context):
                 add = False
         if add:
-            result.append({
-                '@id': base_url + '/@types/' + id,
-                'addable': True,
-                'title': id
-            })
+            result.append({"@id": base_url + "/@types/" + id, "addable": True, "title": id})
     return result
 
 
 @configure.service(
-    context=IContainer, method='GET',
-    permission='guillotina.AccessContent', name='@types/{type_id}',
-    summary='Components for a resource',
-    responses={
-        "200": {
-            "description": "Result results on types",
-            "schema": {
-                "properties": {}
-            }
-        }
-    })
+    context=IContainer,
+    method="GET",
+    permission="guillotina.AccessContent",
+    name="@types/{type_id}",
+    summary="Components for a resource",
+    responses={"200": {"description": "Result results on types", "schema": {"properties": {}}}},
+)
 @configure.service(
-    context=IResource, method='GET',
-    permission='guillotina.AccessContent', name='@types/{type_id}',
-    summary='Components for a resource',
-    responses={
-        "200": {
-            "description": "Result results on types",
-            "schema": {
-                "properties": {}
-            }
-        }
-    })
+    context=IResource,
+    method="GET",
+    permission="guillotina.AccessContent",
+    name="@types/{type_id}",
+    summary="Components for a resource",
+    responses={"200": {"description": "Result results on types", "schema": {"properties": {}}}},
+)
 class Read(Service):
-
     async def prepare(self):
-        type_id = self.request.matchdict['type_id']
+        type_id = self.request.matchdict["type_id"]
         self.value = queryUtility(IResourceFactory, name=type_id)
         if self.value is None:
-            raise HTTPNotFound(content={
-                'reason': f'Could not find type {type_id}',
-                'type': type_id
-            })
+            raise HTTPNotFound(content={"reason": f"Could not find type {type_id}", "type": type_id})
 
     async def __call__(self):
-        serializer = getMultiAdapter(
-            (self.value, self.request),
-            IFactorySerializeToJson)
+        serializer = getMultiAdapter((self.value, self.request), IFactorySerializeToJson)
 
         result = await serializer()
         return result

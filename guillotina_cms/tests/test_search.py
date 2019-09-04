@@ -18,6 +18,7 @@ async def test_search(cms_requester):
         resp, status = await requester("GET", "/db/guillotina/@search?path__starts=cms-folder0&depth__gte=2")
         assert resp["items_total"] == 10
 
+        assert resp["items"][0]["is_folderish"]
         resp, status = await requester(
             "GET", "/db/guillotina/@search?text__in=needs&portal_type=Document&_size=30"
         )

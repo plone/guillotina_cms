@@ -1,7 +1,7 @@
 from aiohttp import web
 from diff_match_patch import diff_match_patch
 from guillotina import configure
-from guillotina.browser import View
+from guillotina.api.service import Service
 from guillotina.content import get_cached_factory
 from guillotina.interfaces import IAsyncBehavior
 from guillotina.transactions import get_tm
@@ -81,7 +81,7 @@ The only payload we handle is when `t=(dmp|fdmp|load|save|saved)`. Otherwise, ev
 passed along to the other subscribers without interpretation. So if you want to pass
 along editor data in any other way, it would be fine.""",
 )
-class WSEdit(View):
+class WSEdit(Service):
     auto_save_delay = 30
     auto_save_handle = None
 

@@ -3,10 +3,12 @@ from guillotina import configure
 from guillotina import FACTORY_CACHE
 from zope.interface import Interface
 from guillotina.constraintypes import FTIConstrainAllowedTypes
-from guillotina_cms.interfaces import ICMSConstrainTypes
+
+# from guillotina_cms.interfaces import ICMSConstrainTypes ITS A PROBLEM to protect on G
+from guillotina.interfaces import IConstrainTypes
 
 
-@configure.adapter(for_=Interface, provides=ICMSConstrainTypes)
+@configure.adapter(for_=Interface, provides=IConstrainTypes)
 class CMSCustomAllowedTypes(FTIConstrainAllowedTypes):
     def get_allowed_types(self) -> list:
         tn = getattr(self.context, "__allowed_types__", None)

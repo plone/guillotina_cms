@@ -49,6 +49,9 @@ class ICMSLayer(Interface):
 
 class ICMSBehavior(Interface):
 
+    index_field("is_folderish", store=True, type="boolean")
+    is_folderish = schema.Bool(title="Is a folderish object", readonly=True)
+
     index_field("hidden_navigation", store=True, type="boolean")
     fieldset("hidden_navigation", "settings")
     hidden_navigation = schema.Bool(title="Should be hidden on navigation", required=False, default=False)
