@@ -1,6 +1,7 @@
 5.0.0a2 (unreleased)
 --------------------
 
+- Images and folder should be workflow enabled
 - Choice converter fix
 
 

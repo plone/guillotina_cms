@@ -10,7 +10,7 @@ _ = MessageFactory("guillotina_cms")
 
 
 app_settings = {
-    "applications": ["guillotina.contrib.swagger", "guillotina_dbusers"],
+    "applications": ["guillotina.contrib.catalog.pg", "guillotina.contrib.swagger", "guillotina_dbusers"],
     "available_tiles": {},
     "commands": {"upgrade": "guillotina_cms.commands.upgrade.UpgradeCommand"},
     "load_utilities": {
@@ -96,6 +96,8 @@ app_settings = {
         "guillotina.interfaces.IResource": "private",
         "guillotina.interfaces.IContainer": "basic",
         "guillotina_cms.content.document.IDocument": "basic",
+        "guillotina_cms.content.image.IImage": "basic",
+        "guillotina_cms.content.folder.IFolder": "basic",
     },
     "default_tiles": {
         "Document": {
@@ -107,6 +109,15 @@ app_settings = {
             "tiles_layout": {"items": ["tile1", "tile2"]},
         },
     },
+    "global_disallowed_types": [
+        "User",
+        "UserManager",
+        "Group",
+        "GroupManager",
+        "Item",
+        "Container",
+        "Folder",
+    ],
     "default_allow_discussion": False,
     "allow_discussion_types": [],
     "store_json": True,

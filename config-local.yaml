@@ -8,16 +8,13 @@ databases:
     dsn: postgresql://postgres:secret@localhost:5432/guillotina
     read_only: false
     pool_size: 100
+store_json: true
 applications:
 - guillotina_cms
-# - guillotina_rediscache
-# - guillotina_elasticsearch
-address: 8081
+- guillotina.contrib.cache
+address: 8079
 static:
   favicon.png: static/favicon.png
-# pastanaga: pastanaga-angular/dist
-# ng: plone-angular-demo/dist
-# plone: plone-react
 root_user:
   password: root
 auth_extractors:
@@ -28,9 +25,6 @@ auth_extractors:
 auth_token_validators:
 - guillotina.auth.validators.SaltedHashPasswordValidator
 - guillotina.auth.validators.JWTValidator
-redis:
-  host: "localhost"
-  port: 6379
 jwt:
   secret: secret
   algorithm: HS256
@@ -52,46 +46,4 @@ cors:
   - "*"
   allow_credentials: true
   max_age: 3660
-elasticsearch:
-  bulk_size: 20
-  index_name_prefix: plone-
-  connection_settings:
-    hosts:
-    - 127.0.0.1:9200
-    sniffer_timeout: 0.5
-  index: {}
-  mapping_overrides:
-    "*": {}
-default_tiles:
-  Document:
-  - type: title
-  - type: text
-workflows:
-  basic:
-    initial_state: private
-    states:
-      private:
-        actions:
-            publish:
-                title: Publish
-                to: public
-                check_permission: guillotina.ReviewContent
-        set_permission:
-            roleperm:
-            - setting: Allow
-              role: guillotina.Anonymous
-              permission: guillotina.ViewContent
-      public:
-        actions:
-            retire:
-                title: Retire
-                to: private
-                check_permission: guillotina.ReviewContent
-        set_permission:
-            roleperm:
-            - setting: Deny
-              role: guillotina.Anonymous
-              permission: guillotina.ViewContent
-workflows_content:
-  guillotina.interfaces.IResource: basic
-  guillotina_cms.content.document.IDocument: guillotina_simple_publication
+
