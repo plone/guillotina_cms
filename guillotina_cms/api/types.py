@@ -14,6 +14,7 @@ from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceFactory
 from guillotina.response import HTTPNotFound
 from guillotina.utils import get_security_policy
+# from guillotina.interfaces import IConstrainTypes
 from guillotina_cms.interfaces import ICMSConstrainTypes
 
 
@@ -67,6 +68,8 @@ async def get_all_types(context, request):
     result = []
     base_url = IAbsoluteURL(context, request)()
     constrains = ICMSConstrainTypes(context, None)
+    # constrains = IConstrainTypes(context, None)
+
     policy = get_security_policy()
 
     for id, factory in FACTORY_CACHE.items():

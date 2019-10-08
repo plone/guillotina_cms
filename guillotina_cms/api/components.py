@@ -101,6 +101,7 @@ class Navigation(Service):
                 "title": brain.get("title"),
                 "@id": brain.get("@id"),
                 "@name": brain.get("uuid"),
+                "description": ""
             }
             pending_dict.setdefault(brain.get("parent_uuid"), []).append(brain_serialization)
 

@@ -12,7 +12,9 @@ store_json: true
 applications:
 - guillotina_cms
 - guillotina.contrib.cache
-address: 8079
+# - guillotina_rediscache
+# - guillotina_elasticsearch
+address: 8081
 static:
   favicon.png: static/favicon.png
 root_user:
