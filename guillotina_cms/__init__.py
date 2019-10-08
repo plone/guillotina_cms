@@ -37,6 +37,7 @@ app_settings = {
         "Event": ["document_view", "layout_view"],
         "Link": ["document_view", "layout_view"],
         "File": ["document_view", "layout_view"],
+        "Image": ["document_view", "layout_view"]
     },
     "workflows": {
         "private": {"initial_state": "private", "states": {"private": {"set_permission": {}, "actions": {}}}},

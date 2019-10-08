@@ -3,6 +3,7 @@ from . import components  # noqa
 from . import constraint  # noqa
 from . import content  # noqa
 from . import following  # noqa
+from . import history  # noqa
 from . import images  # noqa
 from . import indices  # noqa
 from . import search  # noqa

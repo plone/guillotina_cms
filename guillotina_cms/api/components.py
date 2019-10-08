@@ -91,6 +91,7 @@ class Navigation(Service):
         else:
             depth_query = {"depth": depth}
 
+        depth_query["hidden_navigation"] = False
         result = await search.query(
             container, {**{"_sort_asc": "position_in_parent", "_size": 100}, **depth_query}
         )

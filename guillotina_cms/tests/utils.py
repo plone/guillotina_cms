@@ -8,7 +8,7 @@ async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
         path = "/db/guillotina/"
         folder_id = f"{base_id}folder{str(fidx)}"
         resp, status = await requester(
-            "POST", path, data=json.dumps({"@type": "Folder", "title": "Folder" + str(fidx), "id": folder_id})
+            "POST", path, data=json.dumps({"@type": "CMSFolder", "title": "Folder" + str(fidx), "id": folder_id})
         )
         created += 1
         assert status == 201

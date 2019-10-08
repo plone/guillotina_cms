@@ -23,11 +23,11 @@ class CMSCustomAllowedTypes(FTIConstrainAllowedTypes):
 
 
 @configure.adapter(for_=Interface, provides=IConstrainTypes)
-class CMSCustomAllowedTypes(FTIConstrainAllowedTypes):
+class NativeCustomAllowedTypes(FTIConstrainAllowedTypes):
     def get_allowed_types(self) -> list:
         tn = getattr(self.context, "__allowed_types__", None)
         if tn is None:
-            tn = super(CMSCustomAllowedTypes, self).get_allowed_types()
+            tn = super(NativeCustomAllowedTypes, self).get_allowed_types()
 
         if tn is None:
             tn = FACTORY_CACHE.keys()
