@@ -41,3 +41,13 @@ configure.grant(permission="guillotina.ModifyComments", role="guillotina.Manager
 configure.grant(permission="guillotina.DeleteComments", role="guillotina.Manager")
 
 configure.grant(permission="guillotina.DeleteAllComments", role="guillotina.Manager")
+
+configure.grant(permission="guillotina.ViewComments", role="guillotina.Owner")
+
+configure.grant(permission="guillotina.AddComments", role="guillotina.Owner")
+
+configure.grant(permission="guillotina.ModifyComments", role="guillotina.Owner")
+
+configure.grant(permission="guillotina.DeleteComments", role="guillotina.Owner")
+
+configure.grant(permission="guillotina.DeleteAllComments", role="guillotina.Owner")

@@ -2,7 +2,9 @@ import json
 import pytest
 
 
-@pytest.mark.app_settings({"allow_discussion_types": ["Document"], "default_allow_discussion": True})
+@pytest.mark.app_settings(
+    {"allow_discussion_types": ["Document"], "default_allow_discussion": True}
+)
 async def test_comments(cms_requester):
     async with cms_requester as requester:
         resp, status = await requester(
@@ -16,7 +18,36 @@ async def test_comments(cms_requester):
         assert status == 200
 
         resp, status = await requester(
-            "POST", "/db/guillotina/doc1/@comments", data=json.dumps({"text": "My text"})
+            "PATCH",
+            "/db/guillotina/doc1",
+            data=json.dumps(
+                {
+                    "guillotina_cms.interfaces.base.ICMSBehavior": {
+                        "allow_discussion": False
+                    }
+                }
+            ),
+        )
+        assert status == 204
+        resp, status = await requester("GET", "/db/guillotina/doc1/@comments")
+        assert status == 401
+        resp, status = await requester(
+            "PATCH",
+            "/db/guillotina/doc1",
+            data=json.dumps(
+                {
+                    "guillotina_cms.interfaces.base.ICMSBehavior": {
+                        "allow_discussion": True
+                    }
+                }
+            ),
+        )
+        assert status == 204
+
+        resp, status = await requester(
+            "POST",
+            "/db/guillotina/doc1/@comments",
+            data=json.dumps({"text": "My text"}),
         )
         assert status == 204
 
@@ -27,7 +58,9 @@ async def test_comments(cms_requester):
         comment_id = resp["items"][0]["comment_id"]
 
         resp, status = await requester(
-            "POST", "/db/guillotina/doc1/@comments/" + comment_id, data=json.dumps({"text": "My text"})
+            "POST",
+            "/db/guillotina/doc1/@comments/" + comment_id,
+            data=json.dumps({"text": "My text"}),
         )
         assert status == 204
 
@@ -36,7 +69,9 @@ async def test_comments(cms_requester):
         assert status == 200
 
         resp, status = await requester(
-            "PATCH", "/db/guillotina/doc1/@comments/" + comment_id, data=json.dumps({"text": "My text2"})
+            "PATCH",
+            "/db/guillotina/doc1/@comments/" + comment_id,
+            data=json.dumps({"text": "My text2"}),
         )
         assert status == 204
 
@@ -45,7 +80,9 @@ async def test_comments(cms_requester):
         assert resp["items"][0]["text"]["data"] == "My text2"
         assert status == 200
 
-        resp, status = await requester("DELETE", "/db/guillotina/doc1/@comments/" + comment_id)
+        resp, status = await requester(
+            "DELETE", "/db/guillotina/doc1/@comments/" + comment_id
+        )
         assert status == 204
 
         resp, status = await requester("GET", "/db/guillotina/doc1/@comments")

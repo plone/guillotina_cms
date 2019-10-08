@@ -30,22 +30,25 @@ class CMS(AnnotationBehavior):
     language = ContextProperty("language", default_language)
     content_layout = ContextProperty("content_layout", default_layout)
     position_in_parent = ContextProperty("position_in_parent", -1)
-    allow_discussion = ContextProperty("allow_discussion", None)
+    _allow_discussion = ContextProperty("_allow_discussion", None)
 
     @property
     def is_folderish(self):
         return IFolder.providedBy(self.context)
 
     # TODO allow discussion
-    # @property
-    # def allow_discussion(self):
-    #     if self.context.type_name not in app_settings.get("allow_discussion_types", []):
-    #         return False
+    def get_allow_discussion(self):
+        if self.context.type_name not in app_settings.get("allow_discussion_types", []):
+            return False
 
-    #     if self._allow_discussion is None:
-    #         return app_settings.get("default_allow_discussion")
-    #     return self._allow_discussion
+        if self._allow_discussion is None:
+            return app_settings.get("default_allow_discussion")
+        return self._allow_discussion
 
-    # @allow_discussion.setter
-    # def set_allow_discussion(self, value):
-    #     self._allow_discussion = value
+    def set_allow_discussion(self, value):
+        self._allow_discussion = value
+
+    def del_allow_discussion(self):
+        self._allow_discussion = None
+
+    allow_discussion = property(get_allow_discussion, set_allow_discussion, del_allow_discussion)
