@@ -8,11 +8,14 @@ from guillotina.i18n import MessageFactory
 
 _ = MessageFactory("guillotina_cms")
 
-
 app_settings = {
-    "applications": ["guillotina.contrib.catalog.pg", "guillotina.contrib.swagger", "guillotina_dbusers"],
+    "applications": [
+        "guillotina.contrib.catalog.pg",
+        "guillotina.contrib.swagger",
+        "guillotina.contrib.dbusers",
+    ],
     "available_tiles": {},
-    "commands": {"upgrade": "guillotina_cms.commands.upgrade.UpgradeCommand"},
+    "commands": {"create-container": "guillotina_cms.commands.create.CMSCreateCommand"},
     "load_utilities": {
         "guillotina_cms.workflow": {
             "provides": "guillotina_cms.interfaces.IWorkflowUtility",
@@ -31,16 +34,19 @@ app_settings = {
             "event_listing",
             "document_view",
         ],
-        "Document": ["document_view", "layout_view"],
+        "Document": ["document_view", "layout_view", "default"],
         "Container": ["document_view", "layout_view"],
         "News": ["document_view", "layout_view"],
         "Event": ["document_view", "layout_view"],
         "Link": ["document_view", "layout_view"],
         "File": ["document_view", "layout_view"],
-        "Image": ["document_view", "layout_view"]
+        "Image": ["document_view", "layout_view"],
     },
     "workflows": {
-        "private": {"initial_state": "private", "states": {"private": {"set_permission": {}, "actions": {}}}},
+        "private": {
+            "initial_state": "private",
+            "states": {"private": {"set_permission": {}, "actions": {}}},
+        },
         "basic": {
             "initial_state": "private",
             "states": {

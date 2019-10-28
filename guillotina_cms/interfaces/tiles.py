@@ -6,7 +6,7 @@ import json
 from zope.interface import implementer
 
 
-LAYOUT_SCHEMA = json.dumps({"type": "object", "properties": {"items": {"type": "array"}}})
+LAYOUT_SCHEMA = json.dumps({"type": "object", "properties": {}})
 
 DATA_SCHEMA = json.dumps({"type": "object", "properties": {}})
 
@@ -34,6 +34,10 @@ class IDefaultTilesLayout(Interface):
 
 
 class IDefaultTiles(Interface):
+    pass
+
+
+class ITilesMarker(Interface):
     pass
 
 

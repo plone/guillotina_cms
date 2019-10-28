@@ -4,11 +4,15 @@ from .image import IHasImage  # noqa
 from .content import IDocument  # noqa
 from .content import IFile  # noqa
 from .content import IImage  # noqa
-from .content import INews  # noqa
+from .content import IEvent  # noqa
 from .content import IContentUtility  # noqa
 from .content import ICMSFolder  # noqa
 from .constrains import ICMSConstrainTypes  # noqa
 from .events import IWorkflowChangedEvent  # noqa
+from .editors import IGutenbergMarker  # noqa
+from .editors import IGutenberg  # noqa
+from .editors import IRichText  # noqa
+from .editors import IRichTextMarker  # noqa
 from .following import IFollowing  # noqa
 from .following import IFollowingMarker  # noqa
 from .pubsub import IPubSubUtility  # noqa
@@ -17,6 +21,7 @@ from .tiles import ITiles  # noqa
 from .tiles import ITileType  # noqa
 from .tiles import IDefaultTilesLayout  # noqa
 from .tiles import IDefaultTiles  # noqa
+from .tiles import ITilesMarker  # noqa
 from .versioning import IDiffCalculator  # noqa
 from .versioning import IVersioning  # noqa
 from .versioning import IVersioningMarker  # noqa

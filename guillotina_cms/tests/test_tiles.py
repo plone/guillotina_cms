@@ -1,7 +1,7 @@
 from guillotina.tests.utils import create_content
 from guillotina.content import Resource
 from guillotina_cms.interfaces import ITiles
-from guillotina_cms.behaviors.tiles import Tiles
+from guillotina_cms.behaviors.editors import Tiles
 
 import json
 
@@ -10,7 +10,14 @@ async def test_default_tiles_layout(cms_requester):
     async with cms_requester as requester:
         # now test it...
         response, status = await requester("GET", "/db/guillotina/")
-        assert len(response["guillotina_cms.interfaces.tiles.ITiles"]["tiles_layout"]["items"]) == 2
+        assert (
+            len(
+                response["guillotina_cms.interfaces.tiles.ITiles"]["tiles_layout"][
+                    "items"
+                ]
+            )
+            == 2
+        )
         assert "tile1" in response["guillotina_cms.interfaces.tiles.ITiles"]["tiles"]
 
 
