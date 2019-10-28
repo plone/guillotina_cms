@@ -173,6 +173,7 @@ default_tiles:
         text: null
         '@type': text
     tiles_layout:
+      items:
       - tile1
       - tile2
       - tile3
