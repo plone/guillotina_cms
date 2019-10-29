@@ -11,7 +11,7 @@ _ = MessageFactory("guillotina_cms")
 
 app_settings = {
     "applications": ["guillotina.contrib.catalog.pg", "guillotina.contrib.swagger", "guillotina_dbusers"],
-    "available_tiles": {},
+    "available_blocks": {},
     "commands": {"upgrade": "guillotina_cms.commands.upgrade.UpgradeCommand"},
     "load_utilities": {
         "guillotina_cms.workflow": {
@@ -100,14 +100,14 @@ app_settings = {
         "guillotina_cms.content.image.IImage": "basic",
         "guillotina_cms.content.folder.IFolder": "basic",
     },
-    "default_tiles": {
+    "default_blocks": {
         "Document": {
-            "tiles": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
-            "tiles_layout": {"items": ["tile1", "tile2"]},
+            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
+            "blocks_layout": {"items": ["tile1", "tile2"]},
         },
         "Container": {
-            "tiles": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
-            "tiles_layout": {"items": ["tile1", "tile2"]},
+            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
+            "blocks_layout": {"items": ["tile1", "tile2"]},
         },
     },
     "global_disallowed_types": [

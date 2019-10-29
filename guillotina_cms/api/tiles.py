@@ -17,7 +17,7 @@ from guillotina.utils import resolve_dotted_name
     summary='Get available tiles')
 async def get_tiles(context, request):
     result = []
-    for key, item in app_settings['available_tiles'].items():
+    for key, item in app_settings['available_blocks'].items():
         result.append({
             "@id": join(IAbsoluteURL(context)(), "@tiles", item["name"]),
             "title": item['title'],
@@ -32,9 +32,9 @@ async def get_tiles(context, request):
     summary='Get specific tile')
 async def get_tile_schema(context, request):
     key = request.matchdict['key']
-    if key not in app_settings['available_tiles'].keys():
+    if key not in app_settings['available_blocks'].keys():
         return HTTPNotFound()
-    tile = app_settings['available_tiles'][key]
+    tile = app_settings['available_blocks'][key]
     schema = resolve_dotted_name(tile['schema'])
     serializer = get_multi_adapter((schema, request), ISchemaSerializeToJson)
     return await serializer()

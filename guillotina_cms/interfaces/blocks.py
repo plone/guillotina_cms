@@ -17,7 +17,7 @@ class ContextTilesLayoutFactory:
         # Should be in a behavior
         if context is None:
             return None
-        return IDefaultTilesLayout(context.context)()
+        return IDefaultBlocksLayout(context.context)()
 
 
 @implementer(IContextAwareDefaultFactory)
@@ -26,19 +26,19 @@ class ContextTilesFactory:
         # Should be in a behavior
         if context is None:
             return None
-        return IDefaultTiles(context.context)()
+        return IDefaultBlocks(context.context)()
 
 
-class IDefaultTilesLayout(Interface):
+class IDefaultBlocksLayout(Interface):
     pass
 
 
-class IDefaultTiles(Interface):
+class IDefaultBlocks(Interface):
     pass
 
 
 class ITiles(Interface):
-    tiles_layout = JSONField(
+    blocks_layout = JSONField(
         title="Layout of the block",
         required=False,
         defaultFactory=ContextTilesLayoutFactory(),
@@ -46,7 +46,7 @@ class ITiles(Interface):
         # missing_value={"items": []},
     )
 
-    tiles = JSONField(
+    blocks = JSONField(
         title="Data of the block",
         required=False,
         defaultFactory=ContextTilesFactory(),

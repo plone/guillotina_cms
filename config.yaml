@@ -72,7 +72,7 @@ behaviors:
     for: guillotina.interfaces.IItem
     inherited_class: guillotina.behaviors.instance.AnnotationBehavior
     properties:
-      mydata1: 
+      mydata1:
         type: guillotina.schema.TextLine
         title: Text
         default: Hello
@@ -82,7 +82,7 @@ behaviors:
     for: guillotina.interfaces.IItem
     inherited_class: guillotina.behaviors.instance.ContextBehavior
     properties:
-      mydata2: 
+      mydata2:
         type: guillotina.schema.TextLine
         title: Text
         default: Hello
@@ -98,7 +98,7 @@ contents:
     behaviors:
     - guillotina.behaviors.dublincore.IDublinCore
     - guillotina_cms.interfaces.base.ICMSBehavior
-    - guillotina_cms.interfaces.tiles.ITiles
+    - guillotina_cms.interfaces.blocks.IBlocks
     - guillotina_cms.interfaces.Imycontextdata
     properties:
       json_example:
@@ -109,7 +109,7 @@ contents:
             items:
               type: array
         title: My Json Field
-      text: 
+      text:
         type: guillotina_cms.fields.richtext.RichTextField
         widget: richtext
         title: Text
@@ -168,9 +168,9 @@ contents:
     layouts:
     - document_view
     - layout_view
-default_tiles:
+default_blocks:
   Document:
-    tiles:
+    blocks:
       tile1:
         '@type': title
       tile2:
@@ -178,12 +178,12 @@ default_tiles:
       tile3:
         text: null
         '@type': text
-    tiles_layout:
+    blocks_layout:
     - tile1
     - tile2
     - tile3
   Container:
-    tiles:
+    blocks:
       tile1:
         '@type': title
       tile2:
@@ -191,7 +191,7 @@ default_tiles:
       tile3:
         text: null
         '@type': text
-    tiles_layout:
+    blocks_layout:
       items:
       - tile1
       - tile2

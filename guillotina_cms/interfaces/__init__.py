@@ -13,10 +13,10 @@ from .following import IFollowing  # noqa
 from .following import IFollowingMarker  # noqa
 from .pubsub import IPubSubUtility  # noqa
 from .registry import IImagingSettings  # noqa
-from .tiles import ITiles  # noqa
-from .tiles import ITileType  # noqa
-from .tiles import IDefaultTilesLayout  # noqa
-from .tiles import IDefaultTiles  # noqa
+from .blocks import IBlocks  # noqa
+from .blocks import IBlockType  # noqa
+from .blocks import IDefaultBlocksLayout  # noqa
+from .blocks import IDefaultBlocks  # noqa
 from .versioning import IDiffCalculator  # noqa
 from .versioning import IVersioning  # noqa
 from .versioning import IVersioningMarker  # noqa

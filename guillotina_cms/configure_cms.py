@@ -5,7 +5,7 @@ from guillotina_cms import app_settings
 
 def load_tiletype(_context, tile):
     config = tile['config']
-    app_settings['available_tiles'][config['name']] = {
+    app_settings['available_blocks'][config['name']] = {
         'title': config['title'],
         'name': config['name'],
         'add_permission': config.get('add_permission', 'guillotina.AddContent'),

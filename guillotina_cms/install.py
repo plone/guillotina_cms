@@ -7,7 +7,7 @@ from guillotina_cms.behaviors.image import IImageAttachment
 from guillotina_cms.behaviors.syndication import ISyndicationSettings
 from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.interfaces import IImagingSettings
-from guillotina_cms.interfaces import ITiles
+from guillotina_cms.interfaces import IBlocks
 from guillotina.behaviors.dublincore import IDublinCore
 
 
@@ -22,7 +22,7 @@ class CMSAddon(Addon):
         container.add_behavior(IImageAttachment)
         container.add_behavior(ICMSBehavior)
         container.add_behavior(IDublinCore)
-        container.add_behavior(ITiles)
+        container.add_behavior(IBlocks)
         container.register()
 
         registry = await get_registry()

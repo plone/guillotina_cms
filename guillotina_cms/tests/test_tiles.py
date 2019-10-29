@@ -6,12 +6,12 @@ from guillotina_cms.behaviors.tiles import Tiles
 import json
 
 
-async def test_default_tiles_layout(cms_requester):
+async def test_default_blocks_layout(cms_requester):
     async with cms_requester as requester:
         # now test it...
         response, status = await requester("GET", "/db/guillotina/")
-        assert len(response["guillotina_cms.interfaces.tiles.ITiles"]["tiles_layout"]["items"]) == 2
-        assert "tile1" in response["guillotina_cms.interfaces.tiles.ITiles"]["tiles"]
+        assert len(response["guillotina_cms.interfaces.blocks.IBlocks"]["blocks_layout"]["items"]) == 2
+        assert "tile1" in response["guillotina_cms.interfaces.blocks.IBlocks"]["tiles"]
 
 
 async def test_tiles_endpoint_gives_us_registered_tiles(cms_requester):
@@ -33,7 +33,7 @@ def test_conversation_behavior_returns_instance(dummy_request):
     assert isinstance(behavior, Tiles)
 
 
-async def test_storing_tiles_behavior_data(cms_requester):
+async def test_storing_blocks_behavior_data(cms_requester):
     async with cms_requester as requester:
         resp, status = await requester(
             "POST",
@@ -43,10 +43,10 @@ async def test_storing_tiles_behavior_data(cms_requester):
                     "@type": "Folder",
                     "title": "foobar",
                     "id": "foobar",
-                    "@behaviors": ["guillotina_cms.interfaces.tiles.ITiles"],
-                    "guillotina_cms.interfaces.tiles.ITiles": {
-                        "tiles_layout": {"cols": ["#title-1", "#description-1"]},
-                        "tiles": {"#title-1": {"@type": "title"}},
+                    "@behaviors": ["guillotina_cms.interfaces.blocks.IBlocks"],
+                    "guillotina_cms.interfaces.blocks.IBlocks": {
+                        "blocks_layout": {"cols": ["#title-1", "#description-1"]},
+                        "blocks": {"#title-1": {"@type": "title"}},
                     },
                 }
             ),
@@ -55,5 +55,5 @@ async def test_storing_tiles_behavior_data(cms_requester):
 
         resp, status = await requester("GET", "/db/guillotina/foobar")
         assert status == 200
-        assert "guillotina_cms.interfaces.tiles.ITiles" in resp
-        assert "tiles_layout" in resp["guillotina_cms.interfaces.tiles.ITiles"]
+        assert "guillotina_cms.interfaces.blocks.IBlocks" in resp
+        assert "blocks_layout" in resp["guillotina_cms.interfaces.blocks.IBlocks"]
