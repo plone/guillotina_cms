@@ -7,7 +7,7 @@ from . import history  # noqa
 from . import images  # noqa
 from . import indices  # noqa
 from . import search  # noqa
-from . import tiles  # noqa
+from . import blocks  # noqa
 from . import types  # noqa
 from . import versioning  # noqa
 from . import vocabularies  # noqa

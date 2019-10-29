@@ -13,7 +13,7 @@ from guillotina.schema.vocabulary import VocabularyRegistryError
     context=IResource, method='GET',
     permission='guillotina.AccessContent', name='@vocabularies',
     summary='Get available vocabularies')
-async def get_tiles(context, request):
+async def get_vocabularies(context, request):
     result = []
     vocabulary_registry = getVocabularyRegistry()
     for key, item in vocabulary_registry._map.items():
@@ -28,7 +28,7 @@ async def get_tiles(context, request):
     context=IResource, method='GET',
     permission='guillotina.AccessContent', name='@vocabularies/{key}',
     summary='Get specific vocabulary')
-async def get_tile_schema(context, request):
+async def get_block_schema(context, request):
     key = request.matchdict['key']
     vocabulary_registry = getVocabularyRegistry()
     try:

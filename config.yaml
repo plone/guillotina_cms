@@ -92,7 +92,7 @@ contents:
     behaviors:
       - guillotina.behaviors.dublincore.IDublinCore
       - guillotina_cms.interfaces.base.ICMSBehavior
-      - guillotina_cms.interfaces.tiles.ITiles
+      - guillotina_cms.interfaces.blocks.IBlocks
       - guillotina_cms.interfaces.Imycontextdata
     properties:
       json_example:
@@ -162,9 +162,9 @@ contents:
     layouts:
       - document_view
       - layout_view
-default_tiles:
+default_blocks:
   Document:
-    tiles:
+    blocks:
       tile1:
         '@type': title
       tile2:
@@ -172,13 +172,13 @@ default_tiles:
       tile3:
         text: null
         '@type': text
-    tiles_layout:
+    blocks_layout:
       items:
       - tile1
       - tile2
       - tile3
   Container:
-    tiles:
+    blocks:
       tile1:
         '@type': title
       tile2:
@@ -186,7 +186,7 @@ default_tiles:
       tile3:
         text: null
         '@type': text
-    tiles_layout:
+    blocks_layout:
       items:
         - tile1
         - tile2

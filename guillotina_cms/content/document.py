@@ -11,7 +11,7 @@ from guillotina_cms.interfaces import IDocument
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina_cms.interfaces.base.ICMSBehavior",
-        "guillotina_cms.interfaces.tiles.ITiles",
+        "guillotina_cms.interfaces.blocks.IBlocks",
     ],
     allowed_types=["Image", "File"],  # dynamically calculated
 )

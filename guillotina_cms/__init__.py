@@ -14,7 +14,7 @@ app_settings = {
         "guillotina.contrib.swagger",
         "guillotina.contrib.dbusers",
     ],
-    "available_tiles": {},
+    "available_blocks": {},
     "commands": {"create-container": "guillotina_cms.commands.create.CMSCreateCommand"},
     "load_utilities": {
         "guillotina_cms.workflow": {
@@ -106,14 +106,14 @@ app_settings = {
         "guillotina_cms.content.image.IImage": "basic",
         "guillotina_cms.content.folder.IFolder": "basic",
     },
-    "default_tiles": {
+    "default_blocks": {
         "Document": {
-            "tiles": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
-            "tiles_layout": {"items": ["tile1", "tile2"]},
+            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
+            "blocks_layout": {"items": ["tile1", "tile2"]},
         },
         "Container": {
-            "tiles": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
-            "tiles_layout": {"items": ["tile1", "tile2"]},
+            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
+            "blocks_layout": {"items": ["tile1", "tile2"]},
         },
     },
     "global_disallowed_types": [
@@ -151,7 +151,7 @@ def includeme(root, settings):
     configure.scan("guillotina_cms.permissions")
     configure.scan("guillotina_cms.install")
     configure.scan("guillotina_cms.subscribers")
-    configure.scan("guillotina_cms.tiles")
+    configure.scan("guillotina_cms.blocks")
 
     if "guillotina_elasticsearch" in settings.get("applications", []):
         if "load_utilities" not in settings:

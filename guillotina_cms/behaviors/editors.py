@@ -1,7 +1,7 @@
 from guillotina import configure
 from guillotina.behaviors.instance import ContextBehavior
-from guillotina_cms.interfaces import ITiles
-from guillotina_cms.interfaces import ITilesMarker
+from guillotina_cms.interfaces import IBlocks
+from guillotina_cms.interfaces import IBlocksMarker
 from guillotina_cms.interfaces import IGutenberg
 from guillotina_cms.interfaces import IGutenbergMarker
 from guillotina_cms.interfaces import IRichText
@@ -9,12 +9,12 @@ from guillotina_cms.interfaces import IRichTextMarker
 
 
 @configure.behavior(
-    title="Tiles behavior",
-    provides=ITiles,
-    marker=ITilesMarker,
+    title="Blocks behavior",
+    provides=IBlocks,
+    marker=IBlocksMarker,
     for_="guillotina.interfaces.IResource",
 )
-class Tiles(ContextBehavior):
+class Blocks(ContextBehavior):
     pass
 
 
