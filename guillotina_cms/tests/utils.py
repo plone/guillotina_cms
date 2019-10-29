@@ -21,11 +21,14 @@ async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
                     {
                         "@type": "Document",
                         "title": "Document " + str(idx),
-                        "text": {
-                            "encoding": "utf-8",
-                            "content-type": "",
-                            "data": "This is a long text and needs some extra values",  # noqa
-                        },
+                        "@behaviors": ["guillotina_cms.interfaces.editors.IRichText"],
+                        "guillotina_cms.interfaces.editors.IRichText": {
+                            "text": {
+                                "encoding": "utf-8",
+                                "content-type": "",
+                                "data": "This is a long text and needs some extra values",  # noqa
+                            }
+                        }
                     }
                 ),
             )

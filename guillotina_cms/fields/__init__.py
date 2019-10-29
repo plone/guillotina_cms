@@ -1,1 +1,1 @@
-from . import richtext  # noqa
+from .richtext import RichTextField  # noqa

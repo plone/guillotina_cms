@@ -2,6 +2,8 @@
 .eggs
 __pycache__
 *.egg-info
+.python-version
+.pytest_cache
 bin
 .cache
 lib

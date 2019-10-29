@@ -12,6 +12,7 @@ from guillotina.interfaces import IFactorySerializeToJson
 from guillotina.interfaces import IPermission
 from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceFactory
+from guillotina.interfaces import IAsyncContainer
 from guillotina.response import HTTPNotFound
 from guillotina.utils import get_security_policy
 # from guillotina.interfaces import IConstrainTypes
@@ -89,6 +90,41 @@ async def get_all_types(context, request):
                 add = False
         if add:
             result.append({"@id": base_url + "/@types/" + id, "addable": True, "title": id})
+    return result
+
+
+@configure.service(
+    context=IAsyncContainer,
+    method="GET",
+    name="@addable-types",
+    permission="guillotina.AddContent",
+    summary="Return a list of type names that can be added to container",
+    responses={"200": {"description": "Successfully returned list of type names"}},
+)
+async def addable_types(context, request):
+    result = []
+    constrains = ICMSConstrainTypes(context, None)
+
+    policy = get_security_policy()
+
+    for id, factory in FACTORY_CACHE.items():
+        add = True
+        if constrains is not None:
+            if not constrains.is_type_allowed(id):
+                add = False
+
+        if factory.add_permission:
+            if factory.add_permission in PERMISSIONS_CACHE:
+                permission = PERMISSIONS_CACHE[factory.add_permission]
+            else:
+                permission = query_utility(IPermission, name=factory.add_permission)
+                PERMISSIONS_CACHE[factory.add_permission] = permission
+
+            if permission is not None and not policy.check_permission(permission.id, context):
+                add = False
+
+        if add:
+            result.append(id)
     return result
 
 

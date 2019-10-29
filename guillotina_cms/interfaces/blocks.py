@@ -6,68 +6,72 @@ import json
 from zope.interface import implementer
 
 
-LAYOUT_SCHEMA = json.dumps({"type": "object", "properties": {"items": {"type": "array"}}})
+LAYOUT_SCHEMA = json.dumps({"type": "object", "properties": {}})
 
 DATA_SCHEMA = json.dumps({"type": "object", "properties": {}})
 
 
 @implementer(IContextAwareDefaultFactory)
-class ContextTilesLayoutFactory:
+class ContextBlocksLayoutFactory:
     def __call__(self, context):
         # Should be in a behavior
         if context is None:
             return None
-        return IDefaultTilesLayout(context.context)()
+        return IDefaultBlocksLayout(context.context)()
 
 
 @implementer(IContextAwareDefaultFactory)
-class ContextTilesFactory:
+class ContextBlocksFactory:
     def __call__(self, context):
         # Should be in a behavior
         if context is None:
             return None
-        return IDefaultTiles(context.context)()
+        return IDefaultBlocks(context.context)()
 
 
-class IDefaultTilesLayout(Interface):
+class IDefaultBlocksLayout(Interface):
     pass
 
 
-class IDefaultTiles(Interface):
+class IDefaultBlocks(Interface):
     pass
 
 
-class ITiles(Interface):
-    tiles_layout = JSONField(
+class IBlocksMarker(Interface):
+    pass
+
+
+class IBlocks(Interface):
+    blocks_layout = JSONField(
         title="Layout of the block",
         required=False,
-        defaultFactory=ContextTilesLayoutFactory(),
+        defaultFactory=ContextBlocksLayoutFactory(),
         schema=LAYOUT_SCHEMA,
         # missing_value={"items": []},
     )
 
-    tiles = JSONField(
+    blocks = JSONField(
         title="Data of the block",
         required=False,
-        defaultFactory=ContextTilesFactory(),
+        defaultFactory=ContextBlocksFactory(),
         # missing_value={},
         schema=DATA_SCHEMA,
     )
 
 
-class ITileType(Interface):
-    """A utility that describes a type of tile
+class IBlockType(Interface):
+    """A utility that describes a type of block
     """
 
-    __name__ = schema.DottedName(title="Tile name (same as utility name)")
+    __name__ = schema.DottedName(title="Block name (same as utility name)")
     title = schema.TextLine(title=u"Title")
     description = schema.Text(title=u"Description", required=False)
     icon = schema.Text(title=u"Icon", required=False)
     add_permission = schema.Id(title=u"Zope 3 IPermission utility name")
     schema = schema.Object(
-        title=u"Tile schema",
-        description="Describes configurable data for this tile and allows a "
-        "form to be rendered to edit it. Set to None if the tile "
+        title=u"Block schema",
+        description="Describes configurable data for this block and allows a "
+        "form to be rendered to edit it. Set to None if the block "
         "has no configurable schema",
         schema=Interface,
         required=False,

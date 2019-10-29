@@ -5,17 +5,17 @@ from guillotina.schema import JSONField
 import json
 
 
-@configure_cms.tile(
+@configure_cms.block(
     name='title', title='title'
 )
-class ITileTitle(Interface):
+class IBlockTitle(Interface):
     title = schema.TextLine(required=True)
 
 
-@configure_cms.tile(
+@configure_cms.block(
     name='description', title='Description'
 )
-class ITileDescription(Interface):
+class IBlockDescription(Interface):
     description = schema.TextLine(required=True)
 
 
@@ -29,10 +29,10 @@ TEXT_SCHEMA = json.dumps({
 })
 
 
-@configure_cms.tile(
+@configure_cms.block(
     name='text', title='Text'
 )
-class ITileText(Interface):
+class IBlockText(Interface):
     text = JSONField(
         schema=TEXT_SCHEMA
     )
@@ -40,15 +40,15 @@ class ITileText(Interface):
     description = schema.TextLine()
 
 
-@configure_cms.tile(
+@configure_cms.block(
     name='image', title='Image'
 )
-class ITileImage(Interface):
+class IBlockImage(Interface):
     url = schema.TextLine()
 
 
-@configure_cms.tile(
+@configure_cms.block(
     name='video', title='Video'
 )
-class ITileVideo(Interface):
+class IBlockVideo(Interface):
     url = schema.TextLine()

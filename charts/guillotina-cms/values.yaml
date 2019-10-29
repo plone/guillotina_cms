@@ -260,37 +260,37 @@ cms:
     File:
       - document_view
       - layout_view
-  default_tiles:
+  default_blocks:
     Document:
-      tiles:
+      blocks:
         tile1:
           '@type': title
         tile2:
           '@type': text
           text: null
-      tiles_layout:
+      blocks_layout:
         items:
           - tile1
           - tile2
     Container:
-      tiles:
+      blocks:
         tile1:
           '@type': title
         tile2:
           '@type': text
           text: null
-      tiles_layout:
+      blocks_layout:
         items:
           - tile1
           - tile2
     CMSFolder:
-      tiles:
+      blocks:
         tile1:
           '@type': title
         tile2:
           '@type': text
           text: null
-      tiles_layout:
+      blocks_layout:
         items:
           - tile1
           - tile2

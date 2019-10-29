@@ -3,36 +3,27 @@ services:
   guillotina:
     build: .
     command:
-    - guillotina
-    - -c
-    - config-pg.yaml
+      - guillotina
+      - -c
+      - config.yaml
     ports:
-    - "8081:8081"
-    - "50101:50101"
+      - '8081:8081'
     volumes:
-    - .:/usr/src/app
-    - logvolume01:/var/log
+      - .:/usr/src/app
+      - logvolume01:/var/log
     links:
-    - postgres
-    networks:
-    - postgres
+      - postgres
   postgres:
     image: postgres:10
-    ports:
-      - 5432:5432
+    container_name: gcms_dev_pg
     environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: secret
-        POSTGRES_INITDB_ARGS: --data-checksums
-        POSTGRES_DB: guillotina
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_INITDB_ARGS: --data-checksums
+      POSTGRES_DB: guillotina
     volumes:
-    - postgres_data_cms:/var/lib/postgresql/data
-    networks:
-      - postgres
+      - postgres_data_cms:/var/lib/postgresql/data
 
 volumes:
   logvolume01: {}
   postgres_data_cms: {}
-
-networks:
-  postgres:

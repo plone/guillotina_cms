@@ -22,12 +22,14 @@ async def test_li(cms_requester):
             data=json.dumps(
                 {
                     "@type": "Document",
+                    "@behaviors": ["guillotina_cms.interfaces.editors.IRichText"],
                     "title": "Document 2",
                     "id": "doc2",
-                    "text": {
-                        "content-type": "text/html",
-                        "encoding": "utf-8",
-                        "data": """
+                    "guillotina_cms.interfaces.editors.IRichText": {
+                        "text": {
+                            "encoding": "utf-8",
+                            "content-type": "text/html",
+                            "data": """
                     <p>
                     <a href="@resolveuid/{}">foobar</a>
                     </p>
@@ -35,7 +37,7 @@ async def test_li(cms_requester):
                             resp1["@uid"]
                         ),
                     },
-                }
+                }}
             ),
         )
         assert status == 201
@@ -64,12 +66,14 @@ async def test_links_translated(cms_requester):
             data=json.dumps(
                 {
                     "@type": "Document",
+                    "@behaviors": ["guillotina_cms.interfaces.editors.IRichText"],
                     "title": "Document 2",
                     "id": "doc2",
-                    "text": {
-                        "content-type": "text/html",
-                        "encoding": "utf-8",
-                        "data": """
+                    "guillotina_cms.interfaces.editors.IRichText": {
+                        "text": {
+                            "encoding": "utf-8",
+                            "content-type": "text/html",
+                            "data": """
                     <p>
                     <a href="@resolveuid/{}">foobar</a>
                     </p>
@@ -77,10 +81,10 @@ async def test_links_translated(cms_requester):
                             resp1["@uid"]
                         ),
                     },
-                }
+                }}
             ),
         )
         assert status == 201
 
         resp, status = await requester("GET", "/db/guillotina/doc2")
-        assert "/db/guillotina/doc1" in resp["text"]["data"]
+        assert "/db/guillotina/doc1" in resp["guillotina_cms.interfaces.editors.IRichText"]["text"]["data"]

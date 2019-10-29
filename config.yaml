@@ -2,37 +2,31 @@
 aiohttp_settings:
   client_max_size: 20971520
 databases:
-- db:
-    storage: postgresql
-    transaction_strategy: dbresolve_readcommitted
-    dsn: postgresql://postgres:secret@localhost:5432/guillotina
-    read_only: false
-    pool_size: 100
+  - db:
+      storage: postgresql
+      transaction_strategy: dbresolve_readcommitted
+      dsn: postgresql://postgres:secret@gcms_dev_pg:5432/guillotina
+      read_only: false
+      pool_size: 100
 store_json: true
 applications:
-- guillotina_cms
-- guillotina_dbusers
-- guillotina.contrib.cache
-- guillotina.contrib.catalog.pg
-# - guillotina_elasticsearch
-# - guillotina_linkintegrity
-address: 8080
+  - guillotina_cms
+  - guillotina.contrib.cache
+  - guillotina.contrib.catalog.pg
+address: 8081
 static:
-- favicon.png: static/favicon.png
-- assets: guillotina:static/assets
-# pastanaga: pastanaga-angular/dist
-# ng: plone-angular-demo/dist
-# plone: plone-react
+  - favicon.png: static/favicon.png
+  - assets: guillotina:static/assets
 root_user:
   password: root
 auth_extractors:
-- guillotina.auth.extractors.CookiePolicy
-- guillotina.auth.extractors.BearerAuthPolicy
-- guillotina.auth.extractors.BasicAuthPolicy
-- guillotina.auth.extractors.WSTokenAuthPolicy
+  - guillotina.auth.extractors.CookiePolicy
+  - guillotina.auth.extractors.BearerAuthPolicy
+  - guillotina.auth.extractors.BasicAuthPolicy
+  - guillotina.auth.extractors.WSTokenAuthPolicy
 auth_token_validators:
-- guillotina.auth.validators.SaltedHashPasswordValidator
-- guillotina.auth.validators.JWTValidator
+  - guillotina.auth.validators.SaltedHashPasswordValidator
+  - guillotina.auth.validators.JWTValidator
 redis:
   host: localhost
   port: 6379
@@ -43,36 +37,36 @@ jsapps:
   +admin: guillotina:static/executioner
 cors:
   allow_origin:
-  - "*"
+    - '*'
   allow_methods:
-  - GET
-  - POST
-  - DELETE
-  - HEAD
-  - PATCH
-  - OPTIONS
-  - PUT
+    - GET
+    - POST
+    - DELETE
+    - HEAD
+    - PATCH
+    - OPTIONS
+    - PUT
   allow_headers:
-  - "*"
+    - '*'
   expose_headers:
-  - "*"
+    - '*'
   allow_credentials: true
   max_age: 3660
 global_disallowed_types:
-- User
-- UserManager
-- Group
-- GroupManager
-- Item
-- Container
-- Folder
+  - User
+  - UserManager
+  - Group
+  - GroupManager
+  - Item
+  - Container
+  - Folder
 behaviors:
   myannotationdata:
     title: MyData
     for: guillotina.interfaces.IItem
     inherited_class: guillotina.behaviors.instance.AnnotationBehavior
     properties:
-      mydata1: 
+      mydata1:
         type: guillotina.schema.TextLine
         title: Text
         default: Hello
@@ -82,7 +76,7 @@ behaviors:
     for: guillotina.interfaces.IItem
     inherited_class: guillotina.behaviors.instance.ContextBehavior
     properties:
-      mydata2: 
+      mydata2:
         type: guillotina.schema.TextLine
         title: Text
         default: Hello
@@ -93,13 +87,13 @@ contents:
     inherited_class: guillotina.content.Folder
     add_permission: guillotina.AddContent
     allowed_types:
-    - Image
-    - File
+      - Image
+      - File
     behaviors:
-    - guillotina.behaviors.dublincore.IDublinCore
-    - guillotina_cms.interfaces.base.ICMSBehavior
-    - guillotina_cms.interfaces.tiles.ITiles
-    - guillotina_cms.interfaces.Imycontextdata
+      - guillotina.behaviors.dublincore.IDublinCore
+      - guillotina_cms.interfaces.base.ICMSBehavior
+      - guillotina_cms.interfaces.blocks.IBlocks
+      - guillotina_cms.interfaces.Imycontextdata
     properties:
       json_example:
         type: guillotina.schema.JSONField
@@ -109,7 +103,7 @@ contents:
             items:
               type: array
         title: My Json Field
-      text: 
+      text:
         type: guillotina_cms.fields.richtext.RichTextField
         widget: richtext
         title: Text
@@ -145,32 +139,32 @@ contents:
           type: keyword
     fieldsets:
       default:
-      - title
-      - guillotina.behaviors.dublincore.IDublinCore.description
-      - text
-      - myoption
-      - mysecondoption
-      - mylovedlist
-      - mylovedlanguage
+        - title
+        - guillotina.behaviors.dublincore.IDublinCore.description
+        - text
+        - myoption
+        - mysecondoption
+        - mylovedlist
+        - mylovedlanguage
       dates:
-      - guillotina.behaviors.dublincore.IDublinCore.effective_date
-      - guillotina.behaviors.dublincore.IDublinCore.expiration_date
+        - guillotina.behaviors.dublincore.IDublinCore.effective_date
+        - guillotina.behaviors.dublincore.IDublinCore.expiration_date
       ownership:
-      - guillotina.behaviors.dublincore.IDublinCore.creators
-      - guillotina.behaviors.dublincore.IDublinCore.publisher
-      - guillotina.behaviors.dublincore.IDublinCore.contributors
+        - guillotina.behaviors.dublincore.IDublinCore.creators
+        - guillotina.behaviors.dublincore.IDublinCore.publisher
+        - guillotina.behaviors.dublincore.IDublinCore.contributors
       categorization:
-      - guillotina.behaviors.dublincore.IDublinCore.tags
-      - guillotina_cms.interfaces.base.ICMSBehavior.language
+        - guillotina.behaviors.dublincore.IDublinCore.tags
+        - guillotina_cms.interfaces.base.ICMSBehavior.language
       settings:
-      - guillotina_cms.interfaces.base.ICMSBehavior.hidden_navigation
-      - guillotina_cms.interfaces.base.ICMSBehavior.content_layout
+        - guillotina_cms.interfaces.base.ICMSBehavior.hidden_navigation
+        - guillotina_cms.interfaces.base.ICMSBehavior.content_layout
     layouts:
-    - document_view
-    - layout_view
-default_tiles:
+      - document_view
+      - layout_view
+default_blocks:
   Document:
-    tiles:
+    blocks:
       tile1:
         '@type': title
       tile2:
@@ -178,41 +172,42 @@ default_tiles:
       tile3:
         text: null
         '@type': text
-    tiles_layout:
-    - tile1
-    - tile2
-    - tile3
-  Container:
-    tiles:
-      tile1:
-        '@type': title
-      tile2:
-        '@type': description
-      tile3:
-        text: null
-        '@type': text
-    tiles_layout:
+    blocks_layout:
       items:
       - tile1
       - tile2
       - tile3
+  Container:
+    blocks:
+      tile1:
+        '@type': title
+      tile2:
+        '@type': description
+      tile3:
+        text: null
+        '@type': text
+    blocks_layout:
+      items:
+        - tile1
+        - tile2
+        - tile3
 myoptions:
-- - guillotina
-  - Also Love Guillotina
-- - volto
-  - Also Love Volto
+  - - guillotina
+    - Also Love Guillotina
+  - - volto
+    - Also Love Volto
 workflows:
   basic:
     initial_state: private
     states:
       private:
         actions:
-            publish:
-                title: Publish
-                to: public
-                check_permission: guillotina.ReviewContent
+          publish:
+            title: Publish
+            to: public
+            check_permission: guillotina.ReviewContent
         set_permission:
-            roleperm:
+          roleperm:
             - setting: Deny
               role: guillotina.Anonymous
               permission: guillotina.ViewContent
@@ -221,12 +216,12 @@ workflows:
               permission: guillotina.AccessContent
       public:
         actions:
-            retire:
-                title: Retire
-                to: private
-                check_permission: guillotina.ReviewContent
+          retire:
+            title: Retire
+            to: private
+            check_permission: guillotina.ReviewContent
         set_permission:
-            roleperm:
+          roleperm:
             - setting: AllowSingle
               role: guillotina.Anonymous
               permission: guillotina.ViewContent
@@ -238,4 +233,4 @@ workflows_content:
   guillotina_cms.content.document.IDocument: guillotina_simple_publication
   guillotina_cms.interfaces.Imydoc: guillotina_simple_publication
 allow_discussion_types:
-- Document
+  - Document

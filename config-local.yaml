@@ -2,31 +2,29 @@
 aiohttp_settings:
   client_max_size: 20971520
 databases:
-- db:
-    storage: postgresql
-    transaction_strategy: dbresolve_readcommitted
-    dsn: postgresql://postgres:secret@localhost:5432/guillotina
-    read_only: false
-    pool_size: 100
+  - db:
+      storage: postgresql
+      transaction_strategy: dbresolve_readcommitted
+      dsn: postgresql://postgres:secret@localhost:5432/guillotina
+      read_only: false
+      pool_size: 100
 store_json: true
 applications:
-- guillotina_cms
-- guillotina.contrib.cache
-# - guillotina_rediscache
-# - guillotina_elasticsearch
+  - guillotina_cms
+  - guillotina.contrib.cache
 address: 8081
 static:
   favicon.png: static/favicon.png
 root_user:
   password: root
 auth_extractors:
-- guillotina.auth.extractors.CookiePolicy
-- guillotina.auth.extractors.BearerAuthPolicy
-- guillotina.auth.extractors.BasicAuthPolicy
-- guillotina.auth.extractors.WSTokenAuthPolicy
+  - guillotina.auth.extractors.CookiePolicy
+  - guillotina.auth.extractors.BearerAuthPolicy
+  - guillotina.auth.extractors.BasicAuthPolicy
+  - guillotina.auth.extractors.WSTokenAuthPolicy
 auth_token_validators:
-- guillotina.auth.validators.SaltedHashPasswordValidator
-- guillotina.auth.validators.JWTValidator
+  - guillotina.auth.validators.SaltedHashPasswordValidator
+  - guillotina.auth.validators.JWTValidator
 jwt:
   secret: secret
   algorithm: HS256
@@ -34,18 +32,17 @@ jsapps:
   +admin: guillotina:static/executioner
 cors:
   allow_origin:
-  - "*"
+    - "*"
   allow_methods:
-  - GET
-  - POST
-  - DELETE
-  - HEAD
-  - PATCH
-  - OPTIONS
+    - GET
+    - POST
+    - DELETE
+    - HEAD
+    - PATCH
+    - OPTIONS
   allow_headers:
-  - "*"
+    - "*"
   expose_headers:
-  - "*"
+    - "*"
   allow_credentials: true
   max_age: 3660
-

@@ -13,13 +13,13 @@ from guillotina.utils import resolve_dotted_name
 
 @configure.service(
     context=IContainer, method='GET',
-    permission='guillotina.AccessContent', name='@tiles',
-    summary='Get available tiles')
-async def get_tiles(context, request):
+    permission='guillotina.AccessContent', name='@blocks',
+    summary='Get available blocks')
+async def get_blocks(context, request):
     result = []
-    for key, item in app_settings['available_tiles'].items():
+    for key, item in app_settings['available_blocks'].items():
         result.append({
-            "@id": join(IAbsoluteURL(context)(), "@tiles", item["name"]),
+            "@id": join(IAbsoluteURL(context)(), "@blocks", item["name"]),
             "title": item['title'],
             "description": item['description']
         })
@@ -28,13 +28,13 @@ async def get_tiles(context, request):
 
 @configure.service(
     context=IContainer, method='GET',
-    permission='guillotina.AccessContent', name='@tiles/{key}',
-    summary='Get specific tile')
-async def get_tile_schema(context, request):
+    permission='guillotina.AccessContent', name='@blocks/{key}',
+    summary='Get specific block')
+async def get_block_schema(context, request):
     key = request.matchdict['key']
-    if key not in app_settings['available_tiles'].keys():
+    if key not in app_settings['available_blocks'].keys():
         return HTTPNotFound()
-    tile = app_settings['available_tiles'][key]
-    schema = resolve_dotted_name(tile['schema'])
+    block = app_settings['available_blocks'][key]
+    schema = resolve_dotted_name(block['schema'])
     serializer = get_multi_adapter((schema, request), ISchemaSerializeToJson)
     return await serializer()

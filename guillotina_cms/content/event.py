@@ -1,17 +1,18 @@
 # -*- encoding: utf-8 -*-
 from guillotina import configure
-from guillotina.content import Folder
-from guillotina_cms.interfaces import ICMSFolder
+from guillotina.content import Item
+from guillotina_cms.interfaces import IEvent
 
 
 @configure.contenttype(
-    type_name="CMSFolder",
-    schema=ICMSFolder,
+    type_name="Event",
+    schema=IEvent,
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina_cms.interfaces.base.ICMSBehavior",
-        "guillotina_cms.interfaces.blocks.IBlocks",
     ],
+    allowed_types=["Image", "File"],  # dynamically calculated
 )
-class CMSFolder(Folder):
+class Event(Item):
     pass
+

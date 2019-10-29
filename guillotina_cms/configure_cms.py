@@ -3,9 +3,9 @@ from guillotina.configure import register_configuration_handler
 from guillotina_cms import app_settings
 
 
-def load_tiletype(_context, tile):
-    config = tile['config']
-    app_settings['available_tiles'][config['name']] = {
+def load_blocktype(_context, block):
+    config = block['config']
+    app_settings['available_blocks'][config['name']] = {
         'title': config['title'],
         'name': config['name'],
         'add_permission': config.get('add_permission', 'guillotina.AddContent'),
@@ -13,11 +13,11 @@ def load_tiletype(_context, tile):
         'edit_permission': config.get('edit_permission', 'guillotina.ModifyContent'),
         'description': config.get('description', ''),
         'icon': config.get('icon', 'default'),
-        'schema': tile['klass']
+        'schema': block['klass']
     }
 
-register_configuration_handler('tile', load_tiletype) # noqa
+register_configuration_handler('block', load_blocktype) # noqa
 
 
-class tile(_base_decorator):  # noqa: N801
-    configuration_type = 'tile'
+class block(_base_decorator):  # noqa: N801
+    configuration_type = 'block'
