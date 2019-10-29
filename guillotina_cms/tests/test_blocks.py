@@ -10,7 +10,6 @@ async def test_default_blocks_layout(cms_requester):
     async with cms_requester as requester:
         # now test it...
         response, status = await requester("GET", "/db/guillotina/")
-        import pdb; pdb.set_trace()
         assert (
             len(
                 response["guillotina_cms.interfaces.blocks.IBlocks"]["blocks_layout"][
