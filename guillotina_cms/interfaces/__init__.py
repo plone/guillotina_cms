@@ -9,10 +9,8 @@ from .content import IContentUtility  # noqa
 from .content import ICMSFolder  # noqa
 from .constrains import ICMSConstrainTypes  # noqa
 from .events import IWorkflowChangedEvent  # noqa
-from .editors import IGutenbergMarker  # noqa
 from .editors import IGutenberg  # noqa
 from .editors import IRichText  # noqa
-from .editors import IRichTextMarker  # noqa
 from .following import IFollowing  # noqa
 from .following import IFollowingMarker  # noqa
 from .pubsub import IPubSubUtility  # noqa

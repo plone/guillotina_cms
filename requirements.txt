@@ -2,4 +2,4 @@ guillotina>=5.0.0
 diff-match-patch==20121119
 Pillow
 plone.scale>=3.0.1
-guillotina_linkintegrity
+guillotina_linkintegrity>=5.0.1

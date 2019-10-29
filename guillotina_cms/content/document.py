@@ -18,12 +18,3 @@ from guillotina_cms.interfaces import IDocument
 class Document(Folder):
     pass
 
-
-@index.with_accessor(IDocument, "text", type="searchabletext")
-def get_text_from_richtext(ob):
-    # Richtext is a dict and we only care about the text
-    try:
-        if ob.text is not None:
-            return ob.text.data
-    except AttributeError:
-        pass
