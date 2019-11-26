@@ -17,7 +17,6 @@ import os
         },
     }
 )
-@pytest.mark.app_settings({"applications": ["guillotina.contrib.catalog.pg"]})
 async def test_navigation(cms_requester):
     async with cms_requester as requester:
         resp, status = await requester(
