@@ -33,13 +33,12 @@ def merged_tagged_value_dict_merged(iface, name):
     from more-general ones.
     """
     tv = {}
-    for iface in reversed(iface.__iro__):
-        value = iface.queryTaggedValue(name, {})
-        for key, item in value.items():
-            if key in tv:
-                tv[key].extend(item)
-            else:
-                tv[key] = item.copy()
+    value = iface.queryTaggedValue(name, {})
+    for key, item in value.items():
+        if key in tv:
+            tv[key].extend(item)
+        else:
+            tv[key] = item.copy()
     return tv
 
 
