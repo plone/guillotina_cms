@@ -7,6 +7,7 @@ from guillotina_cms.behaviors.image import IImageAttachment
 from guillotina_cms.behaviors.syndication import ISyndicationSettings
 from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.interfaces import IImagingSettings
+from guillotina_cms.interfaces import IMenu
 from guillotina_cms.interfaces import IBlocks
 from guillotina.behaviors.dublincore import IDublinCore
 
@@ -28,6 +29,7 @@ class CMSAddon(Addon):
         registry = await get_registry()
         registry.for_interface(ILayers)["active_layers"] |= {CMS_LAYER}
         registry.register_interface(IImagingSettings)
+        registry.register_interface(IMenu)
         registry.register()
 
     @classmethod

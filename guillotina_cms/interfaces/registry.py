@@ -1,6 +1,8 @@
 from guillotina import schema
 from zope.interface import Interface
+import json
 
+MENU_LAYOUT = json.dumps({"type": "object", "properties": {}})
 
 class IImagingSettings(Interface):
     allowed_sizes = schema.Dict(
@@ -15,3 +17,12 @@ class IImagingSettings(Interface):
         })
 
     quality = schema.Int(default=88)
+
+
+class IMenu(Interface):
+
+    definition = schema.JSONField(
+        title="Menu definition",
+        required=False,
+        schema=MENU_LAYOUT
+    )

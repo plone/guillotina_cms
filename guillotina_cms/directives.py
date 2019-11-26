@@ -26,18 +26,19 @@ class fieldset_field(MetadataDictMergeDirective):  # noqa: N801
             fieldset: name
         }
 
-def merged_tagged_value_dict_merged(iface, name):
+def merged_tagged_value_dict_merged(schema, name):
     """Look up the tagged value 'name' in schema and all its bases, assuming
     that the value under 'name' is a dict. Return a dict that consists of
     all dict items, with those from more-specific interfaces overriding those
     from more-general ones.
     """
     tv = {}
-    for iface in reversed(iface.__iro__):
+    for iface in reversed(schema.__iro__):
         value = iface.queryTaggedValue(name, {})
         for key, item in value.items():
             if key in tv:
                 tv[key].extend(item)
+                tv[key] = list(set(tv[key]))
             else:
                 tv[key] = item.copy()
     return tv

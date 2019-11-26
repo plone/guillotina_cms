@@ -11,10 +11,12 @@ from .constrains import ICMSConstrainTypes  # noqa
 from .events import IWorkflowChangedEvent  # noqa
 from .editors import IGutenberg  # noqa
 from .editors import IRichText  # noqa
+from .editors import IReactPageLayout  # noqa
 from .following import IFollowing  # noqa
 from .following import IFollowingMarker  # noqa
 from .pubsub import IPubSubUtility  # noqa
 from .registry import IImagingSettings  # noqa
+from .registry import IMenu  # noqa
 from .blocks import IBlocks  # noqa
 from .blocks import IBlockType  # noqa
 from .blocks import IDefaultBlocksLayout  # noqa

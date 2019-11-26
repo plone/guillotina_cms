@@ -6,6 +6,7 @@ from guillotina_cms.fields import RichTextField
 
 
 GUTENBERG_SCHEMA = json.dumps({"type": "object", "properties": {}})
+REACT_PAGE_LAYOUT = json.dumps({"type": "object", "properties": {}})
 
 
 class IGutenberg(Interface):
@@ -26,5 +27,16 @@ class IRichText(Interface):
         title="RichText field",
         required=False
     )
+
+
+class IReactPageLayout(Interface):
+
+    fieldset_field("layout", "default")
+    layout = schema.JSONField(
+        title="Layout field",
+        required=False,
+        schema=REACT_PAGE_LAYOUT
+    )
+
 
 

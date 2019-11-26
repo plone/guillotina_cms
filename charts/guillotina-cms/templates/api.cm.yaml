@@ -20,7 +20,7 @@ data:
         pool_size: 100
     applications:
     - guillotina_cms
-    - guillotina_dbusers
+    - guillotina.contrib.dbusers
     - guillotina.contrib.catalog.pg
     - guillotina.contrib.cache
     - guillotina.contrib.swagger
