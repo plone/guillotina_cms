@@ -1,6 +1,7 @@
 5.0.0a2 (unreleased)
 --------------------
 
+- Fixing Zope.Interface
 - History endpoint
 - Removing @order endpoint right now for not beeing compatible G5
 - Images and folder should be workflow enabled
