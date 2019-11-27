@@ -24,5 +24,6 @@ class IMenu(Interface):
     definition = schema.JSONField(
         title="Menu definition",
         required=False,
-        schema=MENU_LAYOUT
+        schema=MENU_LAYOUT,
+        missing_value={}
     )
