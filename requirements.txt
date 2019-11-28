@@ -1,6 +1,5 @@
-guillotina>=5.0.0
+guillotina>=5.1.19
 diff-match-patch==20121119
 Pillow
 plone.scale>=3.0.1
 guillotina_linkintegrity>=5.0.2
-zope.interface>=4.7.1

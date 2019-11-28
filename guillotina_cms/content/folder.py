@@ -10,7 +10,6 @@ from guillotina_cms.interfaces import ICMSFolder
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina_cms.interfaces.base.ICMSBehavior",
-        "guillotina_cms.interfaces.blocks.IBlocks",
     ],
 )
 class CMSFolder(Folder):
