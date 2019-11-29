@@ -40,9 +40,10 @@ after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker build -t plone/guillotina_cms:master .;
     echo "$DOCKER_PASSWORD" | docker login -u="$DOCKER_USERNAME"  --password-stdin;
-    docker push plone/guillotina_cms:master;
+    docker push plone/guillotina_cms:$TRAVIS_BRANCH;
     fi
 
 branches:
   only:
   - master
+  - volto
