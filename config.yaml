@@ -17,6 +17,7 @@ address: 8081
 static:
   - favicon.png: static/favicon.png
   - assets: guillotina:static/assets
+  - swagger_static: guillotina.contrib.swagger:static
 root_user:
   password: root
 auth_extractors:
