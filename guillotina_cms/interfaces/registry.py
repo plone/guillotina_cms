@@ -25,5 +25,5 @@ class IMenu(Interface):
         title="Menu definition",
         required=False,
         schema=MENU_LAYOUT,
-        defaultFactory=dict
+        defaultFactory=list
     )
