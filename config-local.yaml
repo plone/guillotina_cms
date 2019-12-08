@@ -18,7 +18,6 @@ static:
 root_user:
   password: root
 auth_extractors:
-  - guillotina.auth.extractors.CookiePolicy
   - guillotina.auth.extractors.BearerAuthPolicy
   - guillotina.auth.extractors.BasicAuthPolicy
   - guillotina.auth.extractors.WSTokenAuthPolicy

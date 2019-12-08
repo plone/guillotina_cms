@@ -4,6 +4,7 @@ from guillotina.interfaces import IResource
 from guillotina.utils import find_container
 from guillotina_cms.utils import get_search_utility
 import itertools
+from collections import Counter
 
 
 @configure.service(
@@ -62,19 +63,30 @@ async def suggestion_get(context, request):
     if search is None:
         return {}
 
-    
-    params_index = request.query.get('index')
-    if params_index is not None:
-        params = params_index.split('+')
-    else:
-        return {}
-    result = await search.query_aggregation(context, {"_metadata": params})
+    fields = request.query.get('_metadata', '').split(',')
+    result = await search.query_aggregation(context, query)
     if 'member' in result:
-        merged = list(itertools.chain.from_iterable(list(itertools.chain.from_iterable(result['member']))))
-        return {
-            "items": merged,
-            "total": len(merged)
-        }
+        aggregation = []
+        for field in fields:
+            aggregation.append([])
+
+        for items in result['member']:
+            for index, item in enumerate(items):
+                if isinstance(item, list):
+                    for i in item:
+                        aggregation[index].extend(item)
+                elif isinstance(item, str):
+                    aggregation[index].append(item)
+
+        final_result = {}
+
+        for index, field in enumerate(fields):
+            elements = dict(Counter(aggregation[index]))
+            final_result[field] = {
+                "items": elements,
+                "total": len(elements)
+            } 
+        return final_result
     else: 
         return {}
 

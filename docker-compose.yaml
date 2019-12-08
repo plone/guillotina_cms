@@ -21,6 +21,8 @@ services:
       POSTGRES_PASSWORD: secret
       POSTGRES_INITDB_ARGS: --data-checksums
       POSTGRES_DB: guillotina
+    ports:
+      - '5432:5432'
     volumes:
       - postgres_data_cms:/var/lib/postgresql/data
 
