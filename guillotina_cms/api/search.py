@@ -73,8 +73,7 @@ async def suggestion_get(context, request):
         for items in result['member']:
             for index, item in enumerate(items):
                 if isinstance(item, list):
-                    for i in item:
-                        aggregation[index].extend(item)
+                    aggregation[index].extend(item)
                 elif isinstance(item, str):
                     aggregation[index].append(item)
 
