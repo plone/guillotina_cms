@@ -15,3 +15,15 @@ async def menu(context, request):
         'value': settings['definition']
     }
 
+
+@configure.service(
+    context=IContainer, method='GET', permission='guillotina.ViewContent',
+    name='@logo')
+async def logo(context, request):
+
+    registry = await get_registry()
+    settings = registry.for_interface(IMenu)
+    return {
+        'value': settings['logo']
+    }
+

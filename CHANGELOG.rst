@@ -1,6 +1,9 @@
 5.0.0a2 (unreleased)
 --------------------
 
+- Adding menu
+  [bloodbare]
+
 - Fixing Zope.Interface
 - History endpoint
 - Removing @order endpoint right now for not beeing compatible G5

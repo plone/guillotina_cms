@@ -1,4 +1,5 @@
 from guillotina import schema
+from guillotina_cms.utils import get_default_logo
 from zope.interface import Interface
 import json
 
@@ -26,4 +27,10 @@ class IMenu(Interface):
         required=False,
         schema=MENU_LAYOUT,
         defaultFactory=list
+    )
+
+    logo = schema.Text(
+        title="Logo",
+        required=False,
+        defaultFactory=get_default_logo
     )
