@@ -85,8 +85,8 @@ class Navigation(Service):
         container = find_container(self.context)
         depth = get_content_depth(container)
         max_depth = None
-        if "expand.navigation.depth" in self.request.rel_url.query:
-            max_depth = str(int(self.request.rel_url.query["expand.navigation.depth"]) + depth)
+        if "expand.navigation.depth" in self.request.query:
+            max_depth = str(int(self.request.query["expand.navigation.depth"]) + depth)
             depth_query = {"depth__gte": depth, "depth__lte": max_depth}
         else:
             depth_query = {"depth": depth}
