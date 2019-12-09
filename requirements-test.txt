@@ -7,3 +7,4 @@ docker==2.2.1
 docker-pycreds==0.2.1
 psycopg2-binary
 pytest-docker-fixtures
+async_asgi_testclient
