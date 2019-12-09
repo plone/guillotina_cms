@@ -1,4 +1,7 @@
 import json
+import pytest
+
+pytestmark = pytest.mark.asyncio
 
 
 async def test_id_generator(cms_requester):

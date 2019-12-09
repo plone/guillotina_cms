@@ -7,6 +7,8 @@ from guillotina.tests import utils
 from guillotina_cms.interfaces import ICMSBehavior
 from guillotina_cms.ordering import get_last_child_position
 
+pytestmark = pytest.mark.asyncio
+
 
 @pytest.mark.skipif(os.environ.get('DATABASE', 'DUMMY') in ('cockroachdb', 'DUMMY'),
                     reason='Not for dummy db')

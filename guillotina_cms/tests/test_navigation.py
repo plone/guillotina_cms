@@ -2,6 +2,8 @@ import json
 import pytest
 import os
 
+pytestmark = pytest.mark.asyncio
+
 
 @pytest.mark.skipif(
     os.environ.get("DATABASE", "DUMMY") in ("cockroachdb", "DUMMY"), reason="Not for dummy db"

@@ -1,4 +1,8 @@
 import json
+import pytest
+
+pytestmark = pytest.mark.asyncio
+
 
 async def test_history_creation(cms_requester):
     async with cms_requester as requester:

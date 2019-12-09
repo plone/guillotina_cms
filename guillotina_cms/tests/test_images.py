@@ -3,6 +3,9 @@ import json
 
 from guillotina.utils import resolve_path
 from guillotina_cms.behaviors.image import IImageAttachment
+import pytest
+
+pytestmark = pytest.mark.asyncio
 
 
 async def _add_image(requester, path):

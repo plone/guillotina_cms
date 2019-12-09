@@ -24,7 +24,7 @@ async def search_get(context, request):
     search = get_search_utility(query)
     if search is None:
         return {
-            '@id': request.url.human_repr(),
+            '@id': request.url,
             'items': [],
             'items_total': 0
         }
@@ -34,7 +34,7 @@ async def search_get(context, request):
     result = await search.search(container, parsed_query)
 
     return {
-        '@id': request.url.human_repr(),
+        '@id': request.url,
         'items': result['member'],
         'items_total': result['items_count'],
         'batching': {

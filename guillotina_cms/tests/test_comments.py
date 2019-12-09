@@ -1,6 +1,8 @@
 import json
 import pytest
 
+pytestmark = pytest.mark.asyncio
+
 
 @pytest.mark.app_settings(
     {"allow_discussion_types": ["Document"], "default_allow_discussion": True}

@@ -1,4 +1,7 @@
 import json
+import pytest
+
+pytestmark = pytest.mark.asyncio
 
 
 async def test_menu_definition(cms_requester):

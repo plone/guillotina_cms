@@ -2,8 +2,11 @@ from guillotina.tests.utils import create_content
 from guillotina.content import Resource
 from guillotina_cms.interfaces import IBlocks
 from guillotina_cms.behaviors.editors import Blocks
-
+import asyncio
+import pytest
 import json
+
+pytestmark = pytest.mark.asyncio
 
 
 async def test_default_blocks_layout(cms_requester):
@@ -34,7 +37,7 @@ async def test_blocks_endpoint_gives_us_registered_blocks(cms_requester):
         assert response["type"] == "object"
 
 
-def test_conversation_behavior_returns_instance(dummy_request):
+async def test_conversation_behavior_returns_instance(dummy_request):
     ob = create_content(Resource)
     behavior = IBlocks(ob)
     assert isinstance(behavior, Blocks)

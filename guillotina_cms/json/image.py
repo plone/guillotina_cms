@@ -18,7 +18,7 @@ def json_converter(value):
     registry = task_vars.registry.get()
     settings = registry.for_interface(IImagingSettings)
     scales = {}
-    url = request.url.human_repr().split('?')[0]
+    url = request.url.split('?')[0]
     for size, dimension in settings['allowed_sizes'].items():
         width, _, height = dimension.partition(':')
         scales[size] = {

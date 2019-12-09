@@ -23,5 +23,5 @@ class CMSRequester(ContainerRequesterAsyncContextManager):
 
 
 @pytest.fixture(scope="function")
-async def cms_requester(guillotina, loop):
+async def cms_requester(guillotina):
     yield CMSRequester(guillotina)

@@ -44,7 +44,7 @@ class Breadcrumbs(Service):
             context = getattr(context, "__parent__", None)
         result.reverse()
 
-        return {"@id": self.request.url.human_repr(), "items": result}
+        return {"@id": self.request.url, "items": result}
 
 
 def recursive_fill(mother_list, pending_dict):
@@ -114,7 +114,7 @@ class Navigation(Service):
         if max_depth is not None:
             recursive_fill(final_list, pending_dict)
 
-        return {"@id": self.request.url.human_repr(), "items": final_list}
+        return {"@id": self.request.url, "items": final_list}
 
 
 @configure.service(
