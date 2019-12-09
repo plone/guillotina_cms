@@ -8,3 +8,4 @@ docker-pycreds==0.2.1
 psycopg2-binary
 pytest-docker-fixtures
 async_asgi_testclient
+aiohttp>=3.0.0,<4.0.0
