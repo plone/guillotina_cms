@@ -31,7 +31,6 @@ data:
     root_user:
       password: {{ .Values.api.root_passwd }}
     auth_extractors:
-    - guillotina.auth.extractors.CookiePolicy
     - guillotina.auth.extractors.BearerAuthPolicy
     - guillotina.auth.extractors.BasicAuthPolicy
     - guillotina.auth.extractors.WSTokenAuthPolicy
