@@ -9,6 +9,7 @@ from guillotina.interfaces import IContainer
 from guillotina.interfaces import ISchemaSerializeToJson
 from guillotina.response import HTTPNotFound
 from guillotina.utils import resolve_dotted_name
+from guillotina.interfaces import ILayoutComponents
 
 
 @configure.service(
@@ -24,6 +25,16 @@ async def get_blocks(context, request):
             "description": item['description']
         })
     return result
+
+
+@configure.service(
+    context=IContainer, method='GET',
+    permission='guillotina.AccessContent', name='@layout_components',
+    summary='Get available layout components')
+async def get_layout_components(context, request):
+    registry = await get_registry()
+    settings = registry.for_interface(ILayoutComponents)
+    return settings['components']
 
 
 @configure.service(

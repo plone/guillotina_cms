@@ -9,6 +9,7 @@ from . import indices  # noqa
 from . import menu  # noqa
 from . import search  # noqa
 from . import blocks  # noqa
+from . import theme  # noqa
 from . import types  # noqa
 from . import versioning  # noqa
 from . import vocabularies  # noqa

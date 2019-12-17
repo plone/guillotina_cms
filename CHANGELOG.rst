@@ -1,7 +1,7 @@
 6.0.0a1 (unreleased)
 --------------------
 
-- Adding menu
+- Adding menu, cssfield, layout components field
   [bloodbare]
 
 - Fixing Zope.Interface

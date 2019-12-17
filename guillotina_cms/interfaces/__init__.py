@@ -17,6 +17,8 @@ from .following import IFollowingMarker  # noqa
 from .pubsub import IPubSubUtility  # noqa
 from .registry import IImagingSettings  # noqa
 from .registry import IMenu  # noqa
+from .registry import ICustomTheme  # noqa
+from .registry import ILayoutComponents  # noqa
 from .blocks import IBlocks  # noqa
 from .blocks import IBlockType  # noqa
 from .blocks import IDefaultBlocksLayout  # noqa
