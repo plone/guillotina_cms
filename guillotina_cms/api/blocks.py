@@ -9,7 +9,7 @@ from guillotina.interfaces import IContainer
 from guillotina.interfaces import ISchemaSerializeToJson
 from guillotina.response import HTTPNotFound
 from guillotina.utils import resolve_dotted_name
-from guillotina.interfaces import ILayoutComponents
+from guillotina_cms.interfaces import ILayoutComponents
 
 
 @configure.service(

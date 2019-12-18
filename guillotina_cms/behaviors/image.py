@@ -13,3 +13,10 @@ class IImageAttachment(Interface):
     image = CloudFileField()
 
     caption = schema.TextLine()
+
+
+@configure.behavior(
+    title="Lead image attachment", for_=IResource, marker=IHasImage)
+class ILeadImage(Interface):
+
+    image = CloudFileField()

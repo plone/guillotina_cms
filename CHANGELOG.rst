@@ -1,6 +1,9 @@
 6.0.0a1 (unreleased)
 --------------------
 
+- Adding lead image
+  [bloodbare]
+
 - Adding menu, cssfield, layout components field
   [bloodbare]
 
