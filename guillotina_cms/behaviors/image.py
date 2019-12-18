@@ -19,4 +19,4 @@ class IImageAttachment(Interface):
     title="Lead image attachment", for_=IResource, marker=IHasImage)
 class ILeadImage(Interface):
 
-    image = CloudFileField()
+    lead = CloudFileField()
