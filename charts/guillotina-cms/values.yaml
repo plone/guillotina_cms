@@ -44,10 +44,11 @@ processing:
     internalPort: 8888
     protocol: TCP
 
-db:
-  postgresqlUsername: postgres
-  postgresqlPassword: secret
-  postgresqlDatabase: guillotina
+global:
+  postgresql:
+    postgresqlPassword: secret
+    postgresqlUsername: postgres
+    postgresqlDatabase: guillotina
 
 cms:
   workflows:

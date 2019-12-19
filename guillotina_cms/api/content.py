@@ -220,7 +220,7 @@ async def _iter_copyable_content(context, request):
 
 
 @configure.service(
-    method='POST', name="@copy", context=IAsyncContainer,
+    method='POST', name="@copy_mult", context=IAsyncContainer,
     permission='guillotina.AddContent',
     summary='Copy data into destintation',
     parameteres=[{
@@ -256,7 +256,7 @@ async def copy_content(context, request):
 
 
 @configure.service(
-    method='POST', name="@move", context=IAsyncContainer,
+    method='POST', name="@move_mult", context=IAsyncContainer,
     permission='guillotina.AddContent',
     summary='Move data into destintation',
     parameteres=[{

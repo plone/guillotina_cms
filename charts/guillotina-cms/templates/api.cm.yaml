@@ -15,7 +15,7 @@ data:
     - db:
         storage: postgresql
         transaction_strategy: dbresolve_readcommitted
-        dsn: postgresql://{{ .Values.db.postgresqlUsername }}:{{ .Values.db.postgresqlPassword }}@{{ .Release.Name }}-db:5432/{{ .Values.db.postgresqlDatabase }}
+        dsn: postgresql://{{ .Values.global.postgresql.postgresqlUsername }}:{{ .Values.global.postgresql.postgresqlPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.global.postgresql.postgresqlDatabase }}
         read_only: false
         pool_size: 100
     applications:
