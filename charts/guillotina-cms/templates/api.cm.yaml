@@ -24,6 +24,7 @@ data:
     - guillotina.contrib.catalog.pg
     - guillotina.contrib.cache
     - guillotina.contrib.swagger
+    host: 0.0.0.0
     address: {{ .Values.api.service.internalPort }}
     static:
       favicon.png: static/favicon.png
