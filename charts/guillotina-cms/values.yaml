@@ -13,6 +13,7 @@ api:
       memory: "400Mi"
       cpu: "300m"
   root_passwd: root
+  token_expiration: 3660
   jwtsecret: secret
   replicaCount: 1
 
