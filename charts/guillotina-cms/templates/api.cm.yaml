@@ -41,6 +41,7 @@ data:
     jwt:
       secret: {{ .Values.api.jwtsecret }}
       algorithm: HS256
+      token_expiration: {{ .Values.api.token_expiration }}
     jsapps:
       +admin: guillotina:static/executioner
     cors:
