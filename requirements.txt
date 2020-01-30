@@ -1,6 +1,7 @@
-guillotina>=6.0.0a3
+guillotina>=6.0.0a7
 diff-match-patch==20121119
 Pillow
 plone.scale>=3.0.1
 guillotina_linkintegrity>=5.0.2
+guillotina_authentication
 uvicorn
