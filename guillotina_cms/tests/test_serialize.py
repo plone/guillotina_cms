@@ -1,6 +1,9 @@
 import json
+import pytest
 
 from guillotina_cms.behaviors.syndication import ISyndicationSettings
+
+pytestmark = pytest.mark.asyncio
 
 
 async def test_behaviors(cms_requester):

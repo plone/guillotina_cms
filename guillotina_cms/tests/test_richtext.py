@@ -3,6 +3,8 @@ import json
 import pytest
 from guillotina.tests.test_catalog import NOT_POSTGRES
 
+pytestmark = pytest.mark.asyncio
+
 
 @pytest.mark.app_settings({"applications": ["guillotina_linkintegrity"]})
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")

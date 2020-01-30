@@ -3,6 +3,8 @@ import json
 from guillotina_cms.tests.utils import add_content
 from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS, NOT_POSTGRES
 
+pytestmark = pytest.mark.asyncio
+
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
