@@ -11,7 +11,7 @@ from guillotina.utils import get_registry
 from guillotina_cms.interfaces import IHasImage
 from guillotina_cms.interfaces import IImagingSettings
 from plone.scale.scale import scaleImage
-from guillotina.response import ASGIResponse
+from guillotina.response import Response
 
 
 @configure.service(
@@ -63,7 +63,7 @@ class DownloadImageScale(TraversableFieldService):
                 file.filename)
         })
 
-        download_resp = ASGIResponse(
+        download_resp = Response(
             status=200,
             headers=headers,
             content_type=f"image/{format_}",

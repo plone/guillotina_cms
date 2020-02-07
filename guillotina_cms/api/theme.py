@@ -2,7 +2,7 @@ from guillotina import configure
 from guillotina.utils import get_registry
 from guillotina.interfaces import IContainer
 from guillotina_cms.interfaces import ICustomTheme
-from guillotina.response import ASGIResponse
+from guillotina.response import Response
 
 
 @configure.service(
@@ -12,7 +12,7 @@ async def themecss(context, request):
 
     registry = await get_registry()
     settings = registry.for_interface(ICustomTheme)
-    resp = ASGIResponse(status=200)
+    resp = Response(status=200)
     resp.content_type = 'text/css'
     disposition = 'filename="style.css"'
     resp.headers["CONTENT-DISPOSITION"] = disposition
