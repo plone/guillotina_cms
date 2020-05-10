@@ -19,7 +19,7 @@ build: ## Builds the environment
 	bin/pip install -r requirements.txt
 	bin/python setup.py develop
 	docker-compose create
-	docker-compose -f docker-compose-pg.yaml up postgres
+	docker-compose -f docker-compose.yaml up postgres
 	make populate
 
 initdb: ## Create initial content in the DB
@@ -32,4 +32,4 @@ start-backend: ## Starts Guillotina
 	guillotina -c config-pg.yaml
 
 start-dependencies: ## Starts dependencies (PG, ES, Redis)
-	docker-compose -f docker-compose-pg.yaml up postgres
+	docker-compose -f docker-compose.yaml up postgres

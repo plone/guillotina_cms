@@ -1,6 +1,9 @@
 6.0.0a1 (unreleased)
 --------------------
 
+- Fixing Dynamic Content
+  [bloodbare]
+
 - @copy_mult @move_mult to allow to copy and move multiples and keep G endpoints
   [bloodbare]
 

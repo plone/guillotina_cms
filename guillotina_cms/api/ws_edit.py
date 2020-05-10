@@ -1,4 +1,3 @@
-from aiohttp import web
 from diff_match_patch import diff_match_patch
 from guillotina import configure
 from guillotina.api.service import Service
@@ -10,7 +9,7 @@ from guillotina.interfaces import IResource
 from guillotina.interfaces import IPubSubUtility
 from guillotina.component import get_utility
 
-import aiohttp
+import orjson
 import asyncio
 import json
 import logging
@@ -85,15 +84,15 @@ class WSEdit(Service):
     auto_save_delay = 30
     auto_save_handle = None
 
+
     async def __call__(self):
         self.data = {}
-        self.ws = web.WebSocketResponse()
-
-        tm = get_tm(self.request)
-        await tm.abort(self.request)
+        tm = get_tm()
+        await tm.abort()
+        self.ws = self.request.get_ws()
 
         try:
-            await self.ws.prepare(self.request)
+            await self.ws.prepare()
         except ConnectionResetError:
             return {}
 
@@ -109,19 +108,28 @@ class WSEdit(Service):
             self.configure_auto_save()
 
             async for msg in self.ws:
-                if msg.type == aiohttp.WSMsgType.text:
-                    await self.handle_message(msg)
-                elif msg.type == aiohttp.WSMsgType.error:
-                    logger.debug(
-                        "resource ws connection closed with exception {0:s}".format(self.ws.exception())
-                    )
+                try:
+                    message = msg.json
+                except WebSocketJsonDecodeError:
+                    # We only care about json messages
+                    logger.warning("Invalid websocket payload, ignored: {}".format(msg))
+                    continue
+
+                if message["op"].lower() == "close":
+                    break
+
+                try:
+                    await self.handle_message(message)
+                except Exception:
+                    logger.error("Exception on ws", exc_info=True)
+
         except asyncio.CancelledError:
             logger.debug("browser closed")
             pass
         finally:
             try:
                 await self.pubsub.unsubscribe(self.channel_name, self.request.uid)
-                await self.ws.close()  # make sure to close socket
+                await ws.close()  # make sure to close socket
             except Exception:
                 pass
 
@@ -152,21 +160,21 @@ class WSEdit(Service):
             pass
         else:
             try:
-                data = json.loads(msg.data)
+                data = orjson.loads(msg.data)
                 operation = data["t"]
             except Exception:
-                self.ws.send_str(json.dumps({"t": "e", "v": "Not a valid payload"}))
+                self.ws.send_bytes(orjson.dumps({"t": "e", "v": "Not a valid payload"}))
                 return
 
             if operation == "dmp":
                 try:
                     await self.apply_edit(data)
                 except Exception:
-                    await self.ws.send_str(json.dumps({"t": "e", "v": "Error applying dmp"}))
+                    await self.ws.send_bytes(orjson.dumps({"t": "e", "v": "Error applying dmp"}))
                     logger.warn("Error applying dmp", exc_info=True)
             elif operation == "save":
                 await self.save()
-                self.ws.send_str(json.dumps({"t": "saved"}))
+                self.ws.send_bytes(orjson.dumps({"t": "saved"}))
                 await self.pubsub.publish(self.channel_name, {"t": "saved", "ruid": self.request.uid})
             elif operation == "saved":
                 # reset the counter, only one person needs to save it every 30 seconds
@@ -181,11 +189,11 @@ class WSEdit(Service):
         if "." in field_name:
             schema_klass, field_name = field_name.rsplit(".", 1)
             if schema_klass not in self.context.__behaviors__:
-                self.ws.send_str(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
+                self.ws.send_bytes(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
                 return
             schema = resolve_dotted_name(schema_klass)
             if schema is None:
-                self.ws.send_str(json.dumps({"t": "e", "v": "Could not find specified schema"}))
+                self.ws.send_bytes(json.dumps({"t": "e", "v": "Could not find specified schema"}))
                 return
             behavior = schema(context)
             context = behavior
@@ -196,7 +204,7 @@ class WSEdit(Service):
         try:
             field = schema[field_name]
         except KeyError:
-            self.ws.send_str(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
+            self.ws.send_bytes(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
             return
         return context, field
 

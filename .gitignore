@@ -12,3 +12,4 @@ share
 pip-selfcheck.json
 g.db
 g.db.blobs
+settings.json

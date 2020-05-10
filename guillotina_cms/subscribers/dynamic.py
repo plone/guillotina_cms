@@ -5,6 +5,7 @@ import json
 from guillotina import app_settings
 from guillotina_cms.vocabularies.source import AppSettingSource
 from guillotina_cms.directives import fieldset_field
+from guillotina_cms import dyncontent
 from guillotina import configure
 from guillotina import FACTORY_CACHE
 from guillotina import BEHAVIOR_CACHE
@@ -154,7 +155,8 @@ def create_content_factory(proto_name, proto_definition):
         (parent_class,),
         {})
 
-    klass.__module__ = 'guillotina_cms.content'
+    klass.__module__ = 'guillotina_cms.dyncontent'
+    setattr(dyncontent, proto_name, klass)
 
     behaviors = []
     for bhr in proto_definition.get('behaviors', []):
@@ -180,7 +182,7 @@ def create_content_factory(proto_name, proto_definition):
 
     root = get_utility(IApplication, name='root')
     configure.load_configuration(
-        root.app.config, 'guillotina_cms.content', 'contenttype')
+        root.app.config, 'guillotina_cms.dyncontent', 'contenttype')
     root.app.config.execute_actions()
     configure.clear()
     load_cached_schema()

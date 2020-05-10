@@ -29,6 +29,7 @@ jwt:
   algorithm: HS256
 jsapps:
   +admin: guillotina:static/executioner
+  +manage: guillotina:static/gmi
 cors:
   allow_origin:
     - "*"
