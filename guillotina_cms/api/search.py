@@ -8,39 +8,6 @@ from collections import Counter
 
 
 @configure.service(
-    context=IResource, method='GET', permission='guillotina.AccessContent', name='@search',
-    summary='Make search request',
-    responses={
-        "200": {
-            "description": "Search results",
-            "type": "object",
-            "schema": {
-                "$ref": "#/definitions/SearchResults"
-            }
-        }
-    })
-async def search_get(context, request):
-    query = request.query.copy()
-    search = get_search_utility(query)
-    if search is None:
-        return {
-            '@id': request.url,
-            'items': [],
-            'items_total': 0
-        }
-
-    parsed_query = parse_query(context, query, search)
-    container = find_container(context)
-    result = await search.search(container, parsed_query)
-    result['@id'] = request.url
-    result['batching'] = {
-        'from': parsed_query['_from'] or 0,
-        'size': parsed_query['size']
-    }
-    return result
-
-
-@configure.service(
     context=IResource, method='GET', permission='guillotina.AccessContent', name='@suggestion',
     summary='Make search request',
     responses={
