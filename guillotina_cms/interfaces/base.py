@@ -37,7 +37,10 @@ HISTORY_SCHEMA = json.dumps(
             "time": {"type": "string"},
             "type": {"type": "string"},
             "title": {"type": "string"},
-            "data": {"type": "object"},
+            "data": {
+                "type": "object",
+                "properties": {}
+            },
         },
     }
 )
