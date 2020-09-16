@@ -32,17 +32,12 @@ async def search_get(context, request):
     parsed_query = parse_query(context, query, search)
     container = find_container(context)
     result = await search.search(container, parsed_query)
-
-    return {
-        '@id': request.url,
-        'items': result['member'],
-        'items_total': result['items_count'],
-        'batching': {
-            'from': parsed_query['_from'] or 0,
-            'size': parsed_query['size']
-        }
+    result['@id'] = request.url
+    result['batching'] = {
+        'from': parsed_query['_from'] or 0,
+        'size': parsed_query['size']
     }
-
+    return result
 
 
 @configure.service(
