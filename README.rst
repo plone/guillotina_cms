@@ -3,7 +3,7 @@
 GUILLOTINA_CMS
 ==============
 
-WIP: This package is a work in progress to provide CMS on guillotina
+This package is archived in favor of https://github.com/plone/guillotina_volto
 
 Bundle of cms functionality for guillotina
 
