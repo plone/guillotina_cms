@@ -1,9 +1,11 @@
-.. contents::
+DEPRECATED
+==========
+
+This package is archived in favor of https://github.com/plone/guillotina_volto
+
 
 GUILLOTINA_CMS
 ==============
-
-This package is archived in favor of https://github.com/plone/guillotina_volto
 
 Bundle of cms functionality for guillotina
 
